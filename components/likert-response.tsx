@@ -23,13 +23,13 @@ export function LikertResponse({ scale, question, onSelect }: LikertResponseProp
   return (
     <div className="space-y-3">
       <p className="text-sm font-medium">{question}</p>
-      <div className="flex justify-between gap-1">
+      <div className="flex flex-wrap justify-between gap-1 sm:flex-nowrap">
         {likertValues.map((value) => (
           <Button
             key={value}
             variant="outline"
             className={cn(
-              "flex-1 h-12",
+              "flex-1 h-12 w-full sm:w-auto",
               (selectedValue === value) && "bg-primary text-primary-foreground",
             )}
             onClick={() => handleSelect(value)}
