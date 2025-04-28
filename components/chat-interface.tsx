@@ -100,7 +100,6 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
       case ResponseType.Likert:
         return (
           <LikertResponse
-            scale={currentStepConfig.likertScale || 5}
             question={currentStepConfig.likertQuestion || "Rate your willingness:"}
             onSelect={handleResponse}
           />

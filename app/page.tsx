@@ -7,10 +7,10 @@ export default function Home() {
   const router = useRouter();
   return (
     <div className="h-full w-full flex items-center justify-center gap-x-6">
-      <Button onClick={() => router.push("/sagar")}>Sagar's Condition</Button>
-      <Button onClick={() => router.push("/manu")}>Manu's Condition</Button>
-      <Button onClick={() => router.push("/yushan")}>Yushan's Condition</Button>
-      <Button onClick={() => router.push("/lina")}>Lina's Condition</Button>
+      <Button onClick={() => router.push("/sagar")}>Sagar Condition</Button>
+      <Button onClick={() => router.push("/manu")}>Manu Condition</Button>
+      <Button onClick={() => router.push("/yushan")}>Yushan Condition</Button>
+      <Button onClick={() => router.push("/lina")}>Lina Condition</Button>
     </div>
   );
 }

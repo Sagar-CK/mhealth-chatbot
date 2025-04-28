@@ -5,14 +5,13 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface LikertResponseProps {
-  scale: number
   question: string
   onSelect: (response: string) => void
 }
 
 const likertValues = ['Not willing', 'Slightly willing', 'Moderately willing', 'Very willing', 'Extremely willing'];
 
-export function LikertResponse({ scale, question, onSelect }: LikertResponseProps) {
+export function LikertResponse({ question, onSelect }: LikertResponseProps) {
   const [selectedValue, setSelectedValue] = useState<string | string>()
 
   const handleSelect = (value: string) => {

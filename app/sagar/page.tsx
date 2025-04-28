@@ -9,7 +9,7 @@ export default function Sagar() {
       <Card className="w-4/5 h-full bg-slate-50">
         <CardHeader className="w-full flex justify-between items-center">
           <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
-          <p>Sagar's Condition</p>
+          <p>Sagar Condition</p>
         </CardHeader>
         <Separator />
         <CardContent>

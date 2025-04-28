@@ -16,7 +16,6 @@ export const sagarChatConfig : ChatConfig = {
     {
       question: "How comfortable are you discussing your mental health with close friends or family?",
       responseType: ResponseType.Likert,
-      likertScale: 5,
       likertQuestion: "How willing would you be to self-disclose this information (your comfort level discussing mental health with close friends or family)?",
     },
     {
@@ -33,7 +32,6 @@ export const sagarChatConfig : ChatConfig = {
     {
       question: "How often do you experience feelings of anxiety or sadness?",
       responseType: ResponseType.Likert,
-      likertScale: 5,
       likertQuestion: "How willing would you be to self-disclose this information (how often you experience feelings of anxiety or sadness)?",
     },
   ],
