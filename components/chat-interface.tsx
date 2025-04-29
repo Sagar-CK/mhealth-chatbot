@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Bot, User } from 'lucide-react'
+import { Bot, BotMessageSquareIcon, User } from 'lucide-react'
 import { SelectResponse } from "@/components/select-response"
 import { LikertResponse } from "@/components/likert-response"
 import { type ChatConfig, type Message, ResponseType } from "@/lib/types"
@@ -140,7 +140,7 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
             <div className="flex items-center gap-2 max-w-[80%]">
               {message.sender === "bot" && (
                 <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
-                  <Bot className="h-4 w-4 text-primary-foreground" />
+                  <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
                 </Avatar>
               )}
 
