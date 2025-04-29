@@ -1,5 +1,8 @@
 # mHealth - Chatbot
-- For now buttons that redirect to different conditions that have a chatbot and users being able to click buttons.
-- Multiple step conversations and multiple scenarios
-- Save to supabase
+- `/` has buttons that redirect to different conditions.
+- Multiple step conversations and multiple scenarios.
+- Respond with Likert or Button
+- Save data to supabase.
+- Add a task instructions *specific* to a condition
+- Revoke Consent.
 - After completion of all scenarios navigate to a `/completion` route and redirect back to qualtrics.
