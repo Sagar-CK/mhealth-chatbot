@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Button } from "@/components/ui/button";
 import { CircleX } from "lucide-react";
+import Link from "next/link";
+import { RevokeConsentButton } from "@/components/revoke-consent";
+import { TaskInstructionButton } from "@/components/task-instruction";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +33,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
       >
         <nav className="sticky w-full h-16 flex items-center justify-between px-4">
-          <Button>
-            Task Instructions 
-          </Button>
-          <Button>
-          Revoke Consent <CircleX /> 
-          </Button>
+          <TaskInstructionButton />
+          <RevokeConsentButton />
         </nav>
         <main className="flex-1 flex">{children}</main>
       </body>
