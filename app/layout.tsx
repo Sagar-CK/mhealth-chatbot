@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Button } from "@/components/ui/button";
-import { CircleX } from "lucide-react";
-import Link from "next/link";
 import { RevokeConsentButton } from "@/components/revoke-consent";
 import { TaskInstructionButton } from "@/components/task-instruction";
 
