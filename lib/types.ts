@@ -11,8 +11,7 @@ export interface ChatStep {
   likertQuestion?: string
 }
 
-export interface ChatConfig {
-  title?: string
+export interface Scenario {
   steps: ChatStep[]
   completionMessage?: string
 }

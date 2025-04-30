@@ -5,6 +5,9 @@ export default function NotFound() {
       
       <p> Please navigate to the previous page.</p> 
       <p> If you still have issues contact the researcher on email. </p>
+      <strong>
+        You were redirected to this page because you entered an invalid route (e.g. query parameters).
+      </strong>
     </div>
   );
 }

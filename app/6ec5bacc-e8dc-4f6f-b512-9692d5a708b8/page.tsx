@@ -1,7 +1,7 @@
 import { ChatInterface } from "@/components/chat-interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { sagarChatConfig } from "@/lib/chat/sagar-chat-config";
+import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
 import { BotIcon } from "lucide-react";
 
 export default function Sagar() {
@@ -14,7 +14,7 @@ export default function Sagar() {
         </CardHeader>
         <Separator />
         <CardContent>
-          <ChatInterface config={sagarChatConfig} />
+          <ChatInterface scenarios={sagarScenarios} />
         </CardContent>
       </Card>
     </div>

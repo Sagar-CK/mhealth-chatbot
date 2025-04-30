@@ -7,33 +7,38 @@ import { Card } from "@/components/ui/card"
 import { Bot, BotMessageSquareIcon, User } from 'lucide-react'
 import { SelectResponse } from "@/components/select-response"
 import { LikertResponse } from "@/components/likert-response"
-import { type ChatConfig, type Message, ResponseType } from "@/lib/types"
+import { type Scenario, type Message, ResponseType } from "@/lib/types"
+import { useRouter } from "next/navigation"
 
 interface ChatInterfaceProps {
-  config: ChatConfig
+  scenarios: Scenario[];
   height?: string
 }
 
-export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) {
+export function ChatInterface({ scenarios, height = "600px" }: ChatInterfaceProps) {
+  const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [currentStep, setCurrentStep] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
+  const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
+  const currentScenario = scenarios[currentScenarioIndex]
+
   // Initialize with first bot message
   useEffect(() => {
-    if (config.steps.length > 0 && messages.length === 0) {
+    if (currentScenario?.steps.length > 0 && messages.length === 0) {
       setMessages([
         {
           id: "initial",
           sender: "bot",
-          text: config.steps[0].question,
+          text: currentScenario.steps[0].question,
           timestamp: new Date(),
         },
       ])
     }
-  }, [config, messages.length])
+  }, [currentScenario, messages.length])
 
   // Auto-scroll to bottom of messages with smooth animation
   useEffect(() => {
@@ -58,7 +63,7 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
     // Move to next step
     const nextStep = currentStep + 1
 
-    if (nextStep < config.steps.length) {
+    if (nextStep < currentScenario.steps.length) {
       // Add next bot message after a short delay
       setTimeout(() => {
         setMessages((prev) => [
@@ -66,7 +71,7 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
           {
             id: `bot-${Date.now()}`,
             sender: "bot",
-            text: config.steps[nextStep].question,
+            text: currentScenario.steps[nextStep].question,
             timestamp: new Date(),
           },
         ])
@@ -80,7 +85,7 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
           {
             id: `bot-final`,
             sender: "bot",
-            text: config.completionMessage || "Thank you for your responses!",
+            text: currentScenario.completionMessage || "Thank you for your responses!",
             timestamp: new Date(),
           },
         ])
@@ -92,15 +97,15 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
   const renderResponseComponent = () => {
     if (isComplete) return null
 
-    const currentStepConfig = config.steps[currentStep]
+    const currentStepscenario = currentScenario.steps[currentStep]
 
-    switch (currentStepConfig.responseType) {
+    switch (currentStepscenario.responseType) {
       case ResponseType.Select:
-        return <SelectResponse options={currentStepConfig.options || []} onSelect={handleResponse} />
+        return <SelectResponse options={currentStepscenario.options || []} onSelect={handleResponse} />
       case ResponseType.Likert:
         return (
           <LikertResponse
-            question={currentStepConfig.likertQuestion || "Rate your willingness:"}
+            question={currentStepscenario.likertQuestion || "Rate your willingness:"}
             onSelect={handleResponse}
           />
         )
@@ -109,17 +114,24 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
     }
   }
 
-  const resetChat = () => {
-    setMessages([
-      {
-        id: "initial-reset",
-        sender: "bot",
-        text: config.steps[0].question,
-        timestamp: new Date(),
-      },
-    ])
-    setCurrentStep(0)
-    setIsComplete(false)
+  const nextOrCompleteScenario = () => {
+    if (currentScenarioIndex < scenarios.length - 1) {
+      // Move to next scenario
+      setCurrentScenarioIndex(prev => prev + 1)
+      setMessages([
+        {
+          id: "initial-reset",
+          sender: "bot",
+          text: scenarios[currentScenarioIndex + 1].steps[0].question,
+          timestamp: new Date(),
+        },
+      ])
+      setCurrentStep(0)
+      setIsComplete(false)
+    } else {
+      // All scenarios complete, navigate to completion page
+      router.push('/completion')
+    }
   }
 
   return (
@@ -161,8 +173,8 @@ export function ChatInterface({ config, height = "600px" }: ChatInterfaceProps) 
 
       <div className="p-4 border-t bg-card">
         {isComplete ? (
-          <Button onClick={resetChat} className="w-full">
-            Next Scenario
+          <Button onClick={nextOrCompleteScenario} className="w-full">
+            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
           </Button>
         ) : (
           renderResponseComponent()
