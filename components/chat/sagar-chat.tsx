@@ -6,26 +6,23 @@ import { Separator } from "@/components/ui/separator";
 import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
 import { BotIcon } from "lucide-react";
 import { api } from "@/trpc/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SagarChatProps {
   uid: string;
 }
 
 export function SagarChat({ uid }: SagarChatProps) {
-  const { data: user, isLoading: isUserLoading } = api.users.getUserById.useQuery({
-    userId: uid,
-  });
-
-  const createUser = api.users.createUser.useMutation();
+  const [isLoading, setIsLoading] = useState(true);
+  const createUser = api.users.createUser.useMutation({onSuccess: () => {
+    setIsLoading(false);
+  }});
 
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      createUser.mutate({ userId: uid });
-    }
-  }, [uid, isUserLoading, user, createUser]);
+    createUser.mutate({ userId: uid });
+  }, []);
 
-  if (isUserLoading || createUser.isPending) {
+  if (isLoading) {
     return (
       <div className="flex w-full items-center justify-center">
         <Card className="w-4/5 h-full bg-slate-50">

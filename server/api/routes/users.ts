@@ -9,6 +9,15 @@ export const usersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Check if user already exists
+      const existingUser = await ctx.sql`SELECT * FROM users WHERE userId = ${input.userId}`;
+      if (existingUser.length > 0) {
+        return existingUser[0];
+      }
+
+      console.log("Creating new user");
+
+      // Create new user
       const lastUser = await ctx.sql`SELECT * FROM users ORDER BY created_at DESC LIMIT 1`;
       let newUserCondition = 1;
       if (lastUser.length > 0) {
@@ -17,7 +26,8 @@ export const usersRouter = createTRPCRouter({
       }
       const createdAt = new Date();
       const revokedConsent = false;
-      await ctx.sql`INSERT INTO users (userId, condition, revoked_consent, created_at) VALUES (${input.userId}, ${newUserCondition}, ${revokedConsent}, ${createdAt})`;
+      const newUser = await ctx.sql`INSERT INTO users (userId, condition, revoked_consent, created_at) VALUES (${input.userId}, ${newUserCondition}, ${revokedConsent}, ${createdAt}) RETURNING *`;
+      return newUser[0];
     }),
   getUserById: publicProcedure
     .input(
