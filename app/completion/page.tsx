@@ -1,14 +1,13 @@
 "use client"
 
 import { Card } from "@/components/ui/card"
-import { useSearchParams } from "next/navigation"
 import { QualtricsButton } from "@/components/qualtrics-button"
-import { Suspense } from "react"
+import { useSearchParams } from "next/navigation";
 
-function CompletionContent() {
-  const searchParams = useSearchParams()
-  const studyId = searchParams.get("study_id")
-  const uid = searchParams.get("uid")
+export default function CompletionPage() {
+  const searchParams = useSearchParams();
+  const studyId = searchParams.get("study_id") as string;
+  const uid = searchParams.get("uid") as string;
 
   if (!studyId || !uid) {
     return <div className="flex flex-col items-center justify-center w-full h-full gap-y-4">
@@ -32,11 +31,3 @@ function CompletionContent() {
     </div>
   )
 }
-
-export default function CompletionPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <CompletionContent />
-    </Suspense>
-  )
-} 

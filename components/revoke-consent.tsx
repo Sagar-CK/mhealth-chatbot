@@ -3,6 +3,8 @@
 import { CircleX } from "lucide-react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,8 +17,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export function RevokeConsentButton() {
+function RevokeConsentButtonContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const uid = searchParams.get("uid");
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -40,11 +45,25 @@ export function RevokeConsentButton() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => router.push("/revoked-consent")}>
+          <AlertDialogAction onClick={() => {
+            if (uid) {
+              router.push(`/revoked-consent?uid=${uid}`);
+            } else {
+              router.push("/revoked-consent");
+            }
+          }}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  );
+}
+
+export function RevokeConsentButton() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RevokeConsentButtonContent />
+    </Suspense>
   );
 }

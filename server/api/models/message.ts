@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const MessageSchema = z.object({
-  userId: z.string(),
+  user_id: z.string(),
   id: z.string(),
   sender: z.enum(["bot", "user"]),
   text: z.string(),

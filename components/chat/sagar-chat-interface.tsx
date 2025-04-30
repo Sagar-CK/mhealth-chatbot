@@ -10,16 +10,17 @@ import { LikertResponse } from "@/components/chat/likert-response"
 import { type Scenario, type Message, ResponseType } from "@/lib/types"
 import { useRouter } from "next/navigation"
 import { api } from "@/trpc/react"
-import { sagarCondition } from "@/lib/constants"
+import { sagarStudy } from "@/lib/constants"
+import { User as UserType } from "@/server/api/models/user"
+
 
 interface ChatInterfaceProps {
   scenarios: Scenario[];
-  condition: number;
-  userId: string;
+  user: UserType;
   height?: string
 }
 
-export function ChatInterface({ scenarios, userId, condition, height = "600px" }: ChatInterfaceProps) {
+export function ChatInterface({ scenarios, user, height = "600px" }: ChatInterfaceProps) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -42,12 +43,12 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
           sender: "bot",
           text: currentScenario.steps[0].question,
           timestamp: new Date(),
-          userId: userId,
+          user_id: user.user_id,
           scenario: currentScenario.title
         },
       ])
     }
-  }, [currentScenario, messages.length, userId])
+  }, [currentScenario, messages.length, user.user_id])
 
   // Auto-scroll to bottom of messages with smooth animation
   useEffect(() => {
@@ -64,7 +65,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
       sender: "user" as const,
       text: response,
       timestamp: new Date(),
-      userId: userId,
+      user_id: user.user_id,
       scenario: currentScenario.title
     };
     
@@ -84,7 +85,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
           sender: "bot" as const,
           text: currentScenario.steps[nextStep].question,
           timestamp: new Date(),
-          userId: userId,
+          user_id: user.user_id,
           scenario: currentScenario.title
         };
         
@@ -100,7 +101,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
           sender: "bot" as const,
           text: currentScenario.completionMessage || "Thank you for your responses!",
           timestamp: new Date(),
-          userId: userId,
+          user_id: user.user_id,
           scenario: currentScenario.title
         };
         
@@ -141,7 +142,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
           sender: "bot",
           text: scenarios[currentScenarioIndex + 1].steps[0].question,
           timestamp: new Date(),
-          userId: userId,
+          user_id: user.user_id,
           scenario: scenarios[currentScenarioIndex + 1].title
         },
       ])
@@ -149,7 +150,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
       setIsComplete(false)
     } else {
       // All scenarios complete, navigate to completion page
-      router.push(`/completion?study_id=${sagarCondition}&uid=${userId}`)
+      router.push(`/completion?study_id=${sagarStudy}&uid=${user.user_id}`)
     }
   }
 
@@ -193,7 +194,7 @@ export function ChatInterface({ scenarios, userId, condition, height = "600px" }
       <div className="p-4 border-t bg-card">
         {isComplete ? (
           <Button onClick={nextOrCompleteScenario} className="w-full">
-            {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${condition})` : "Next Scenario"}
+            {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
           </Button>
         ) : (
           renderResponseComponent()

@@ -10,10 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  linaCondition,
-  manuCondition,
-  sagarCondition,
-  yushanCondition,
+  linaStudy,
+  manuStudy,
+  sagarStudy,
+  yushanStudy,
 } from "@/lib/constants";
 import SagarTaskInstructions from "./task-instructions/sagar-task-instructions";
 
@@ -29,13 +29,13 @@ export function TaskInstructionButton() {
         <DialogHeader>
           <DialogTitle>Task Instructions</DialogTitle>
           <div className="text-muted-foreground text-sm">
-            {pathname.includes(sagarCondition) ? (
+            {pathname.includes(sagarStudy) ? (
               <SagarTaskInstructions />
-            ) : pathname.includes(manuCondition) ? (
+            ) : pathname.includes(manuStudy) ? (
               <p>Manu Instructions</p>
-            ) : pathname.includes(yushanCondition) ? (
+            ) : pathname.includes(yushanStudy) ? (
               <p>Yushan Instructions</p>
-            ) : pathname.includes(linaCondition) ? (
+            ) : pathname.includes(linaStudy) ? (
               <p>Lina Instructions</p>
             ) : (
               <p>

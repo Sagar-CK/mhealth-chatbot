@@ -20,11 +20,18 @@ export default async function Sagar({ searchParams }: PageProps) {
     );
   }
 
-  const user = await api.users.getUserById({ userId: uid });
+  const user = await api.users.createUser({ user_id: uid });
 
-  if (!user || !user.condition) {
-    return <div>User not found</div>;
+  if (!user) {
+    return (
+      <div className="flex flex-col gap-4 h-full w-full items-center justify-center">
+        <h1 className="text-2xl font-bold">User not found!</h1>
+        <p className="text-sm text-muted-foreground">
+          Contact the researcher for support or go to the previous page in your browser!
+        </p>
+      </div>
+    );
   }
-  
-  return <SagarChat uid={uid} condition={user.condition} />;
+
+  return <SagarChat user={user} />;
 }

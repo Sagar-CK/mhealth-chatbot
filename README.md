@@ -8,7 +8,7 @@
 - After completion of all scenarios navigate to a `/completion` route and redirect back to qualtrics. ✅
 - Add qualtrics integrations. ✅
 - Create LLM Endpoint for chat (maybe different ones for different stages)?
-- Create different conditions within the study.
+- Create different conditions within the study. ✅
 
 ----
 

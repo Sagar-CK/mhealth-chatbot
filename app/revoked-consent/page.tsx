@@ -1,7 +1,26 @@
-export default function RevokedConsent() {
+import { api } from "@/trpc/server";
+
+interface RevokedConsentProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function RevokedConsent({ searchParams }: RevokedConsentProps) {
+  const uid = (await searchParams).uid as string;
+
+  if (!uid) {
+    return <div className="w-full h-full flex items-center justify-center flex-col gap-y-4">
+      <h1 className="text-2xl font-bold">No UID provided!</h1>
+      <p className="text-sm text-muted-foreground">
+        We could not revoke your consent because no UID was provided. Please contact the researcher for support.
+      </p>
+    </div>
+  }
+
+  await api.users.revokeConsent({ user_id: uid });
+
   return(
     <div className="w-full h-full flex items-center justify-center">
-      To-do: Re-direct to the qualtrics survey!
+      We have revoked your consent. All data collected so far has been deleted.
     </div>
   )
 }

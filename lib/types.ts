@@ -22,6 +22,6 @@ export interface Message {
   sender: "bot" | "user"
   text: string
   timestamp: Date
-  userId: string
+  user_id: string
   scenario: string
 }
