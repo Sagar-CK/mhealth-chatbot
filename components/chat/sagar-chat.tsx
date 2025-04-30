@@ -1,6 +1,6 @@
 "use client";
 
-import { ChatInterface } from "@/components/chat/chat-interface";
+import { ChatInterface } from "@/components/chat/sagar-chat-interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
@@ -10,13 +10,16 @@ import { useEffect, useState } from "react";
 
 interface SagarChatProps {
   uid: string;
+  condition: number;
 }
 
-export function SagarChat({ uid }: SagarChatProps) {
+export function SagarChat({ uid, condition }: SagarChatProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const createUser = api.users.createUser.useMutation({onSuccess: () => {
-    setIsLoading(false);
-  }});
+  const createUser = api.users.createUser.useMutation({
+    onSuccess: () => {
+      setIsLoading(false);
+    }
+  });
 
   useEffect(() => {
     createUser.mutate({ userId: uid });
@@ -38,12 +41,12 @@ export function SagarChat({ uid }: SagarChatProps) {
     <div className="flex w-full items-center justify-center">
       <Card className="w-4/5 h-full bg-slate-50">
         <CardHeader className="w-full flex justify-between items-center">
-          <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
+          <CardTitle>Interact with your mHealth Chatbot! Condition: {condition}</CardTitle>
           <BotIcon />
         </CardHeader>
         <Separator />
         <CardContent>
-          <ChatInterface scenarios={sagarScenarios} userId={uid} />
+          <ChatInterface scenarios={sagarScenarios} userId={uid} condition={condition} />
         </CardContent>
       </Card>
     </div>

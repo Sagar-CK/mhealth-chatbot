@@ -14,11 +14,12 @@ import { sagarCondition } from "@/lib/constants"
 
 interface ChatInterfaceProps {
   scenarios: Scenario[];
+  condition: number;
   userId: string;
   height?: string
 }
 
-export function ChatInterface({ scenarios, userId, height = "600px" }: ChatInterfaceProps) {
+export function ChatInterface({ scenarios, userId, condition, height = "600px" }: ChatInterfaceProps) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -192,7 +193,7 @@ export function ChatInterface({ scenarios, userId, height = "600px" }: ChatInter
       <div className="p-4 border-t bg-card">
         {isComplete ? (
           <Button onClick={nextOrCompleteScenario} className="w-full">
-            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
+            {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${condition})` : "Next Scenario"}
           </Button>
         ) : (
           renderResponseComponent()

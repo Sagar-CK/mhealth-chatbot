@@ -1,4 +1,5 @@
 import { SagarChat } from "@/components/chat/sagar-chat";
+import { api } from "@/trpc/server";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -19,5 +20,11 @@ export default async function Sagar({ searchParams }: PageProps) {
     );
   }
 
-  return <SagarChat uid={uid} />;
+  const user = await api.users.getUserById({ userId: uid });
+
+  if (!user || !user.condition) {
+    return <div>User not found</div>;
+  }
+  
+  return <SagarChat uid={uid} condition={user.condition} />;
 }
