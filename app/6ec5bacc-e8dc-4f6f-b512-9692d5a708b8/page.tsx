@@ -1,22 +1,23 @@
-import { ChatInterface } from "@/components/chat-interface";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
-import { BotIcon } from "lucide-react";
+import { SagarChat } from "@/components/chat/sagar-chat";
 
-export default function Sagar() {
-  return (
-    <div className="flex w-full items-center justify-center">
-      <Card className="w-4/5 h-full bg-slate-50">
-        <CardHeader className="w-full flex justify-between items-center">
-          <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
-          <BotIcon />
-        </CardHeader>
-        <Separator />
-        <CardContent>
-          <ChatInterface scenarios={sagarScenarios} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function Sagar({ searchParams }: PageProps) {
+  const trueSearchParams = await searchParams;
+  const uid = trueSearchParams.uid as string;
+
+  if (!uid) {
+    return (
+      <div className="flex flex-col gap-4 h-full w-full items-center justify-center">
+        <h1 className="text-2xl font-bold">No UID provided!</h1>
+        <p className="text-sm text-muted-foreground">
+          Contact the researcher for support or go to the previous page in your browser!
+        </p>
+      </div>
+    );
+  }
+
+  return <SagarChat uid={uid} />;
 }

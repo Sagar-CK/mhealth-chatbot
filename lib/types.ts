@@ -12,6 +12,7 @@ export interface ChatStep {
 }
 
 export interface Scenario {
+  title: string
   steps: ChatStep[]
   completionMessage?: string
 }
@@ -21,4 +22,6 @@ export interface Message {
   sender: "bot" | "user"
   text: string
   timestamp: Date
+  userId: string
+  scenario: string
 }

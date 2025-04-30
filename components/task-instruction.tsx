@@ -19,6 +19,7 @@ import SagarTaskInstructions from "./task-instructions/sagar-task-instructions";
 
 export function TaskInstructionButton() {
   const pathname = usePathname().toString();
+
   return (
     <Dialog>
       <DialogTrigger asChild>

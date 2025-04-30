@@ -1,0 +1,54 @@
+"use client";
+
+import { ChatInterface } from "@/components/chat/chat-interface";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
+import { BotIcon } from "lucide-react";
+import { api } from "@/trpc/react";
+import { useEffect } from "react";
+
+interface SagarChatProps {
+  uid: string;
+}
+
+export function SagarChat({ uid }: SagarChatProps) {
+  const { data: user, isLoading: isUserLoading } = api.users.getUserById.useQuery({
+    userId: uid,
+  });
+
+  const createUser = api.users.createUser.useMutation();
+
+  useEffect(() => {
+    if (!isUserLoading && !user) {
+      createUser.mutate({ userId: uid });
+    }
+  }, [uid, isUserLoading, user, createUser]);
+
+  if (isUserLoading || createUser.isPending) {
+    return (
+      <div className="flex w-full items-center justify-center">
+        <Card className="w-4/5 h-full bg-slate-50">
+          <CardContent className="flex items-center justify-center p-6">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex w-full items-center justify-center">
+      <Card className="w-4/5 h-full bg-slate-50">
+        <CardHeader className="w-full flex justify-between items-center">
+          <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
+          <BotIcon />
+        </CardHeader>
+        <Separator />
+        <CardContent>
+          <ChatInterface scenarios={sagarScenarios} userId={uid} />
+        </CardContent>
+      </Card>
+    </div>
+  );
+} 

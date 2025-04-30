@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RevokeConsentButton } from "@/components/revoke-consent";
 import { TaskInstructionButton } from "@/components/task-instruction";
-
+import { TRPCReactProvider } from "@/trpc/react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +33,9 @@ export default function RootLayout({
           <TaskInstructionButton />
           <RevokeConsentButton />
         </nav>
-        <main className="flex-1 flex">{children}</main>
+        <TRPCReactProvider>
+          <main className="flex-1 flex">{children}</main>
+        </TRPCReactProvider>
       </body>
     </html>
   );

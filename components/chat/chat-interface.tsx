@@ -4,18 +4,21 @@ import { useState, useRef, useEffect } from "react"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Bot, BotMessageSquareIcon, User } from 'lucide-react'
-import { SelectResponse } from "@/components/select-response"
-import { LikertResponse } from "@/components/likert-response"
+import { BotMessageSquareIcon, User } from 'lucide-react'
+import { SelectResponse } from "@/components/chat/select-response"
+import { LikertResponse } from "@/components/chat/likert-response"
 import { type Scenario, type Message, ResponseType } from "@/lib/types"
 import { useRouter } from "next/navigation"
+import { api } from "@/trpc/react"
+import { sagarCondition } from "@/lib/constants"
 
 interface ChatInterfaceProps {
   scenarios: Scenario[];
+  userId: string;
   height?: string
 }
 
-export function ChatInterface({ scenarios, height = "600px" }: ChatInterfaceProps) {
+export function ChatInterface({ scenarios, userId, height = "600px" }: ChatInterfaceProps) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -26,19 +29,24 @@ export function ChatInterface({ scenarios, height = "600px" }: ChatInterfaceProp
 
   const currentScenario = scenarios[currentScenarioIndex]
 
+  const createMessage = api.messages.create.useMutation()
+
+
   // Initialize with first bot message
   useEffect(() => {
     if (currentScenario?.steps.length > 0 && messages.length === 0) {
       setMessages([
         {
-          id: "initial",
+          id: `${currentScenario.title}-0-bot`,
           sender: "bot",
           text: currentScenario.steps[0].question,
           timestamp: new Date(),
+          userId: userId,
+          scenario: currentScenario.title
         },
       ])
     }
-  }, [currentScenario, messages.length])
+  }, [currentScenario, messages.length, userId])
 
   // Auto-scroll to bottom of messages with smooth animation
   useEffect(() => {
@@ -48,49 +56,57 @@ export function ChatInterface({ scenarios, height = "600px" }: ChatInterfaceProp
     }
   }, [messages])
 
-  const handleResponse = (response: string) => {
+  const handleResponse = async (response: string) => {
     // Add user response
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: `user-${Date.now()}`,
-        sender: "user",
-        text: response,
-        timestamp: new Date(),
-      },
-    ])
+    const userMessage = {
+      id: `${currentScenario.title}-${currentStep}-user`,
+      sender: "user" as const,
+      text: response,
+      timestamp: new Date(),
+      userId: userId,
+      scenario: currentScenario.title
+    };
+    
+    setMessages((prev) => [...prev, userMessage]);
+    
+    // Save message to server
+    createMessage.mutate(userMessage)
 
     // Move to next step
-    const nextStep = currentStep + 1
+    const nextStep = currentStep + 1;
 
     if (nextStep < currentScenario.steps.length) {
       // Add next bot message after a short delay
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `bot-${Date.now()}`,
-            sender: "bot",
-            text: currentScenario.steps[nextStep].question,
-            timestamp: new Date(),
-          },
-        ])
-        setCurrentStep(nextStep)
-      }, 500)
+        const botMessage = {
+          id: `${currentScenario.title}-${nextStep}-bot`,
+          sender: "bot" as const,
+          text: currentScenario.steps[nextStep].question,
+          timestamp: new Date(),
+          userId: userId,
+          scenario: currentScenario.title
+        };
+        
+        setMessages((prev) => [...prev, botMessage]);
+        createMessage.mutate(botMessage)
+        setCurrentStep(nextStep);
+      }, 500);
     } else {
       // Chat is complete
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `bot-final`,
-            sender: "bot",
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-          },
-        ])
-        setIsComplete(true)
-      }, 500)
+        const finalMessage = {
+          id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+          sender: "bot" as const,
+          text: currentScenario.completionMessage || "Thank you for your responses!",
+          timestamp: new Date(),
+          userId: userId,
+          scenario: currentScenario.title
+        };
+        
+        setMessages((prev) => [...prev, finalMessage]);
+        createMessage.mutate(finalMessage)
+        setIsComplete(true);
+      }, 500);
     }
   }
 
@@ -120,33 +136,35 @@ export function ChatInterface({ scenarios, height = "600px" }: ChatInterfaceProp
       setCurrentScenarioIndex(prev => prev + 1)
       setMessages([
         {
-          id: "initial-reset",
+          id: `${scenarios[currentScenarioIndex + 1].title}-0-bot`,
           sender: "bot",
           text: scenarios[currentScenarioIndex + 1].steps[0].question,
           timestamp: new Date(),
+          userId: userId,
+          scenario: scenarios[currentScenarioIndex + 1].title
         },
       ])
       setCurrentStep(0)
       setIsComplete(false)
     } else {
       // All scenarios complete, navigate to completion page
-      router.push('/completion')
+      router.push(`/completion?study_id=${sagarCondition}&uid=${userId}`)
     }
   }
 
   return (
-    <div 
-      className="flex flex-col rounded-lg border shadow-sm overflow-hidden" 
+    <div
+      className="flex flex-col rounded-lg border shadow-sm overflow-hidden"
       style={{ height }}
     >
-      <div 
+      <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
         style={{ scrollBehavior: "smooth" }}
       >
         {messages.map((message) => (
-          <div 
-            key={message.id} 
+          <div
+            key={message.id}
             className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
           >
             <div className="flex items-center gap-2 max-w-[80%]">

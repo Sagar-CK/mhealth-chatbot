@@ -1,9 +1,24 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { useSearchParams } from "next/navigation"
+import { QualtricsButton } from "@/components/qualtrics-button"
+import { Suspense } from "react"
 
-export default function CompletionPage() {
+function CompletionContent() {
+  const searchParams = useSearchParams()
+  const studyId = searchParams.get("study_id")
+  const uid = searchParams.get("uid")
+
+  if (!studyId || !uid) {
+    return <div className="flex flex-col items-center justify-center w-full h-full gap-y-4">
+      <h1 className="text-2xl font-bold">No study ID or UID found</h1>
+      <p className="text-muted-foreground">
+        Please contact the researcher for support or go to the previous page in your browser!
+      </p>
+    </div>
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-full h-full gap-y-4">
       <Card className="p-8 max-w-md text-center">
@@ -13,8 +28,15 @@ export default function CompletionPage() {
         </p>
       </Card>
 
-      <Button onClick={() => window.open('https://www.google.com', '_blank')}>Continue to Qualtrics</Button>
-
+      <QualtricsButton uid={uid} studyId={studyId} />
     </div>
+  )
+}
+
+export default function CompletionPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CompletionContent />
+    </Suspense>
   )
 } 

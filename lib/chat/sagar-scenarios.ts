@@ -2,6 +2,7 @@ import { type Scenario, ResponseType } from "../types";
 
 export const sagarScenarios: Scenario[] = [
   {
+    title: "low-severity",
     steps: [
       {
         question:
@@ -33,6 +34,32 @@ export const sagarScenarios: Scenario[] = [
         responseType: ResponseType.Likert,
         likertQuestion:
           "How willing would you be to self-disclose this information (how often you experience feelings of anxiety or sadness)?",
+      },
+    ],
+    completionMessage:
+      "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being.",
+  },
+  {
+    title: "medium-severity",
+    steps: [
+      {
+        question: "How often do you experience feelings of anxiety or sadness?",
+        responseType: ResponseType.Likert,
+        likertQuestion:
+          "How willing would you be to self-disclose this information (how often you experience feelings of anxiety or sadness)?",
+      },
+    ],
+    completionMessage:
+      "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being.",
+  },
+  {
+    title: "high-severity",
+    steps: [
+      {
+        question: "Have you ever considered harming yourself?",
+        responseType: ResponseType.Likert,
+        likertQuestion:
+          "How willing would you be to self-disclose this information (have you ever considered harming yourself)?",
       },
     ],
     completionMessage:
