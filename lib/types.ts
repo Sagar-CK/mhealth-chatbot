@@ -11,9 +11,24 @@ export interface ChatStep {
   likertQuestion?: string
 }
 
+export interface AudioChatStep {
+  id: string
+  question: string
+  audioUrl: string
+  audioDuration: number
+  likertScale?: number
+  likertQuestion?: string
+}
+
 export interface ChatConfig {
   title?: string
   steps: ChatStep[]
+  completionMessage?: string
+}
+
+export interface AudioChatConfig {
+  title?: string
+  steps: AudioChatStep[]
   completionMessage?: string
 }
 
