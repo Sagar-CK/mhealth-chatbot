@@ -21,11 +21,13 @@ export const usersRouter = createTRPCRouter({
       const [lastUser] =
         await ctx.sql`SELECT * FROM users ORDER BY created_at DESC LIMIT 1`;
 
+      console.log("lastUser", lastUser);
+
 
       let newUserCondition = 1;
 
       if (lastUser) {
-        const lastCondition = Number(lastUser[0].condition);
+        const lastCondition = Number(lastUser.condition);
         newUserCondition = lastCondition === 1 ? 2 : 1;
       }
 
