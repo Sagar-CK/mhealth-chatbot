@@ -1,168 +1,237 @@
 "use client"
 
-import { useState } from "react"
-import { Avatar } from "@/components/ui/avatar"
+import { useState, useRef, useEffect } from "react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Bot, Play, Pause, Volume2 } from "lucide-react"
+import { Play, Pause, Volume2 } from "lucide-react"
+import { Slider } from "@/components/ui/slider"
 import { Progress } from "@/components/ui/progress"
-import { type AudioChatConfig } from "@/lib/types"
+import { Card, CardContent } from "@/components/ui/card"
+import type { AudioChatConfig } from "@/lib/types"
 
 interface AudioChatInterfaceProps {
   config: AudioChatConfig
   height?: string
 }
 
-export function AudioChatInterface({ config, height = "600px" }: AudioChatInterfaceProps) {
-  const [currentStep, setCurrentStep] = useState(0)
+export function AudioChatInterface({ config }: AudioChatInterfaceProps) {
+  const [currentQuestionNo, setCurrentQuestionNo] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
   const [selectedValue, setSelectedValue] = useState<number | null>(null)
-  const [responses, setResponses] = useState<Record<number, number>>({})
-  const [progress, setProgress] = useState(0)
+  const [responses, setResponses] = useState<Record<number, number | null>>({})
   const [isComplete, setIsComplete] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
-  const currentQuestion = config.steps[currentStep]
-  const isLastQuestion = currentStep === config.steps.length - 1
+  const currentQuestion = config.questions[currentQuestionNo]
+  const isLastQuestion = currentQuestionNo === config.questions.length - 1
+  const progressPercentage = Math.round((currentQuestionNo / config.questions.length) * 100)
 
-  // Handle audio play/pause
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying)
+  // Format time in MM:SS format
+  const formatTime = (timeInSeconds: number) => {
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = Math.floor(timeInSeconds % 60)
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`
+  }
 
-    // Simulate audio playing with progress
-    if (!isPlaying) {
-      setProgress(0)
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval)
-            setIsPlaying(false)
-            return 100
-          }
-          return prev + 2
-        })
-      }, 100)
+  // Handle play/pause toggle
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
     }
   }
 
-  // Handle next question
+  // Handle seeking
+  const handleSeek = (value: number[]) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = value[0]
+      setCurrentTime(value[0])
+    }
+  }
+
+  // Update current time as audio plays
+  useEffect(() => {
+    const audio = audioRef.current
+
+    const handleTimeUpdate = () => {
+      if (audio) {
+        setCurrentTime(audio.currentTime)
+      }
+    }
+
+    const handleLoadedMetadata = () => {
+      if (audio) {
+        setDuration(audio.duration)
+      }
+    }
+
+    const handleEnded = () => {
+      setIsPlaying(false)
+      setCurrentTime(0)
+      if (audio) {
+        audio.currentTime = 0
+      }
+    }
+
+    if (audio) {
+      audio.addEventListener("timeupdate", handleTimeUpdate)
+      audio.addEventListener("loadedmetadata", handleLoadedMetadata)
+      audio.addEventListener("ended", handleEnded)
+    }
+
+    return () => {
+      if (audio) {
+        audio.removeEventListener("timeupdate", handleTimeUpdate)
+        audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
+        audio.removeEventListener("ended", handleEnded)
+      }
+    }
+  }, [])
+
   const handleNext = () => {
-    // Save current response
     setResponses((prev) => ({
       ...prev,
-      [currentQuestion.id]: selectedValue as number,
+      [currentQuestion.id]: selectedValue,
     }))
 
-    // Move to next question or finish
     if (!isLastQuestion) {
-      setCurrentStep((prev) => prev + 1)
+      setCurrentQuestionNo((prev) => prev + 1)
       setSelectedValue(null)
-      setProgress(0)
       setIsPlaying(false)
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
     } else {
-      // Handle completion
       setIsComplete(true)
       console.log("Assessment complete!", responses)
     }
   }
 
-  // Reset the chat
-  const resetChat = () => {
-    setCurrentStep(0)
-    setSelectedValue(null)
-    setProgress(0)
-    setIsPlaying(false)
-    setResponses({})
-    setIsComplete(false)
+  const getLikertLabel = (value: number) => {
+    switch (value) {
+      case 1:
+        return "Not at all"
+      case 2:
+        return "Slightly"
+      case 3:
+        return "Moderately"
+      case 4:
+        return "Very"
+      case 5:
+        return "Extremely"
+      default:
+        return ""
+    }
   }
 
   return (
-    <div className="flex flex-col rounded-lg border shadow-sm overflow-hidden" style={{ height }}>
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 bg-muted/20">
-        {/* Progress indicator */}
-        <div className="flex justify-between items-center">
-          <span className="text-sm text-gray-500">
-            Question {currentStep + 1} of {config.steps.length}
+    <div className="flex flex-col rounded-lg border shadow-sm overflow-auto bg-background">
+      <div className="p-4 border-b">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-lg font-semibold">Progress</h2>
+          <span className="text-sm font-medium">
+            Question {currentQuestionNo + 1} of {config.questions.length}
           </span>
-          <span className="text-sm font-medium">{Math.round((currentStep / config.steps.length) * 100)}% Complete</span>
         </div>
+        <Progress value={progressPercentage} className="h-2" />
+      </div>
 
-        {/* Speaker notification */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-700">
-          <Volume2 className="h-4 w-4" />
-          <p className="text-sm font-medium">Please turn on your speakers</p>
-        </div>
-
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {!isComplete ? (
           <>
-            {/* Audio message with chatbot icon */}
-            <div className="flex items-start gap-3">
-              <Avatar className="h-10 w-10 bg-primary/10">
-                <Bot className="h-6 w-6 text-primary" />
-              </Avatar>
-
-              {/* WhatsApp style audio player */}
-              <div className="flex items-center gap-3 bg-white rounded-full p-1 pl-1 pr-3 border shadow-sm">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className={`rounded-full h-10 w-10 ${isPlaying ? "bg-red-100 text-red-600" : "bg-primary/10 text-primary"}`}
-                  onClick={togglePlay}
-                >
-                  {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
-                </Button>
-
-                <div className="flex-1">
-                  <Progress value={progress} className="h-1" />
-                </div>
-
-                <span className="text-xs text-gray-500 min-w-[32px] text-right">{currentQuestion.audioDuration}</span>
-              </div>
+            <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700">
+              <Volume2 className="h-5 w-5" />
+              <p className="text-sm font-medium">Please ensure your speakers are working </p>
             </div>
 
-            {/* Response scale 1-5 */}
-            <div className="space-y-4">
-              <label className="text-sm font-medium">Your response:</label>
+            <Card className="p-2">
+              <CardContent className="">
+                <div className="flex items-center gap-4 mb-4">
+                  <Avatar className="h-12 w-12 border-2 border-primary/10">
+                    <AvatarImage src="/placeholder.svg?height=48&width=48" />
+                    <AvatarFallback>RC</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-medium">Research Chatbot</h3>
+                    <p className="text-sm text-muted-foreground">Please Listen to the question</p>
+                  </div>
+                </div>
 
-              <div className="flex justify-center gap-3">
-                {[1, 2, 3, 4, 5].map((num) => (
-                  <Button
-                    key={num}
-                    variant={selectedValue === num ? "default" : "outline"}
-                    size="sm"
-                    className="h-12 w-12 p-0 rounded-full"
-                    onClick={() => setSelectedValue(num)}
-                  >
-                    {num}
-                  </Button>
-                ))}
-              </div>
+                <div className="space-y-4 flex-1">
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-10 w-10 rounded-full flex-shrink-0 bg-primary/5 hover:bg-primary/10"
+                      onClick={togglePlayPause}
+                    >
+                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                      <span className="sr-only">{isPlaying ? "Pause" : "Play"}</span>
+                    </Button>
 
-              <div className="flex justify-between text-sm text-gray-500 px-6">
-                <span>Not at all</span>
-                <span>Extremely</span>
+                    <div className="flex-1 space-y-1">
+                      <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} />
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>{formatTime(currentTime)}</span>
+                        <span>{formatTime(duration)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <audio ref={audioRef} src={config.questions[currentQuestionNo].audioUrl} />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Question and Likert scale */}
+            <div className="space-y-5 pt-2">
+              <h3 className="text-lg font-medium">{config.questions[currentQuestionNo].likertQuestion}</h3>
+
+              <div className="space-y-6">
+                <div className="grid grid-cols-5 gap-2">
+                  {[1, 2, 3, 4, 5].map((num) => (
+                    <div key={num} className="flex flex-col items-center gap-2">
+                      <Button
+                        variant={selectedValue === num ? "default" : "outline"}
+                        size="lg"
+                        className={`p-0 h-8 w-8 rounded-full ${selectedValue === num ? "ring-2 ring-offset-2 ring-primary" : ""}`}
+                        onClick={() => setSelectedValue(num)}
+                      >
+                        {num}
+                      </Button>
+                      <span className="text-xs text-center text-muted-foreground">{getLikertLabel(num)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </>
         ) : (
-          <div className="flex items-center justify-center p-6">
-            <div className="text-center">
-              <h3 className="text-lg font-medium mb-2">Assessment Complete</h3>
-              <p className="text-gray-500">{config.completionMessage}</p>
+          <div className="flex items-center justify-center h-full p-4">
+            <div className="text-center max-w-md">
+              <h3 className="text-xl font-medium mb-3">Assessment Complete</h3>
+              <p className="text-muted-foreground mb-6">{config.completionMessage}</p>
+              <Button onClick={() => location.href=""} className="w-full">
+                Continue to Post Task Survey
+              </Button>
             </div>
           </div>
         )}
       </div>
 
-      <div className="p-4 border-t bg-card">
-        {isComplete ? (
-          <Button onClick={resetChat} className="w-full">
-            Start New Assessment
+      {!isComplete && (
+        <div className="p-4 border-t bg-muted/10">
+          <Button onClick={handleNext} disabled={selectedValue === null} className="w-full" size="lg">
+            {isLastQuestion ? "Finish" : "Next Question"}
           </Button>
-        ) : (
-          <Button onClick={handleNext} disabled={selectedValue === null} className="w-full">
-            {isLastQuestion ? "Finish" : "Next"}
-          </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

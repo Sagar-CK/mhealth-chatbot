@@ -5,14 +5,14 @@ import { manuChatConfig } from "@/lib/chat/manu-chat-config";
 
 export default function Manu() {
   return (
-    <div className="flex w-full items-center justify-center">
-      <Card className="w-4/5 h-full bg-slate-50">
+    <div className="flex w-full items-center justify-center flex-1 overflow-auto">
+      <Card className="w-4/5 bg-slate-50 flex flex-col overflow-auto">
         <CardHeader className="w-full flex justify-between items-center">
           <CardTitle>Interact with your mHealth Voice Chatbot!</CardTitle>
           <p>Manu Condition</p>
         </CardHeader>
         <Separator />
-        <CardContent>
+        <CardContent className="flex-1">
           <AudioChatInterface config={manuChatConfig} />
         </CardContent>
       </Card>

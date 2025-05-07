@@ -15,8 +15,6 @@ export interface AudioChatStep {
   id: string
   question: string
   audioUrl: string
-  audioDuration: number
-  likertScale?: number
   likertQuestion?: string
 }
 
@@ -28,7 +26,7 @@ export interface ChatConfig {
 
 export interface AudioChatConfig {
   title?: string
-  steps: AudioChatStep[]
+  questions: AudioChatStep[]
   completionMessage?: string
 }
 

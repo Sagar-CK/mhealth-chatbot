@@ -27,14 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased max-h-screen flex flex-col overflow-auto`}
       >
         <nav className="sticky w-full h-16 flex items-center justify-between px-4">
           <Button>
-            Task Instructions 
+            Task Instructions
           </Button>
           <Button>
-          Revoke Consent <CircleX /> 
+          Revoke Consent <CircleX />
           </Button>
         </nav>
         <main className="flex-1 flex">{children}</main>
