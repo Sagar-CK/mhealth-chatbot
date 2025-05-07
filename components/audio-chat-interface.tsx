@@ -217,7 +217,8 @@ export function AudioChatInterface({ config }: AudioChatInterfaceProps) {
             <div className="text-center max-w-md">
               <h3 className="text-xl font-medium mb-3">Assessment Complete</h3>
               <p className="text-muted-foreground mb-6">{config.completionMessage}</p>
-              <Button onClick={() => location.href=""} className="w-full">
+              {/*Add the user id param once it exists */}
+              <Button onClick={() => location.href="https://tudelft.fra1.qualtrics.com/jfe/form/SV_eOGnYeZNYA1PX4G?study_id=7a793cf6-19f8-4066-afe0-a009ce48e996&uid="} className="w-full">
                 Continue to Post Task Survey
               </Button>
             </div>
