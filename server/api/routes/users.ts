@@ -45,12 +45,12 @@ export const usersRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const sql = ctx.sql;
-      const user =
+      const [user] =
         await sql`SELECT * FROM users WHERE user_id = ${input.user_id}`;
-      if (user.length === 0) {
+      if (!user) {
         return null;
       }
-      return user[0];
+      return user;
     }),
   revokeConsent: publicProcedure
     .input(
@@ -60,9 +60,9 @@ export const usersRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // if the user does not exist, create them first
-      const user =
+      const [user] =
         await ctx.sql`SELECT * FROM users WHERE user_id = ${input.user_id}`;
-      if (user.length === 0) {
+      if (!user){
         const [lastUser] =
           await ctx.sql`SELECT * FROM users ORDER BY created_at DESC LIMIT 1`;
         let newUserCondition = 1;
