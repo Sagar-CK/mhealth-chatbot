@@ -10,7 +10,6 @@ export interface ChatStep {
   likertScale?: number
   likertQuestion?: string
 }
-
 export interface AudioChatStep {
   id: string
   question: string
@@ -18,8 +17,8 @@ export interface AudioChatStep {
   likertQuestion?: string
 }
 
-export interface ChatConfig {
-  title?: string
+export interface Scenario {
+  title: string
   steps: ChatStep[]
   completionMessage?: string
 }
@@ -35,4 +34,6 @@ export interface Message {
   sender: "bot" | "user"
   text: string
   timestamp: Date
+  user_id: string
+  scenario: string
 }
