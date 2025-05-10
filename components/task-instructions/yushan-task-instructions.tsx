@@ -18,10 +18,10 @@ export default function YushanTaskInstructions() {
           </p>
 
           <ul>
-              <li><i>1. Base Version</i></li>
-              <li><i>2. Positive Tone Version</i></li>
-              <li><i>3. Negative Tone Version</i></li>
-              <li><i>4. Self-Disclosure Version</i></li>
+              <li><i>1. Baseline Version</i></li>
+              <li><i>2. Positive Version</i></li>
+              <li><i>3. Negative Version</i></li>
+              <li><i>4. More Disclosure Version</i></li>
           </ul>
       </div>
   )
