@@ -32,7 +32,7 @@ export default function YushanTaskInstructions() {
                 <li><i>1. Baseline Version</i></li>
                 <li><i>2. Positive Version</i></li>
                 <li><i>3. Negative Version</i></li>
-                <li><i>4. Mixture Version</i></li>
+                <li><i>4. Combined Version</i></li>
             </ul>
         </div>
     )

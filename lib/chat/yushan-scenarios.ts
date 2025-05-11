@@ -428,7 +428,7 @@ export const yushanScenarios: Scenario[] = [
             "Great job — you’ve completed the Negative Chatbot interaction."
     },
     {
-        title: "Mixture",
+        title: "Combined",
         steps: [
             // My worst fears
             {
