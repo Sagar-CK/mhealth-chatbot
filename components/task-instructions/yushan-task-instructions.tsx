@@ -5,7 +5,7 @@ export default function YushanTaskInstructions() {
         <div>
             <BotIcon/>
             <hr/>
-            <p><strong>Scenario</strong></p>
+            <p><strong>Role-Play</strong></p>
             <hr/>
             <p>
                 Imagine you are a bachelor student at risk of expulsion because you haven’t earned enough credits this
@@ -24,15 +24,15 @@ export default function YushanTaskInstructions() {
             <p><strong>Task</strong></p>
             <hr/>
             <p>
-                You will interact with <strong>four different versions</strong> of a mental health support chatbot.
-                Please respond to each chatbot as if you were the student described in the scenario.
+                You will interact with <strong>four different scenarios</strong> of a mental health support chatbot.
+                Please respond to each chatbot as if you were the student described in the Role-Play section.
             </p>
 
             <ul>
-                <li><i>1. Baseline Version</i></li>
-                <li><i>2. Positive Version</i></li>
-                <li><i>3. Negative Version</i></li>
-                <li><i>4. Combined Version</i></li>
+                <li><i>1. Baseline</i></li>
+                <li><i>2. Positive</i></li>
+                <li><i>3. Negative</i></li>
+                <li><i>4. Combined</i></li>
             </ul>
         </div>
     )
