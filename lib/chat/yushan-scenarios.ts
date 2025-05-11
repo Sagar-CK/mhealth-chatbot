@@ -17,7 +17,7 @@ export const yushanScenarios: Scenario[] = [
       }
     ],
     completionMessage:
-        "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being.",
+        "You are done with interacting with the Base Chatbot",
   },
   {
     title: "Positive",
