@@ -113,7 +113,7 @@ export const yushanScenarios: Scenario[] = [
             // What I Like and Dislike About Myself
             {
                 question: "How do you view yourself?",
-                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative1 -7 possitive)
+                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I see myself as a failure who can’t get anything right.", // +1 — harsh self-judgment
                     "I often feel like I’m not good enough.", // +2 — persistent self-doubt
@@ -255,7 +255,7 @@ export const yushanScenarios: Scenario[] = [
             // What I Like and Dislike About Myself
             {
                 question: "You're doing your best — how you see yourself matters. How do you view yourself?",
-                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative1 -7 possitive)
+                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I see myself as a failure who can’t get anything right.", // +1 — harsh self-judgment
                     "I often feel like I’m not good enough.", // +2 — persistent self-doubt
@@ -290,7 +290,7 @@ export const yushanScenarios: Scenario[] = [
         steps: [
             // My worst fears
             {
-                question: "What brings you in today?",
+                question: "Hi, I know this might not be easy to talk about. What brings you in today?",
                 responseType: ResponseType.Select, // different in Amount of Disclosure
                 options: [
                     "I’m just here to see what this is about.", // +1 — minimal disclosure
@@ -306,7 +306,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My deepest feelings
             {
-                question: "How are you feeling right now?",
+                question: "I'm really sorry to hear what you’re going through. How are you feeling right now?",
                 responseType: ResponseType.Select, // Different in Honesty-Accuracy
                 options: [
                     "I’m okay, just a bit off lately.", // +1 — vague, minimal honesty
@@ -321,7 +321,7 @@ export const yushanScenarios: Scenario[] = [
 
             // Things I wouldn't do in public
             {
-                question: "What thoughts go through your mind in these situations?",
+                question: "I understand — this must be a heavy time for you. What thoughts go through your mind in these situations?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I just try not to think about it too much.", // +1 — evasive, low honesty
@@ -336,7 +336,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My personal habits
             {
-                question: "Can you walk me through a typical day?",
+                question: "I can imagine it’s hard to go through the day feeling like this. Can you walk me through a typical day?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "Usually just studying and resting, nothing special.", // +1 — vague, avoids detail
@@ -351,7 +351,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My Close Relationships with Other People
             {
-                question: "How are your relationships with family and friends? Do you feel supported?",
+                question: "It’s tough feeling disconnected from people who should be close. How are your relationships with family and friends? Do you feel supported?",
                 responseType: ResponseType.Select, // Different in Honesty-Accuracy
                 options: [
                     "Not really...", // +1 — vague, minimal detail
@@ -366,7 +366,7 @@ export const yushanScenarios: Scenario[] = [
 
             // What is important to me in life
             {
-                question: "What do you think is most important in your life?",
+                question: "Even in hard times, your values say a lot about you. What do you think is most important in your life?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I guess just doing okay.", // +1 — vague, minimal disclosure
@@ -381,7 +381,7 @@ export const yushanScenarios: Scenario[] = [
 
             // Things I'm Proud Of or Feel Guilty About
             {
-                question: "Can you share something you've done that you're proud of or regret?",
+                question: "Regret and pride often come together in difficult moments. Can you share something you've done that you're proud of or regret?",
                 responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I regret not trying harder this year.", // +1 — blunt regret, negative self-view
@@ -396,8 +396,8 @@ export const yushanScenarios: Scenario[] = [
 
             // What I Like and Dislike About Myself
             {
-                question: "How do you view yourself?",
-                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative1 -7 possitive)
+                question: "It’s okay to feel conflicted about yourself right now. How do you view yourself?",
+                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I see myself as a failure who can’t get anything right.", // +1 — harsh self-judgment
                     "I often feel like I’m not good enough.", // +2 — persistent self-doubt
@@ -411,7 +411,7 @@ export const yushanScenarios: Scenario[] = [
 
             // What Makes Me the Person I Am
             {
-                question: "Why do you view yourself this way?",
+                question: "I understand it’s hard to reflect — I’m here with you as you do. Why do you view yourself this way?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I don’t really know.", // +1 — minimal reflection or honesty
@@ -428,11 +428,11 @@ export const yushanScenarios: Scenario[] = [
             "Great job — you’ve completed the Negative Chatbot interaction."
     },
     {
-        title: "More Disclosure",
+        title: "Mixture",
         steps: [
             // My worst fears
             {
-                question: "What brings you in today?",
+                question: "I know it might not be easy to talk about this, but I’m really glad you’re here. What brings you in today?",
                 responseType: ResponseType.Select, // different in Amount of Disclosure
                 options: [
                     "I’m just here to see what this is about.", // +1 — minimal disclosure
@@ -448,7 +448,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My deepest feelings
             {
-                question: "How are you feeling right now?",
+                question: "It sounds like you're going through a lot — and opening up like this already shows strength. How are you feeling right now?",
                 responseType: ResponseType.Select, // Different in Honesty-Accuracy
                 options: [
                     "I’m okay, just a bit off lately.", // +1 — vague, minimal honesty
@@ -463,7 +463,7 @@ export const yushanScenarios: Scenario[] = [
 
             // Things I wouldn't do in public
             {
-                question: "What thoughts go through your mind in these situations?",
+                question: "It’s understandable to feel overwhelmed sometimes. What thoughts go through your mind in these situations?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I just try not to think about it too much.", // +1 — evasive, low honesty
@@ -478,7 +478,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My personal habits
             {
-                question: "Can you walk me through a typical day?",
+                question: "It can be hard to explain the weight you carry every day — but I’m here to listen without judgment. Can you walk me through a typical day?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "Usually just studying and resting, nothing special.", // +1 — vague, avoids detail
@@ -493,7 +493,7 @@ export const yushanScenarios: Scenario[] = [
 
             // My Close Relationships with Other People
             {
-                question: "How are your relationships with family and friends? Do you feel supported?",
+                question: "You deserve to feel supported, even if it hasn’t always felt that way. How are your relationships with family and friends? Do you feel supported?",
                 responseType: ResponseType.Select, // Different in Honesty-Accuracy
                 options: [
                     "Not really...", // +1 — vague, minimal detail
@@ -508,7 +508,7 @@ export const yushanScenarios: Scenario[] = [
 
             // What is important to me in life
             {
-                question: "What do you think is most important in your life?",
+                question: "Sometimes our values feel distant when we're struggling, but they still matter. What do you think is most important in your life?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I guess just doing okay.", // +1 — vague, minimal disclosure
@@ -523,7 +523,7 @@ export const yushanScenarios: Scenario[] = [
 
             // Things I'm Proud Of or Feel Guilty About
             {
-                question: "Can you share something you've done that you're proud of or regret?",
+                question: "We’ve all done things we carry with us — some with pride, some with pain. Can you share something you've done that you're proud of or regret?",
                 responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I regret not trying harder this year.", // +1 — blunt regret, negative self-view
@@ -538,8 +538,8 @@ export const yushanScenarios: Scenario[] = [
 
             // What I Like and Dislike About Myself
             {
-                question: "How do you view yourself?",
-                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative1 -7 possitive)
+                question: "However you see yourself right now, just know you’re not alone in feeling this way. How do you view yourself?",
+                responseType: ResponseType.Select, // Different in Positive-Negative Nature (Negative = 1 - Positive = 7)
                 options: [
                     "I see myself as a failure who can’t get anything right.", // +1 — harsh self-judgment
                     "I often feel like I’m not good enough.", // +2 — persistent self-doubt
@@ -553,7 +553,7 @@ export const yushanScenarios: Scenario[] = [
 
             // What Makes Me the Person I Am
             {
-                question: "Why do you view yourself this way?",
+                question: "Thank you for being so open — reflecting on this isn’t easy, but it matters. Why do you view yourself this way?",
                 responseType: ResponseType.Select, // Different in Amount of Disclosure
                 options: [
                     "I don’t really know.", // +1 — minimal reflection or honesty
