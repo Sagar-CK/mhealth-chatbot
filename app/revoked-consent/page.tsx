@@ -6,6 +6,7 @@ interface RevokedConsentProps {
 
 export default async function RevokedConsent({ searchParams }: RevokedConsentProps) {
   const uid = (await searchParams).uid as string;
+  const study = (await searchParams).study as string;
 
   if (!uid) {
     return <div className="w-full h-full flex items-center justify-center flex-col gap-y-4">
@@ -16,7 +17,7 @@ export default async function RevokedConsent({ searchParams }: RevokedConsentPro
     </div>
   }
 
-  await api.users.revokeConsent({ user_id: uid });
+  await api.users.revokeConsent({ user_id: uid, study });
 
   return(
     <div className="w-full h-full flex items-center justify-center">
