@@ -20,7 +20,7 @@ export default async function Yushan({ searchParams }: PageProps) {
         );
     }
 
-    const user = await api.users.createUser({ user_id: uid });
+    const user = await api.users.createUser({ user_id: uid, study:"yushan" });
 
     if (!user) {
         return (
