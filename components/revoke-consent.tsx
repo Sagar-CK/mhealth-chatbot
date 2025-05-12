@@ -2,7 +2,7 @@
 
 import { CircleX } from "lucide-react";
 import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import {
@@ -21,6 +21,9 @@ function RevokeConsentButtonContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const uid = searchParams.get("uid");
+  // get path 
+  const pathname = usePathname();
+  const study = pathname.split("/")[1];
 
   return (
     <AlertDialog>
@@ -47,9 +50,9 @@ function RevokeConsentButtonContent() {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={() => {
             if (uid) {
-              router.push(`/revoked-consent?uid=${uid}`);
+              router.push(`/revoked-consent?uid=${uid}&study=${study}`);
             } else {
-              router.push("/revoked-consent");
+              alert("No UID found, contact the researcher for support!");
             }
           }}>
             Continue
