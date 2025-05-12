@@ -1,3 +1,4 @@
+import { sagarStudy, yushanStudy, manuStudy, linaStudy} from "@/lib/constants";
 import { api } from "@/trpc/server";
 
 interface RevokedConsentProps {
@@ -8,6 +9,9 @@ export default async function RevokedConsent({ searchParams }: RevokedConsentPro
   const uid = (await searchParams).uid as string;
   const study = (await searchParams).study as string;
 
+  // get the study from the pathname
+  const realStudy = study.includes(sagarStudy) ? "sagar" : study.includes(yushanStudy) ? "yushan" : study.includes(manuStudy) ? "manu" : study.includes(linaStudy) ? "lina" : "unknown";
+
   if (!uid) {
     return <div className="w-full h-full flex items-center justify-center flex-col gap-y-4">
       <h1 className="text-2xl font-bold">No UID provided!</h1>
@@ -17,7 +21,7 @@ export default async function RevokedConsent({ searchParams }: RevokedConsentPro
     </div>
   }
 
-  await api.users.revokeConsent({ user_id: uid, study });
+  await api.users.revokeConsent({ user_id: uid, study: realStudy });
 
   return(
     <div className="w-full h-full flex items-center justify-center">
