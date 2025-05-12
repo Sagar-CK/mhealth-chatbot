@@ -7,6 +7,7 @@ export const usersRouter = createTRPCRouter({
     .input(
       z.object({
         user_id: z.string(),
+        study: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -34,7 +35,7 @@ export const usersRouter = createTRPCRouter({
       const created_at = new Date();
       const revoked_consent = false;
       const [newUser] =
-        await ctx.sql`INSERT INTO users (user_id, condition, revoked_consent, created_at) VALUES (${input.user_id}, ${newUserCondition}, ${revoked_consent}, ${created_at}) RETURNING *`;
+        await ctx.sql`INSERT INTO users (user_id, condition, revoked_consent, created_at, study) VALUES (${input.user_id}, ${newUserCondition}, ${revoked_consent}, ${created_at}, ${input.study}) RETURNING *`;
       return newUser as User;
     }),
   getUserById: publicProcedure
@@ -56,6 +57,7 @@ export const usersRouter = createTRPCRouter({
     .input(
       z.object({
         user_id: z.string(),
+        study: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -73,7 +75,7 @@ export const usersRouter = createTRPCRouter({
         const created_at = new Date();
         const revoked_consent = true;
         const [newUser] =
-          await ctx.sql`INSERT INTO users (user_id, condition, revoked_consent, created_at) VALUES (${input.user_id}, ${newUserCondition}, ${revoked_consent}, ${created_at}) RETURNING *`;
+          await ctx.sql`INSERT INTO users (user_id, condition, revoked_consent, created_at, study) VALUES (${input.user_id}, ${newUserCondition}, ${revoked_consent}, ${created_at}, ${input.study}) RETURNING *`;
         return newUser as User;
       }
       const [updatedUser] =

@@ -20,7 +20,7 @@ export default async function Sagar({ searchParams }: PageProps) {
     );
   }
 
-  const user = await api.users.createUser({ user_id: uid });
+  const user = await api.users.createUser({ user_id: uid, study: "sagar" });
 
   if (!user) {
     return (
