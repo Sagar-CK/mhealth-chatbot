@@ -7,32 +7,39 @@ export const yushanScenarios: Scenario[] = [
             // My worst fears
             {
                 question: "What brings you in today?",
-                responseType: ResponseType.Select, // different in Amount of Disclosure
-                options: [
-                    "I’m just here to see what this is about.", // +1 — minimal disclosure
-                    "I’ve been feeling a bit stressed.", // +2 — emotional disclosure
-                    "I’ve been stressed and having trouble sleeping.", // +3 — emotional + behavioral disclosure
-                    "I’ve been stressed and having trouble sleeping because school has been overwhelming.", // +4 — adds reasoning
-                    "I’ve been underperforming academically, and it’s affecting me emotionally and mentally.", // +5 — emotion + behavior + reasoning
-                    "I’m scared I might fail the year. It’s been hard to focus or stay motivated.", // +6 — adds relational concern
-                    "I’m scared I might fail the year and disappoint my parents. " +
-                    "It’s seriously affecting me mentally and I don’t know what to do." // +7 — adds consequence + hopelessness
-                ]
+                responseType: ResponseType.Likert,
+                likertQuestion: "How much are you willing to disclosure about your worst fears in the scenario indicated in the task instruction?",
+                likertScale: 7
+
+                // different in Amount of Disclosure
+                // options: [
+                //     "I’m just here to see what this is about.", // +1 — minimal disclosure
+                //     "I’ve been feeling a bit stressed.", // +2 — emotional disclosure
+                //     "I’ve been stressed and having trouble sleeping.", // +3 — emotional + behavioral disclosure
+                //     "I’ve been stressed and having trouble sleeping because school has been overwhelming.", // +4 — adds reasoning
+                //     "I’ve been underperforming academically, and it’s affecting me emotionally and mentally.", // +5 — emotion + behavior + reasoning
+                //     "I’m scared I might fail the year. It’s been hard to focus or stay motivated.", // +6 — adds relational concern
+                //     "I’m scared I might fail the year and disappoint my parents. " +
+                //     "It’s seriously affecting me mentally and I don’t know what to do." // +7 — adds consequence + hopelessness
+                // ]
             },
 
             // My deepest feelings
             {
                 question: "How are you feeling right now?",
-                responseType: ResponseType.Select, // Different in Honesty-Accuracy
-                options: [
-                    "I’m okay, just a bit off lately.", // +1 — vague, minimal honesty
-                    "I guess I’ve been a little stressed.", // +2 — slight honesty, still guarded
-                    "I’ve been feeling stressed and kind of overwhelmed.", // +3 — basic emotional admission
-                    "I’m having a hard time managing my stress and it’s starting to wear me down.", // +4 — emotional + behavioral hint
-                    "I feel constantly anxious and it’s affecting my ability to study or rest properly.", // +5 — emotionally honest + behavioral impact
-                    "I’m mentally exhausted and scared I’m not going to make it through the year.", // +6 — emotionally raw + fear of failure
-                    "I feel lost, overwhelmed, and like I'm falling apart. I don’t know how to cope anymore." // +7 — full vulnerability, emotional and existential honesty
-                ]
+                responseType: ResponseType.Select,
+                likertQuestion: "How much are you willing to disclosure about your worst fears in the scenario indicated in the task instruction?",
+                likertScale: 7
+                // Different in Honesty-Accuracy
+                // options: [
+                //     "I’m okay, just a bit off lately.", // +1 — vague, minimal honesty
+                //     "I guess I’ve been a little stressed.", // +2 — slight honesty, still guarded
+                //     "I’ve been feeling stressed and kind of overwhelmed.", // +3 — basic emotional admission
+                //     "I’m having a hard time managing my stress and it’s starting to wear me down.", // +4 — emotional + behavioral hint
+                //     "I feel constantly anxious and it’s affecting my ability to study or rest properly.", // +5 — emotionally honest + behavioral impact
+                //     "I’m mentally exhausted and scared I’m not going to make it through the year.", // +6 — emotionally raw + fear of failure
+                //     "I feel lost, overwhelmed, and like I'm falling apart. I don’t know how to cope anymore." // +7 — full vulnerability, emotional and existential honesty
+                // ]
             },
 
             // Things I wouldn't do in public
@@ -428,7 +435,7 @@ export const yushanScenarios: Scenario[] = [
             "Great job — you’ve completed the Negative Chatbot interaction."
     },
     {
-        title: "Combined",
+        title: "Emotioanl",
         steps: [
             // My worst fears
             {

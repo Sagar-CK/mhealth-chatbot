@@ -24,14 +24,13 @@ export default function YushanTaskInstructions() {
             <p><strong>Task</strong></p>
             <hr/>
             <p>
-                You will interact with <strong>four different scenarios</strong> of a mental health support chatbot.
-                Please respond to each chatbot as if you were the student described in the Role-Play section.
+                You will interact with <strong>three different scenarios</strong> of a mental health support chatbot.
             </p>
 
             <ul>
                 <li><i>1. Baseline</i></li>
-                <li><i>2. Positive</i></li>
-                <li><i>3. Negative</i></li>
+                <li><i>2. Emotional</i></li>
+                <li><i>3. Factual</i></li>
                 <li><i>4. Combined</i></li>
             </ul>
         </div>
