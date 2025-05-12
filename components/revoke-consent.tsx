@@ -21,7 +21,6 @@ function RevokeConsentButtonContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const uid = searchParams.get("uid");
-  // get path 
   const pathname = usePathname();
   const study = pathname.split("/")[1];
 
