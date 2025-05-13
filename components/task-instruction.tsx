@@ -16,6 +16,7 @@ import {
   yushanStudy,
 } from "@/lib/constants";
 import SagarTaskInstructions from "./task-instructions/sagar-task-instructions";
+import LinaTaskInstructions from "./task-instructions/lina-task-instructions";
 
 export function TaskInstructionButton() {
   const pathname = usePathname().toString();
@@ -36,7 +37,7 @@ export function TaskInstructionButton() {
             ) : pathname.includes(yushanStudy) ? (
               <p>Yushan Instructions</p>
             ) : pathname.includes(linaStudy) ? (
-              <p>Lina Instructions</p>
+              < LinaTaskInstructions />
             ) : (
               <p>
                 For a specific path (one of our studies) we provide our own task
