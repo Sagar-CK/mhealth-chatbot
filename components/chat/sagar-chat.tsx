@@ -2,8 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
-import { BotIcon } from "lucide-react";
+import { sagarScenarios } from "@/lib/sagar/sagar-scenarios";
 import { User } from "@/server/api/models/user";
 import { SagarChatInterface } from "@/components/chat/sagar-chatbot";
 
@@ -18,13 +17,6 @@ export function SagarChat({ user }: SagarChatProps) {
       <Card className="w-4/5 h-full bg-slate-50">
         <CardHeader className="w-full flex justify-between items-center">
           <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
-          <>
-          {user.condition == 2 ? (
-             "Condition 2"
-          ) : (
-            "Condition 1"
-          )}
-          </>
         </CardHeader>
         <Separator />
         <CardContent>

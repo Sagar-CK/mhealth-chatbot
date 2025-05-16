@@ -125,6 +125,7 @@ export function ChatInterface({ scenarios, user, height = "600px" }: ChatInterfa
           <LikertResponse
             question={currentStepscenario.likertQuestion || "Rate your willingness:"}
             onSelect={handleResponse}
+            scale={currentStepscenario.likertScale || 5}
           />
         )
       default:
