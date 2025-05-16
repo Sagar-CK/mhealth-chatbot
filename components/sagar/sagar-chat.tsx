@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { sagarScenarios } from "@/lib/sagar/sagar-scenarios";
 import { User } from "@/server/api/models/user";
-import { SagarChatInterface } from "@/components/chat/sagar-chatbot";
+import { SagarChatInterface } from "@/components/sagar/sagar-chatbot";
 
 interface SagarChatProps {
   user: User;

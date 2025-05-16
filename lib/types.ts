@@ -1,33 +1,15 @@
 export enum ResponseType {
-  Statement = "statement",
-  Question = "question",
+  Select = "select",
+  Likert = "likert",
 }
 
-export enum Severity {
-  Low = "low",
-  Medium = "medium",
-  High = "high",
-}
-
-export interface StatementStep {
-  type: ResponseType.Statement
-  text: string
-  options: string[]
-}
-
-export interface QuestionStep {
-  type: ResponseType.Question
+export interface ChatStep {
   question: string
-  severity: Severity
-  likertScale: 5 | 7
-  responses: {
-    willingness: number
-    severity: Severity
-    message: string
-  }[]
+  responseType: ResponseType
+  options?: string[]
+  likertScale?: number
+  likertQuestion?: string
 }
-
-export type ChatStep = StatementStep | QuestionStep
 
 export interface Scenario {
   title: string

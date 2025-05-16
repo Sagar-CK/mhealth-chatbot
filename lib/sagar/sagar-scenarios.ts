@@ -1,4 +1,5 @@
-import { type Scenario, ResponseType, Severity } from "../types";
+import { type Scenario, ResponseType } from "@/lib/sagar/types";
+import { Severity } from "@/lib/sagar/types";
 
 export const sagarScenarios: Scenario[] = [
   {

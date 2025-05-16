@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Severity } from "./types";
+import { Severity } from "@/lib/sagar/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
