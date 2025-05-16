@@ -1,11 +1,10 @@
 "use client";
 
-import { ChatInterface } from "@/components/chat/sagar-chat-interface";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { sagarScenarios } from "@/lib/chat/sagar-scenarios";
-import { BotIcon } from "lucide-react";
+import { sagarScenarios } from "@/lib/sagar/sagar-scenarios";
 import { User } from "@/server/api/models/user";
+import { SagarChatInterface } from "@/components/sagar/sagar-chatbot";
 
 interface SagarChatProps {
   user: User;
@@ -18,11 +17,10 @@ export function SagarChat({ user }: SagarChatProps) {
       <Card className="w-4/5 h-full bg-slate-50">
         <CardHeader className="w-full flex justify-between items-center">
           <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
-          <BotIcon />
         </CardHeader>
         <Separator />
         <CardContent>
-          <ChatInterface scenarios={sagarScenarios} user={user} />
+          <SagarChatInterface scenarios={sagarScenarios} user={user} />
         </CardContent>
       </Card>
     </div>

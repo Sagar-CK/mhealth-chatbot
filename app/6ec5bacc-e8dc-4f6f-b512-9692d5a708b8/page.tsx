@@ -1,4 +1,4 @@
-import { SagarChat } from "@/components/chat/sagar-chat";
+import { SagarChat } from "@/components/sagar/sagar-chat";
 import { api } from "@/trpc/server";
 
 interface PageProps {
