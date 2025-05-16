@@ -7,7 +7,7 @@ export interface ChatStep {
   question: string
   responseType: ResponseType
   options?: string[]
-  likertScale?: number
+  likertScale?: 5 | 7
   likertQuestion?: string
 }
 
