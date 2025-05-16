@@ -88,9 +88,9 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         if (likertWithRespondStep.type === ResponseType.LikertWithRespond) {
             return (
                 <LikertResponse
-                    question={likertWithRespondStep.question || "Rate your willingness:"}
+                    question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
                     onSelect={(willingness) => {
-                        handleResponse(stringifyWillingness(mapWillingnessToNumber(willingness), likertWithRespondStep.options))
+                        handleResponse(stringifyWillingness(mapWillingnessToNumber(willingness) - 1, likertWithRespondStep.options))
                     }}
                     scale={likertWithRespondStep.likertScale}
                 />

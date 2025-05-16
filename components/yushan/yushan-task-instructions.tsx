@@ -14,6 +14,12 @@ export default function YushanTaskInstructions() {
                 scenario below</strong>.
             </p>
 
+            <p>
+                For each question, simply rate how <strong>willing</strong> you are to disclose the <strong>specific
+                topic</strong> mentioned in the willingness question. A pre-written, mocked response will be shown based
+                on your selected rating.
+            </p>
+
             <hr/>
             <p className="font-bold">Role-Play Scenario</p>
             <hr/>
