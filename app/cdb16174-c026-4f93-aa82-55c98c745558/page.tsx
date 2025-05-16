@@ -1,11 +1,11 @@
 import {api} from "@/trpc/server";
-import {YushanChat} from "@/components/chat/yushan-chat";
+import {YushanChat} from "@/components/yushan/yushan-chat";
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function Yushan({ searchParams }: PageProps) {
+export default async function Yushan({searchParams}: PageProps) {
     const trueSearchParams = await searchParams;
     const uid = trueSearchParams.uid as string;
 
@@ -20,7 +20,7 @@ export default async function Yushan({ searchParams }: PageProps) {
         );
     }
 
-    const user = await api.users.createUser({ user_id: uid, study:"yushan" });
+    const user = await api.users.createUser({user_id: uid, study: "yushan"});
 
     if (!user) {
         return (
@@ -33,5 +33,5 @@ export default async function Yushan({ searchParams }: PageProps) {
         );
     }
 
-    return <YushanChat user={user} />;
+    return <YushanChat user={user}/>;
 }

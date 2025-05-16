@@ -15,8 +15,8 @@ import {
   sagarStudy,
   yushanStudy,
 } from "@/lib/constants";
-import SagarTaskInstructions from "./task-instructions/sagar-task-instructions";
-import YushanTaskInstructions from "./task-instructions/yushan-task-instructions";
+import SagarTaskInstructions from "./sagar/sagar-task-instructions";
+import YushanTaskInstructions from "./yushan/yushan-task-instructions";
 
 export function TaskInstructionButton() {
   const pathname = usePathname().toString();
