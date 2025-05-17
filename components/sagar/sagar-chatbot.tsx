@@ -56,19 +56,18 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
 
   const currentScenario = scenarios[currentScenarioIndex]
 
-  const createMessage = api.messages.create.useMutation()
-
+  const createSelfDisclosure = api.selfDisclosure.create.useMutation()
 
   // Initialize with first bot message
   useEffect(() => {
     if (currentScenario?.steps.length > 0 && messages.length === 0) {
       const firstStep = currentScenario.steps[0]
-      const messageText = firstStep.type === ResponseType.Statement 
-        ? (firstStep as StatementStep).text 
+      const messageText = firstStep.type === ResponseType.Statement
+        ? (firstStep as StatementStep).text
         : (firstStep as QuestionStep).question
 
       const initialMessage = {
-        id: `${currentScenario.title}-0-bot`,
+        id: crypto.randomUUID(),
         sender: "bot" as const,
         text: messageText,
         timestamp: new Date(),
@@ -77,9 +76,8 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
       }
 
       setMessages([initialMessage])
-      createMessage.mutate(initialMessage)
     }
-  }, [currentScenario, messages.length, user.user_id, createMessage])
+  }, [currentScenario, messages.length, user.user_id])
 
   // Auto-scroll to bottom of messages with smooth animation
   useEffect(() => {
@@ -99,14 +97,13 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
       return <SelectResponse options={statementStep.options} onSelect={handleResponse} />
     } else if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
-      
+
       // If we haven't asked about willingness yet
       if (questionState.willingness === undefined && !isTyping) {
         return (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground mb-2">How willing are you to answer this question?</p>
             <LikertResponse
-              question="Willingness to self-disclose"
+              question="How willing are you to answer this question?"
               onSelect={(willingness) => {
                 // we need to map willingness to a number from the likert scale
                 const willingnessNum = mapWillingnessToNumber(willingness)
@@ -117,7 +114,7 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           </div>
         )
       }
-      
+
       // If we have willingness but not severity
       if (questionState.severity === undefined && questionState.willingness !== undefined) {
         return (
@@ -128,8 +125,6 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
               onSelect={(severity) => {
                 const severityValue = severity as Severity
                 setQuestionState(prev => ({ ...prev, severity: severityValue }))
-                // Send both responses together
-                handleResponse(stringifyWillingnessSeverity(questionState.willingness!, severityValue, questionStep.likertScale))
               }}
             />
           </div>
@@ -139,67 +134,89 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
     return null
   }
 
+  // Add effect to handle response after severity is set
+  useEffect(() => {
+    if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+      const currentStepData = currentScenario.steps[currentStep]
+      if (currentStepData.type === ResponseType.Question) {
+        const questionStep = currentStepData as QuestionStep
+        handleResponse(stringifyWillingnessSeverity(questionState.willingness, questionState.severity, questionStep.likertScale))
+      }
+    }
+  }, [questionState.severity, questionState.willingness, currentStep, currentScenario.steps])
+
   const handleResponse = async (response: string) => {
     const currentStepData = currentScenario.steps[currentStep]
-    
+
     if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
-      
+
+      // Store self-disclosure data when we have both willingness and severity
+      if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+        createSelfDisclosure.mutate({
+          user_id: user.user_id,
+          scenario: currentScenario.title,
+          question: questionStep.question,
+          question_severity: questionStep.severity,
+          user_willingness: questionState.willingness,
+          user_severity: questionState.severity,
+          timestamp: new Date()
+        })
+      }
+
       // Add the user's response message
       const userMessage = {
-        id: `${currentScenario.title}-${currentStep}-user-${Date.now()}`,
+        id: crypto.randomUUID(),
         sender: "user" as const,
         text: response,
         timestamp: new Date(),
         user_id: user.user_id,
         scenario: currentScenario.title
       };
-      
+
       setMessages((prev) => [...prev, userMessage]);
-      createMessage.mutate(userMessage)
 
       // Find the matching response based on the current question state
       const matchingResponse = questionStep.responses.find(
-        r => r.willingness === questionState.willingness && r.severity === questionState.severity
+        r => r.conditions.willingness.includes(questionState.willingness!) && 
+             r.conditions.severity.includes(questionState.severity!)
       )
-      
+
       if (matchingResponse) {
         // Add the bot's response message
         const botMessage = {
-          id: `${currentScenario.title}-${currentStep}-bot-response-${Date.now()}`,
+          id: crypto.randomUUID(),
           sender: "bot" as const,
           text: matchingResponse.message,
           timestamp: new Date(),
           user_id: user.user_id,
           scenario: currentScenario.title
         }
-        
+
         setMessages(prev => [...prev, botMessage])
-        createMessage.mutate(botMessage)
       }
-      
+
       // Move to next step
       const nextStep = currentStep + 1;
       if (nextStep < currentScenario.steps.length) {
         // Reset question state before moving to next step
         setQuestionState({})
-        
+
         if (Number(user.condition) === 2) {
           setIsTyping(true)
           // Show typing indicator for 2 seconds before showing the message
           setTimeout(() => {
             const nextStepData = currentScenario.steps[nextStep]
             const nextBotMessage = {
-              id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
+              id: crypto.randomUUID(),
               sender: "bot" as const,
               text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title
             };
-            
+
             setMessages((prev) => [...prev, nextBotMessage]);
-            createMessage.mutate(nextBotMessage)
             setCurrentStep(nextStep);
             setIsTyping(false)
           }, 2000);
@@ -207,16 +224,15 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           // For other conditions, show message immediately
           const nextStepData = currentScenario.steps[nextStep]
           const nextBotMessage = {
-            id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
+            id: crypto.randomUUID(),
             sender: "bot" as const,
             text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
             timestamp: new Date(),
             user_id: user.user_id,
             scenario: currentScenario.title
           };
-          
+
           setMessages((prev) => [...prev, nextBotMessage]);
-          createMessage.mutate(nextBotMessage)
           setCurrentStep(nextStep);
         }
       } else {
@@ -226,47 +242,44 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           // Show typing indicator for 2 seconds before showing the final message
           setTimeout(() => {
             const finalMessage = {
-              id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
+              id: crypto.randomUUID(),
               sender: "bot" as const,
               text: currentScenario.completionMessage || "Thank you for your responses!",
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title
             };
-            
+
             setMessages((prev) => [...prev, finalMessage]);
-            createMessage.mutate(finalMessage)
             setIsComplete(true);
             setIsTyping(false)
           }, 2000);
         } else {
           const finalMessage = {
-            id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
+            id: crypto.randomUUID(),
             sender: "bot" as const,
             text: currentScenario.completionMessage || "Thank you for your responses!",
             timestamp: new Date(),
             user_id: user.user_id,
             scenario: currentScenario.title
           };
-          
+
           setMessages((prev) => [...prev, finalMessage]);
-          createMessage.mutate(finalMessage)
           setIsComplete(true);
         }
       }
     } else {
       // Handle statement responses
       const userMessage = {
-        id: `${currentScenario.title}-${currentStep}-user-${Date.now()}`,
+        id: crypto.randomUUID(),
         sender: "user" as const,
         text: response,
         timestamp: new Date(),
         user_id: user.user_id,
         scenario: currentScenario.title
       };
-      
+
       setMessages((prev) => [...prev, userMessage]);
-      createMessage.mutate(userMessage)
 
       // Move to next step
       const nextStep = currentStep + 1;
@@ -277,16 +290,15 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           setTimeout(() => {
             const nextStepData = currentScenario.steps[nextStep]
             const nextBotMessage = {
-              id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
+              id: crypto.randomUUID(),
               sender: "bot" as const,
               text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title
             };
-            
+
             setMessages((prev) => [...prev, nextBotMessage]);
-            createMessage.mutate(nextBotMessage)
             setCurrentStep(nextStep);
             setIsTyping(false)
           }, 2000);
@@ -294,16 +306,15 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           // For other conditions, show message immediately
           const nextStepData = currentScenario.steps[nextStep]
           const nextBotMessage = {
-            id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
+            id: crypto.randomUUID(),
             sender: "bot" as const,
             text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
             timestamp: new Date(),
             user_id: user.user_id,
             scenario: currentScenario.title
           };
-          
+
           setMessages((prev) => [...prev, nextBotMessage]);
-          createMessage.mutate(nextBotMessage)
           setCurrentStep(nextStep);
         }
       } else {
@@ -313,31 +324,29 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
           // Show typing indicator for 2 seconds before showing the final message
           setTimeout(() => {
             const finalMessage = {
-              id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
+              id: crypto.randomUUID(),
               sender: "bot" as const,
               text: currentScenario.completionMessage || "Thank you for your responses!",
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title
             };
-            
+
             setMessages((prev) => [...prev, finalMessage]);
-            createMessage.mutate(finalMessage)
             setIsComplete(true);
             setIsTyping(false)
           }, 2000);
         } else {
           const finalMessage = {
-            id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
+            id: crypto.randomUUID(),
             sender: "bot" as const,
             text: currentScenario.completionMessage || "Thank you for your responses!",
             timestamp: new Date(),
             user_id: user.user_id,
             scenario: currentScenario.title
           };
-          
+
           setMessages((prev) => [...prev, finalMessage]);
-          createMessage.mutate(finalMessage)
           setIsComplete(true);
         }
       }
@@ -350,13 +359,13 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
       setCurrentScenarioIndex(prev => prev + 1)
       const nextScenario = scenarios[currentScenarioIndex + 1]
       const firstStep = nextScenario.steps[0]
-      const messageText = firstStep.type === ResponseType.Statement 
-        ? (firstStep as StatementStep).text 
+      const messageText = firstStep.type === ResponseType.Statement
+        ? (firstStep as StatementStep).text
         : (firstStep as QuestionStep).question
 
       setMessages([
         {
-          id: `${nextScenario.title}-0-bot`,
+          id: crypto.randomUUID(),
           sender: "bot",
           text: messageText,
           timestamp: new Date(),
@@ -413,7 +422,7 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
       <div className="p-4 border-t bg-card">
         {isComplete ? (
           <Button onClick={nextOrCompleteScenario} className="w-full">
-            {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
+            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
           </Button>
         ) : (
           renderResponseComponent()
