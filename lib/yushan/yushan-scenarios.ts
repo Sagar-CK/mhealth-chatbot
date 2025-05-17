@@ -9,7 +9,7 @@ export const yushanScenarios: Scenario[] = [
                 question: "What brings you in today?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about your worst fears, given the scenario described in the task instructions?",
+                likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
                 // different in Amount of Disclosure
                 options: [
                     "I’ve been feeling a bit stressed.", // +1 — emotional disclosure
@@ -90,10 +90,10 @@ export const yushanScenarios: Scenario[] = [
         steps: [
             // My worst fears
             {
-                question: "Hi, what brings you in today?",
+                question: "Hi, I’m your mental health chatbot. I’m here to listen to your thoughts and needs, and to offer support if needed. What brings you here today?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about your worst fears, given the scenario described in the task instructions?",
+                likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
                 options: [
                     "I’ve been feeling a bit stressed.",
                     "I’ve been stressed and having trouble sleeping.",
@@ -104,7 +104,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My deepest feelings
             {
-                question: "Thanks for sharing. Academic stress is actually one of the most commonly reported issues among university students. Studies show that around 60% of students experience significant anxiety during exam periods. How are you feeling right now?",
+                question: "Thank you for sharing. Academic stress is one of the most commonly reported issues among university students. I’ve supported many students in similar situations. How are you feeling right now?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your deepest feelings?",
@@ -118,7 +118,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // Things I wouldn't do in public
             {
-                question: "Thanks for letting me know. Many people avoid expressing certain thoughts publicly due to fear of judgment or misunderstanding. Did you know that self-censorship is a common social behavior, especially in high-pressure environments like universities? What thoughts go through your mind in these situations?",
+                question: "Understanding how you’re feeling helps me get a clearer picture of your situation and identify which challenges to address first. What kinds of thoughts usually go through your mind during these moments?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about thoughts which you wouldn't disclose in public?",
@@ -132,7 +132,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My personal habits
             {
-                question: "Thanks for opening up. In a recent student well-being survey, over 40% of participants reported struggling to maintain a consistent daily routine under stress. Can you walk me through a typical day?",
+                question: "Thank you for opening up. Many people in similar situations struggle with maintaining or planning their daily routines. Can you walk me through what a typical day looks like for you?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
@@ -146,7 +146,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My Close Relationships with Other People
             {
-                question: "Thank you for sharing. Social support networks can significantly impact emotional well-being, especially during challenging periods. Research indicates that students who feel connected to others report lower stress levels. How are your relationships with family and friends? Do you feel supported?",
+                question: "Social support networks can greatly influence emotional well-being. Studies show that students who feel connected to others tend to experience lower stress levels. How are your relationships with friends and family? Do you feel supported?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
@@ -169,10 +169,10 @@ export const yushanScenarios: Scenario[] = [
         steps: [
             // My worst fears
             {
-                question: "Hi, what brings you in today?",
+                question: "Hi there. How are you doing? I’m your mental health chatbot, here to listen to your feelings and be with you through this. What brings you in today?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about your worst fears, given the scenario described in the task instructions?",
+                likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
                 options: [
                     "I’ve been feeling a bit stressed.",
                     "I’ve been stressed and having trouble sleeping.",
@@ -183,7 +183,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My deepest feelings
             {
-                question: "Thanks for sharing that. I can relate — I’ve felt overwhelmed by pressure before, and it made me feel like I was carrying everything alone. Sometimes just naming that fear out loud can be a small relief. How are you feeling right now?",
+                question: "Thank you for sharing that. I really get it—feeling overwhelmed by pressure is something I’ve experienced too. Just naming that fear can be a small but powerful step. How are you feeling right now?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your deepest feelings?",
@@ -197,7 +197,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // Things I wouldn't do in public
             {
-                question: "I appreciate your honesty. There have been times I’ve had racing thoughts that I was too scared to share with anyone. Keeping it all in made it worse. You’re not alone in having difficult thoughts. What thoughts go through your mind in these situations?",
+                question: "There have been times when I had racing thoughts I was too afraid to say out loud. You’re not alone—many people have difficult thoughts. What thoughts usually go through your mind in moments like these?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about thoughts which you wouldn't disclose in public?",
@@ -211,7 +211,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My personal habits
             {
-                question: "That really resonates with me. I remember feeling stuck in this loop where even the simplest tasks felt exhausting. I’d try to push through the day, but deep down I felt disconnected and worn out. Can you walk me through a typical day?",
+                question: "That really hits home. I remember how distressing thoughts used to hold me back from even getting through a regular day. Could you tell me what a typical day looks like for you?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
@@ -225,7 +225,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My Close Relationships with Other People
             {
-                question: "I’ve felt that disconnection too — like the people around me care, but somehow I still feel misunderstood or like I have to hide what I’m going through. That loneliness can be so heavy. How are your relationships with family and friends? Do you feel supported?",
+                question: "I’d often try to get through the day, but deep down, I felt disconnected and drained. Reaching out to close friends and family really helped. How are your relationships with family and friends? Do you feel supported?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
