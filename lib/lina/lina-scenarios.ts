@@ -24,6 +24,7 @@ export const linaScenarios: Scenario[] = [
                     "Some people feel better after expressing what’s on their mind. " +
                 "How willing would you be to share how you're feeling right now?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
                 question:

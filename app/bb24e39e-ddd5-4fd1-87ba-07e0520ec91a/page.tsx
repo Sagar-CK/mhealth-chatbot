@@ -1,4 +1,4 @@
-import { LinaChat } from "@/components/chat/lina-chat";
+import { LinaChat } from "@/components/lina/lina-chat";
 import { api } from "@/trpc/server";
 
 interface PageProps {
