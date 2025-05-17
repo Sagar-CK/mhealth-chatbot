@@ -5,12 +5,14 @@ import { Separator } from "@/components/ui/separator";
 import { linaScenarios } from "@/lib/lina/lina-scenarios";
 import { User } from "@/server/api/models/user";
 import { LinaChatInterface } from "@/components/lina/lina-chatbot";
+import {linaScenarioEmpathetic} from "@/lib/lina/lina-scenario-empathetic";
 
 interface LinaChatProps {
     user: User;
 }
 
 export function LinaChat({ user }: LinaChatProps) {
+    const scenariosToUse = user.condition === '2' ? linaScenarioEmpathetic : linaScenarios;
 
     return (
         <div className="flex w-full items-center justify-center">
@@ -20,7 +22,7 @@ export function LinaChat({ user }: LinaChatProps) {
                 </CardHeader>
                 <Separator />
                 <CardContent>
-                    <LinaChatInterface scenarios={linaScenarios} user={user} />
+                    <LinaChatInterface scenarios={scenariosToUse} user={user} />
                 </CardContent>
             </Card>
         </div>
