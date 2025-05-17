@@ -4,9 +4,9 @@ export enum ResponseType {
 }
 
 export enum Severity {
-  Low = "low",
-  Medium = "medium",
-  High = "high",
+  Low = "Low",
+  Medium = "Medium",
+  High = "High",
 }
 
 export interface StatementStep {
@@ -21,8 +21,10 @@ export interface QuestionStep {
   severity: Severity
   likertScale: 5 | 7
   responses: {
-    willingness: number
-    severity: Severity
+    conditions: {
+      willingness: number[]
+      severity: Severity[]
+    }
     message: string
   }[]
 }

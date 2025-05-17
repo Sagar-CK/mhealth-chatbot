@@ -19,18 +19,24 @@ export const sagarScenarios: Scenario[] = [
         likertScale: 5,
         responses: [
           {
-            willingness: 1,
-            severity: Severity.Low,
+            conditions: {
+              willingness: [1, 2],
+              severity: [Severity.Low],
+            },
             message: "I understand this might be difficult to discuss. Would you like to talk about general stress management instead?"
           },
           {
-            willingness: 2,
-            severity: Severity.Medium,
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
             message: "Thank you for sharing. How do you typically cope with these feelings?"
           },
           {
-            willingness: 3,
-            severity: Severity.High,
+            conditions: {
+              willingness: [3, 4, 5],
+              severity: [Severity.High],
+            },
             message: "I appreciate your openness. Have you considered speaking with a mental health professional about this?"
           }
         ]
