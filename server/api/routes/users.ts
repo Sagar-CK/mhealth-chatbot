@@ -13,14 +13,16 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       // Check if user already exists
       const [existingUser] =
-        await ctx.sql`SELECT * FROM users WHERE user_id = ${input.user_id}`;
+        await ctx.sql`SELECT * FROM users WHERE user_id = ${input.user_id} AND study = ${input.study}`;
       if (existingUser) {
         return existingUser as User;
       }
 
       // Create new user
       const [lastUser] =
-        await ctx.sql`SELECT * FROM users ORDER BY created_at DESC LIMIT 1`;
+        await ctx.sql`SELECT * FROM users WHERE study = ${input.study} ORDER BY created_at DESC LIMIT 1`;
+
+      console.log("lastUser", lastUser);
 
       console.log("lastUser", lastUser);
 
@@ -63,10 +65,10 @@ export const usersRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       // if the user does not exist, create them first
       const [user] =
-        await ctx.sql`SELECT * FROM users WHERE user_id = ${input.user_id}`;
+        await ctx.sql`SELECT * FROM users WHERE user_id = ${input.user_id} AND study = ${input.study}`
       if (!user){
         const [lastUser] =
-          await ctx.sql`SELECT * FROM users ORDER BY created_at DESC LIMIT 1`;
+          await ctx.sql`SELECT * FROM users WHERE study = ${input.study} ORDER BY created_at DESC LIMIT 1`;
         let newUserCondition = 1;
         if (lastUser) {
           const lastCondition = Number(lastUser.condition);

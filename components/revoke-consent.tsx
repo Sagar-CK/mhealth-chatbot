@@ -17,13 +17,21 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { sagarStudy, yushanStudy, manuStudy, linaStudy } from "@/lib/constants";
 function RevokeConsentButtonContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const uid = searchParams.get("uid");
-  // get path 
   const pathname = usePathname();
-  const study = pathname.split("/")[1];
+  var study = pathname.split("/")[1];
+
+  if (study !== sagarStudy && study !== yushanStudy && study !== manuStudy && study !== linaStudy) {
+    // get the study from study_id in the url
+    const studyId = searchParams.get("study_id");
+    if (studyId) {
+      study = studyId;
+    }
+  }
 
   return (
     <AlertDialog>
@@ -50,7 +58,7 @@ function RevokeConsentButtonContent() {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={() => {
             if (uid) {
-              router.push(`/revoked-consent?uid=${uid}&study=${study}`);
+              router.push(`/revoked-consent?uid=${uid}&study_id=${study}`);
             } else {
               alert("No UID found, contact the researcher for support!");
             }
