@@ -24,6 +24,8 @@ export const usersRouter = createTRPCRouter({
 
       console.log("lastUser", lastUser);
 
+      console.log("lastUser", lastUser);
+
 
       let newUserCondition = 1;
 
@@ -83,4 +85,3 @@ export const usersRouter = createTRPCRouter({
       return updatedUser as User;
     }),
 });
-  
