@@ -8,12 +8,13 @@ interface LikertResponseProps {
   question: string
   onSelect: (response: string) => void
   scale: 5 | 7
+  disabled?: boolean
 }
 
 const likertValues5 = ['Not willing', 'Slightly willing', 'Moderately willing', 'Very willing', 'Extremely willing'];
 const likertValues7 = ['Strongly disagree', 'Disagree', 'Somewhat disagree', 'Neutral', 'Somewhat agree', 'Agree', 'Strongly agree'];
 
-export function LikertResponse({ question, onSelect, scale }: LikertResponseProps) {
+export function LikertResponse({ question, onSelect, scale, disabled }: LikertResponseProps) {
   const [selectedValue, setSelectedValue] = useState<string | string>()
 
   const handleSelect = (value: string) => {
@@ -34,6 +35,7 @@ export function LikertResponse({ question, onSelect, scale }: LikertResponseProp
               (selectedValue === value) && "bg-primary text-primary-foreground",
             )}
             onClick={() => handleSelect(value)}
+            disabled={disabled}
           >
             {value}
           </Button>
@@ -46,6 +48,7 @@ export function LikertResponse({ question, onSelect, scale }: LikertResponseProp
               (selectedValue === value) && "bg-primary text-primary-foreground",
             )}
             onClick={() => handleSelect(value)}
+            disabled={disabled}
           >
             {value}
           </Button>

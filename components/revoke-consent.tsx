@@ -23,7 +23,7 @@ function RevokeConsentButtonContent() {
   const searchParams = useSearchParams();
   const uid = searchParams.get("uid");
   const pathname = usePathname();
-  var study = pathname.split("/")[1];
+  let study = pathname.split("/")[1];
 
   if (study !== sagarStudy && study !== yushanStudy && study !== manuStudy && study !== linaStudy) {
     // get the study from study_id in the url

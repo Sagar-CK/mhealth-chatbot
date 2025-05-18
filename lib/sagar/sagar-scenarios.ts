@@ -1,6 +1,39 @@
 import { type Scenario, ResponseType } from "@/lib/sagar/types";
 import { Severity } from "@/lib/sagar/types";
 
+export function validateResponseCoverage(scenarios: Scenario[]) {
+  for (const scenario of scenarios) {
+    for (const step of scenario.steps) {
+      if (step.type === ResponseType.Question) {
+        const allWillingness = [1, 2, 3, 4, 5];
+        const allSeverity = [Severity.Low, Severity.Medium, Severity.High];
+        
+        // For each severity level, check if all willingness levels are covered
+        for (const severity of allSeverity) {
+          const coveredWillingness = new Set<number>();
+          
+          // Check each response's conditions
+          step.responses.forEach(response => {
+            if (response.conditions.severity.includes(severity)) {
+              response.conditions.willingness.forEach(w => coveredWillingness.add(w));
+            }
+          });
+
+          // Find missing willingness levels for this severity
+          const missingWillingness = allWillingness.filter(w => !coveredWillingness.has(w));
+
+          if (missingWillingness.length > 0) {
+            throw new Error(
+              `Incomplete response coverage in scenario "${scenario.title}":\n` +
+              `For severity ${severity}, missing willingness levels: ${missingWillingness.join(', ')}`
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
 export const sagarScenarios: Scenario[] = [
   {
     title: "mental-health-assessment",
@@ -21,23 +54,30 @@ export const sagarScenarios: Scenario[] = [
           {
             conditions: {
               willingness: [1, 2],
-              severity: [Severity.Low],
+              severity: [Severity.Medium, Severity.High],
             },
-            message: "I understand this might be difficult to discuss. Would you like to talk about general stress management instead?"
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              severity: [Severity.Medium],
-            },
-            message: "Thank you for sharing. How do you typically cope with these feelings?"
+            message: "I understand this might be difficult to discuss. Thanks for sharing."
           },
           {
             conditions: {
               willingness: [3, 4, 5],
-              severity: [Severity.High],
+              severity: [Severity.Medium, Severity.High],
             },
-            message: "I appreciate your openness. Have you considered speaking with a mental health professional about this?"
+            message: "Thanks for sharing despite the intensity of the question."
+          },
+          {
+            conditions: {
+              willingness: [3, 4, 5], 
+              severity: [Severity.Low],
+            },
+            message: "I appreciate your openness. Let's move on to the next question."
+          },
+          {
+            conditions: {
+              willingness: [1, 2],
+              severity: [Severity.Low],
+            },
+            message: "Thank you for sharing. Let's move on to the next question."
           }
         ]
       },

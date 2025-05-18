@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 interface SelectResponseProps {
   options: string[]
   onSelect: (option: string) => void
+  disabled?: boolean
 }
 
-export function SelectResponse({ options, onSelect }: SelectResponseProps) {
+export function SelectResponse({ options, onSelect, disabled }: SelectResponseProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((option, index) => (
@@ -16,6 +17,7 @@ export function SelectResponse({ options, onSelect }: SelectResponseProps) {
           variant="outline"
           className="flex-1 min-w-[200px] h-auto py-3 px-4 text-left"
           onClick={() => onSelect(option)}
+          disabled={disabled}
         >
           {option}
         </Button>
