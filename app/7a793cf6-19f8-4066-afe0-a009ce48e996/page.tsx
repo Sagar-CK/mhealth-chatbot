@@ -1,21 +1,37 @@
-import { AudioChatInterface } from "@/components/audio-chat-interface";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { manuChatConfig } from "@/lib/chat/manu-chat-config";
+import { ManuChat } from "@/components/manu/manu-chat";
+import { api } from "@/trpc/server";
 
-export default function Manu() {
-  return (
-    <div className="flex w-full items-center justify-center flex-1 overflow-auto">
-      <Card className="w-4/5 bg-slate-50 flex flex-col overflow-auto">
-        <CardHeader className="w-full flex justify-between items-center">
-          <CardTitle>Interact with your mHealth Voice Chatbot!</CardTitle>
-          <p>Manu Condition</p>
-        </CardHeader>
-        <Separator />
-        <CardContent className="flex-1">
-          <AudioChatInterface config={manuChatConfig} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function Manu({ searchParams }: PageProps) {
+  const trueSearchParams = await searchParams;
+  const uid = trueSearchParams.uid as string;
+
+  if (!uid) {
+    return (
+      <div className="flex flex-col gap-4 h-full w-full items-center justify-center">
+        <h1 className="text-2xl font-bold">No UID provided!</h1>
+        <p className="text-sm text-muted-foreground">
+          Contact the researcher for support or go to the previous page in your browser!
+        </p>
+      </div>
+    );
+  }
+
+  const user = await api.users.createUser({ user_id: uid, study: "manu" });
+
+  if (!user) {
+    return (
+      <div className="flex flex-col gap-4 h-full w-full items-center justify-center">
+        <h1 className="text-2xl font-bold">User not found!</h1>
+        <p className="text-sm text-muted-foreground">
+          Contact the researcher for support or go to the previous page in your browser!
+        </p>
+      </div>
+    );
+  }
+
+  return <ManuChat user={user} />;
 }
