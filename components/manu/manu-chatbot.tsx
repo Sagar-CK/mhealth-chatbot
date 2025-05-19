@@ -415,6 +415,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
         <Volume2 className="h-5 w-5" />
         <p className="text-sm font-medium">Please ensure your speakers are working </p>
       </div>
+
       <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
@@ -431,7 +432,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
                   <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
                     <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
                   </Avatar>
-                  <AudioMessage audioUrl={message.audioUrl} />
+                  <AudioMessage audioUrl={message.text}/>
                 </div>
               )}
 

@@ -8,11 +8,7 @@ def text_to_mp3(messages):
 
     for message in messages:
         audio = gTTS(text=message, lang=language, slow=False)
-        audio.save(os.path.join("c:/Users/manug/Documents/mhealth-chatbot/app/7a793cf6-19f8-4066-afe0-a009ce48e996/audioFiles", "welcome.mp3"))
-
-        #Play the audio file
-        os.system("start c:/Users/manug/Documents/mhealth-chatbot/app/7a793cf6-19f8-4066-afe0-a009ce48e996/audioFiles/welcome.mp3")
-
+        audio.save(os.path.join("c:/Users/manug/Documents/mhealth-chatbot/public/audioFilesManu", "welcome.mp3"))
 
 if __name__ == "__main__":
     # Example usage
