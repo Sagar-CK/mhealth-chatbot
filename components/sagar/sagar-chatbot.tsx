@@ -23,11 +23,11 @@ interface SagarChatInterfaceProps {
 const TypingIndicator = () => {
   return (
     <div className="flex items-center gap-2">
-      <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
-        <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
+      <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0">
+        <BotMessageSquareIcon className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
       </Avatar>
-      <Card className="p-3 bg-muted w-[60px] flex items-center justify-center">
-        <div className="flex space-x-1">
+      <Card className="p-2.5 md:p-3 bg-muted w-[60px] flex items-center justify-center shadow-sm">
+        <div className="flex space-x-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0ms' }}></span>
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '150ms' }}></span>
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '300ms' }}></span>
@@ -419,30 +419,30 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
   }
 
   return (
-    <div className="flex flex-col w-full h-full max-h-[500px] rounded-lg border shadow-sm overflow-hidden">
+    <div className="flex flex-col w-full h-full max-h-[600px] md:max-h-[700px] rounded-lg border shadow-sm overflow-hidden bg-background">
       <div
         ref={messagesContainerRef}
-        className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
+        className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-3 md:p-4 space-y-3 md:space-y-4 bg-muted/10"
       >
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
           >
-            <div className="flex items-center gap-2 max-w-[90%] md:max-w-[80%]">
+            <div className="flex items-start gap-2 max-w-[85%] md:max-w-[75%]">
               {message.sender === "bot" && (
-                <Avatar className="h-6 w-6 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0">
-                  <BotMessageSquareIcon className="h-3 w-3 md:h-4 md:w-4 text-primary-foreground" />
+                <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0 mt-1">
+                  <BotMessageSquareIcon className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
                 </Avatar>
               )}
 
-              <Card className={`p-2 md:p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
-                <p className="text-sm md:text-base break-words">{message.text}</p>
+              <Card className={`p-2.5 md:p-3.5 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"} shadow-sm`}>
+                <p className="text-sm md:text-base break-words leading-relaxed">{message.text}</p>
               </Card>
 
               {message.sender === "user" && (
-                <Avatar className="h-6 w-6 md:h-8 md:w-8 bg-secondary flex items-center justify-center shrink-0">
-                  <User className="h-3 w-3 md:h-4 md:w-4 text-secondary-foreground" />
+                <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-secondary flex items-center justify-center shrink-0 mt-1">
+                  <User className="h-4 w-4 md:h-5 md:w-5 text-secondary-foreground" />
                 </Avatar>
               )}
             </div>
@@ -451,13 +451,18 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
         {isTyping && Number(user.condition) === 2 && <TypingIndicator />}
       </div>
 
-      <div className="flex-shrink-0 p-2 md:p-4 border-t bg-card">
+      <div className="flex-shrink-0 p-3 md:p-4 border-t bg-card">
         {isComplete ? (
-          <Button onClick={nextOrCompleteScenario} className="w-full text-sm md:text-base">
+          <Button 
+            onClick={nextOrCompleteScenario} 
+            className="w-full text-sm md:text-base h-10 md:h-11 font-medium"
+          >
             {currentScenarioIndex === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
           </Button>
         ) : (
-          renderResponseComponent()
+          <div className="space-y-3">
+            {renderResponseComponent()}
+          </div>
         )}
       </div>
     </div>
