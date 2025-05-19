@@ -41,9 +41,7 @@ export const sagarScenarios: Scenario[] = [
       {
         type: ResponseType.Statement,
         text: "Let's talk about mental health and well-being. How would you like to proceed?",
-        options: [
-          "I'm comfortable discussing my mental health",
-        ]
+        option: "I'm comfortable discussing my mental health"
       },
       { 
         type: ResponseType.Question,
@@ -84,9 +82,7 @@ export const sagarScenarios: Scenario[] = [
       {
         type: ResponseType.Statement,
         text: "What activities do you find most helpful for managing stress?",
-        options: [
-          "Exercise and physical activity",
-        ]
+        option: "Exercise and physical activity"
       }
     ],
     completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being."

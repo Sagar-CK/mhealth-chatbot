@@ -308,7 +308,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
 
     if (currentStepData.type === ResponseType.Statement) {
       const statementStep = currentStepData as StatementStep
-      return <SelectResponse options={statementStep.options} onSelect={handleResponse} disabled={isResponseDisabled} />
+      return <SelectResponse options={[statementStep.option]} onSelect={handleResponse} disabled={isResponseDisabled} />
     } else if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
 

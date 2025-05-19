@@ -12,7 +12,7 @@ export enum Severity {
 export interface StatementStep {
   type: ResponseType.Statement
   text: string
-  options: string[]
+  option: string
 }
 
 export interface QuestionStep {
