@@ -160,7 +160,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             case ResponseType.Likert:
                 return (
                     <LikertResponse
-                        question={currentStepscenario.likertQuestion || "Rate your willingness:"}
+                        question={currentStepscenario.likertQuestion || "Rate your willingness to share:"}
                         onSelect={handleResponse}
                         scale={(currentStepscenario.likertScale === 5 ? 5 : 7)}
                     />

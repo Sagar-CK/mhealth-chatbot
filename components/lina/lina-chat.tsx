@@ -18,7 +18,7 @@ export function LinaChat({ user }: LinaChatProps) {
         <div className="flex w-full items-center justify-center">
             <Card className="w-4/5 h-full bg-slate-50">
                 <CardHeader className="w-full flex justify-between items-center">
-                    <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
+                    <CardTitle>Time for a quick mental check-in with Echo? 💬</CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent>
