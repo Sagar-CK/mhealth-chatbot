@@ -1,40 +1,6 @@
 import { type Scenario, ResponseType } from "@/lib/sagar/types";
 import { Severity } from "@/lib/sagar/types";
-
-export function validateResponseCoverage(scenarios: Scenario[]) {
-  for (const scenario of scenarios) {
-    for (const step of scenario.steps) {
-      if (step.type === ResponseType.Question) {
-        const allWillingness = [1, 2, 3, 4, 5];
-        const allSeverity = [Severity.Low, Severity.Medium, Severity.High];
-        
-        // For each severity level, check if all willingness levels are covered
-        for (const severity of allSeverity) {
-          const coveredWillingness = new Set<number>();
-          
-          // Check each response's conditions
-          step.responses.forEach(response => {
-            if (response.conditions.severity.includes(severity)) {
-              response.conditions.willingness.forEach(w => coveredWillingness.add(w));
-            }
-          });
-
-          // Find missing willingness levels for this severity
-          const missingWillingness = allWillingness.filter(w => !coveredWillingness.has(w));
-
-          if (missingWillingness.length > 0) {
-            throw new Error(
-              `Incomplete response coverage in scenario "${scenario.title}":\n` +
-              `For severity ${severity}, missing willingness levels: ${missingWillingness.join(', ')}`
-            );
-          }
-        }
-      }
-    }
-  }
-}
-
-export const sagarScenarios: Scenario[] = [
+export const controlScenarios: Scenario[] = [
   {
     title: "mental-health-assessment",
     steps: [

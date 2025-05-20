@@ -1,8 +1,8 @@
-import { sagarScenarios } from '../lib/sagar/sagar-scenarios';
-import { validateResponseCoverage } from '../lib/sagar/sagar-scenarios';
+import { controlScenarios } from '../lib/sagar/control-scenarios';
+import { validateResponseCoverage } from '../lib/utils';
 
 try {
-  validateResponseCoverage(sagarScenarios);
+  validateResponseCoverage(controlScenarios);
   console.log('✅ All scenarios validated successfully!');
   process.exit(0);
 } catch (error) {
