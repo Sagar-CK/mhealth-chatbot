@@ -6,34 +6,92 @@ export const linaScenarioEmpathetic: Scenario[] = [
         steps: [
             {
                 question:
-                    "HIIIIIIIIIIII",
+                    "Hello! My name is Echo. I'm here to listen and help you explore your thoughts and feelings.\n" +
+                    "In some parts of this check-up, I will present a situation with only one possible response for you to select. " +
+                    "In other ones, I will ask questions where you need to answer how comfortable you would feel sharing information. " +
+                    "You can answer at your own pace, there are no right or wrong responses. \n" +
+                    "Let’s start with a simple situation. Let’s imagine something that might happen on a long day.\n\n" +
+                    "You’ve had a heavy day, and you're just not feeling like yourself.\n\n" +
+                    "How have you been feeling today?",
                 responseType: ResponseType.Select,
-                options: ["I have been feeling off today, but I haven’t really talked to anyone about it."],
+                options: ["I’ve been feeling off today, but I haven’t really talked about it with anyone."]
             },
             {
                 question:
-                    "Thank you for sharing that. \n" +
-                    "Some people feel better after expressing what’s on their mind. " +
-                    "How willing would you be to share how you're feeling right now?",
+                    "Thank you for sharing that. It’s completely normal to experience something like this.\n" +
+                    "Often people feel better after expressing their thoughts or sharing more about their feelings.\n" +
+                    "Do you want to talk more about how you’re feeling right now?",
                 responseType: ResponseType.Likert,
-                likertScale: 5,
+                likertScale: 5
             },
             {
                 question:
-                    "Stress can build up over time, especially when things feel uncertain or overwhelming. \n" +
-                    "How willing would you be to share if you have been feeling stressed recently?",
+                    "Sometimes stress can build up with time, especially during long heavy days, or when things feel overwhelming.\n" +
+                    "Have you been feeling stressed recently?",
                 responseType: ResponseType.Likert,
+                likertScale: 5
             },
             {
-                question: "Feeling lonely, even briefly, is something many people experience, especially during quiet days. \n" +
-                    "How willing would you be to share if you felt lonely today?",
+                question:
+                    "Apart from stress, it’s also very common to experience feeling lonely, whether during quiet or busy days, even if just for a short moment.\n" +
+                    "Have you felt lonely at any point today?",
                 responseType: ResponseType.Likert,
+                likertScale: 5
             },
             {
-                question: "And occasionally, people experience stronger emotions that are difficult to describe. \n" +
-                    "How willing would you be to share if you had strong negative feelings about yourself or the world recently?",
+                question:
+                    "From time to time, you might feel a certain type of way that might be difficult to describe—strong emotions that can be hard to put into words. " +
+                    "It can be very helpful, however, to try and express them.\n" +
+                    "Have you experienced any strong emotions today?",
                 responseType: ResponseType.Likert,
+                likertScale: 5
+            }
+        ]
+    },
+    {
+        title: "behavioural",
+        steps: [
+            {
+                question:
+                    "Now let’s imagine a different kind of day.\n\n" +
+                    "You've had a quiet day to yourself only — no classes, no major plans. You’ve spent the day at home.\n\n" +
+                    "Did you get a chance to do anything active or outdoors today?",
+                responseType: ResponseType.Select,
+                options: ["Not really, I stayed inside all day."]
             },
+            {
+                question:
+                    "Thank you for sharing this with me.\n" +
+                    "It’s completely normal to have days like that where you don’t feel like going out or doing anything active. " +
+                    "You might not be in the mood, and that is understandable. In this case, it often helps to be open to trying something new.\n" +
+                    "Have you been interested in exploring new things?",
+                responseType: ResponseType.Likert,
+                likertScale: 5
+            },
+            {
+                question:
+                    "Apart from being adventurous, regular exercise can help shift your mood and avoid feelings of restlessness and low energy.\n" +
+                    "Have you exercised at least once recently?",
+                responseType: ResponseType.Likert,
+                likertScale: 5
+            },
+            {
+                question:
+                    "Having the day to yourself can sometimes give you the space to think about your problems and try to solve them, or cope with them in different ways.\n" +
+                    "Have you been dealing with your problems in a good way?",
+                responseType: ResponseType.Likert,
+                likertScale: 5
+            },
+            {
+                question:
+                    "It often happens that people turn to substances like cigarettes or alcohol as coping mechanisms against stress or problems. " +
+                    "In other cases, these are also consumed to simply pass the time.\n" +
+                    "Have you been consuming alcohol or other substances to pass the time or cope with issues?",
+                responseType: ResponseType.Likert,
+                likertScale: 5
+            }
         ],
+        completionMessage:
+            "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being."
     }
 ];

@@ -82,7 +82,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             if (user.condition === '2') {
                 if (response === "Not willing") {
                     customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It’s okay, I am here to listen to you and guide you to reflect on your mental health.";
-                } else if (response === "Willing") {
+                } else {
                     customResponse = "Thank you very much for agreeing to share with me. I am here to listen to you and guide you to reflect on your mental health. Sharing can be very beneficial to you.";
                 }
             }
@@ -99,7 +99,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                     };
                     setMessages((prev) => [...prev, customBotMessage]);
                     createMessage.mutate(customBotMessage);
-                }, 1000);
+                }, 500);
             }
         }
 
@@ -121,7 +121,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 setMessages((prev) => [...prev, botMessage]);
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
-            }, 1000); // Increased delay to account for custom response
+            }, 2000); // Increased delay to account for custom response
         } else {
             // Chat is complete
             setTimeout(() => {
