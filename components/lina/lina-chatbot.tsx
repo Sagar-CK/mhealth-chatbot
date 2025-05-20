@@ -81,7 +81,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             // Only apply custom responses for linaScenarioEmpathetic (condition 2)
             if (user.condition === '2') {
                 if (response === "Not willing") {
-                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It’s okay, I am here to listen to you and guide you to reflect on your mental health.";
+                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It’s okay, I am here to listen to you and guide you to reflect on your mental health. 🌱";
                 } else {
                     customResponse = "Thank you very much for agreeing to share with me. I am here to listen to you and guide you to reflect on your mental health. Sharing can be very beneficial to you.";
                 }
