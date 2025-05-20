@@ -87,6 +87,14 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 }
             }
 
+            if (user.condition === '1') {
+                if (response === "Not willing") {
+                    customResponse = "Thank you for your answer.";
+                } else {
+                    customResponse = "Thank you for your answer.";
+                }
+            }
+
             if (customResponse) {
                 setTimeout(() => {
                     const customBotMessage = {

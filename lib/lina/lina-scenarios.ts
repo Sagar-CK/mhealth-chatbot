@@ -7,40 +7,38 @@ export const linaScenarios: Scenario[] = [
             {
                 question:
                     "Hello! My name is Echo. I'm here to listen and help you explore your thoughts and feelings.\n" +
-                    "In some parts of this check-in, I will present a situation with only one response for you to choose from." +
-                    " In others, I will ask a few questions about how comfortable you would feel sharing information. " +
-                    "You can answer at your own pace, there are no right or wrong responses. \n" +
-                    "Let’s start with a simple situation. Let’s imagine something that might happen on a typical day.\n" +
-                    "\n" +
-                    "\"Some days feel heavier than others. Maybe something disappointing happened, or you're just not feeling like yourself.\"\n" +
-                    "\n" +
-                    "Has anything been on your mind today?",
+                    "In some parts of this check-up, I will present a situation with only one possible response for you to select. " +
+                    "In other ones, I will ask questions where you need to answer how comfortable you would feel sharing information. " +
+                    "You can answer at your own pace, there are no right or wrong responses.\n" +
+                    "Let’s start with a simple situation. Let’s imagine something that might happen on a long day.\n\n" +
+                    "You’ve had a heavy day, and you're just not feeling like yourself.\n\n" +
+                    "How have you been feeling today?",
                 responseType: ResponseType.Select,
-                options: ["I have been feeling off today, but I haven’t really talked to anyone about it."],
+                options: ["I’ve been feeling off today, but I haven’t really talked about it with anyone."],
             },
             {
                 question:
-                    "Thank you for sharing that. \n" +
-                    "Some people feel better after expressing what’s on their mind. " +
-                "How willing would you be to share how you're feeling right now?",
+                    "Do you want to talk more about how you’re feeling right now?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
                 question:
-                    "Stress can build up over time, especially when things feel uncertain or overwhelming. \n" +
-                    "How willing would you be to share if you have been feeling stressed recently?",
+                    "Have you been feeling stressed recently?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
-                question: "Feeling lonely, even briefly, is something many people experience, especially during quiet days. \n" +
-                    "How willing would you be to share if you felt lonely today?",
+                question:
+                    "Have you felt lonely at any point today?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
-                question: "And occasionally, people experience stronger emotions that are difficult to describe. \n" +
-                    "How willing would you be to share if you had strong negative feelings about yourself or the world recently?",
+                question:
+                    "Have you experienced any strong emotions today?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
         ],
     },
@@ -48,33 +46,35 @@ export const linaScenarios: Scenario[] = [
         title: "behavioural",
         steps: [
             {
-                question: "Now let’s imagine a different kind of day.\n" +
-                    "\n" +
-                    "\"You've had a quiet day mostly to yourself—no classes, no major plans. You’ve spent the day at home.\"\n" +
-                    "\n" +
+                question:
+                    "Now let’s imagine a different kind of day.\n\n" +
+                    "You've had a quiet day to yourself only — no classes, no major plans. You’ve spent the day at home.\n\n" +
                     "Did you get a chance to do anything active or outdoors today?",
                 responseType: ResponseType.Select,
-                options: ["Not really, I stayed inside all day."]
+                options: ["Not really, I stayed inside all day."],
             },
             {
-                question: "Thanks for sharing. \n" +
-                    "It’s completely normal to have quiet days like that. Thinking about small parts of your day can sometimes offer helpful perspective. \n" +
-                    "How willing would you be to share if you've been interested in exploring new things?",
+                question:
+                    "Thank you for sharing. \n" +
+                    "Have you been interested in exploring new things?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
-                question: "Sometimes, doing something active can help shift our mood. \n" +
-                    "How willing would you be to share if you have exercised at least once recently?",
+                question: "Have you exercised at least once recently?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
-                question: "On quiet days, feeling isolated can creep in, often leading people to turn to different coping strategies.\n" +
-                    "How willing would you be to share if you’ve been managing problems well?",
+                question: "Have you been dealing with your problems in a good way?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
             {
-                question: "Some people use substances like cigarettes or alcohol to cope with stress or pass the time. How willing would you be to share if you're using any substances currently?",
+                question:
+                    "Have you been consuming alcohol or other substances to pass the time or cope with issues?",
                 responseType: ResponseType.Likert,
+                likertScale: 5,
             },
         ],
         completionMessage:
