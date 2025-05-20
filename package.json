@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "pnpm validate-scenarios && next dev --turbopack",
     "validate-scenarios": "tsx scripts/validate-scenarios.ts",
     "build": "pnpm validate-scenarios && next build",
     "start": "next start",
