@@ -74,6 +74,35 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         // Save message to server
         createMessage.mutate(userMessage)
 
+        // Add custom response for Likert scale
+        const currentStepscenario = currentScenario.steps[currentStep];
+        if (currentStepscenario.responseType === ResponseType.Likert) {
+            let customResponse = "";
+            // Only apply custom responses for linaScenarioEmpathetic (condition 2)
+            if (user.condition === '2') {
+                if (response === "Not willing") {
+                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It’s okay, I am here to listen to you and guide you to reflect on your mental health.";
+                } else if (response === "Willing") {
+                    customResponse = "Thank you very much for agreeing to share with me. I am here to listen to you and guide you to reflect on your mental health. Sharing can be very beneficial to you.";
+                }
+            }
+
+            if (customResponse) {
+                setTimeout(() => {
+                    const customBotMessage = {
+                        id: `${currentScenario.title}-${currentStep}-bot-custom`,
+                        sender: "bot" as const,
+                        text: customResponse,
+                        timestamp: new Date(),
+                        user_id: user.user_id,
+                        scenario: currentScenario.title
+                    };
+                    setMessages((prev) => [...prev, customBotMessage]);
+                    createMessage.mutate(customBotMessage);
+                }, 1000);
+            }
+        }
+
         // Move to next step
         const nextStep = currentStep + 1;
 
@@ -92,7 +121,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 setMessages((prev) => [...prev, botMessage]);
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
-            }, 500);
+            }, 1000); // Increased delay to account for custom response
         } else {
             // Chat is complete
             setTimeout(() => {
@@ -108,7 +137,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 setMessages((prev) => [...prev, finalMessage]);
                 createMessage.mutate(finalMessage)
                 setIsComplete(true);
-            }, 500);
+            }, 1000); // Increased delay to account for custom response
         }
     }
 
