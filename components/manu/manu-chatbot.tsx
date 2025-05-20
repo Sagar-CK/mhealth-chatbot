@@ -416,6 +416,14 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
         <p className="text-sm font-medium">Please ensure your speakers are working </p>
       </div>
 
+    <div className="flex items-center gap-3 px-4 py-3 m-4 bg-blue-50 border border-blue-200 rounded-md text-blue-700 shadow-sm">
+      <Volume2 className="h-5 w-5 text-blue-500" />
+      <p className="text-sm font-medium text-blue-700">Please listen to the privacy policy first</p>
+      <div className="ml-auto">
+        <AudioMessage audioUrl="/path-to-privacy-policy-audio.mp3" />
+      </div>
+    </div>
+
       <div
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
