@@ -747,7 +747,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This kind of stress can go deep, and even just quietly acknowledging it is a meaningful step. 🫶",
+              "This kind of stress can go deep, I appreciate your willingness to reflect on it. 🫶",
           },
           {
             conditions: {
@@ -854,6 +854,6 @@ export const anthroScenarios: Scenario[] = [
       
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
+      "Thank you for sharing your thoughts and experiences. You can click the button below to complete the task! 🤗",
   },
 ];

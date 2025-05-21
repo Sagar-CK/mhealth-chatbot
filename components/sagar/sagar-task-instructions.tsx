@@ -1,5 +1,3 @@
-import { BotIcon } from "lucide-react";
-
 export default function SagarTaskInstructions() {
   return (
     <div className="w-full h-full flex flex-col items-start justify-center gap-y-4 p-4">

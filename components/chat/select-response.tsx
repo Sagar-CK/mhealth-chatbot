@@ -15,7 +15,7 @@ export function SelectResponse({ options, onSelect, disabled }: SelectResponsePr
         <Button
           key={index}
           variant="outline"
-          className="flex-1 min-w-[200px] h-auto py-3 px-4 text-left"
+          className="flex-1 min-w-[200px] h-auto py-3 px-4 text-left whitespace-normal break-words text-sm md:text-base"
           onClick={() => onSelect(option)}
           disabled={disabled}
         >

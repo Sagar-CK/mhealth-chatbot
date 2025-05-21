@@ -42,6 +42,106 @@ interface QuestionState {
   severity?: Severity
 }
 
+// Add these helper functions after the TypingIndicator component
+const createMessage = (
+  sender: "bot" | "user",
+  text: string,
+  user_id: string,
+  scenario: string
+): Message => ({
+  id: crypto.randomUUID(),
+  sender,
+  text,
+  timestamp: new Date(),
+  user_id,
+  scenario
+})
+
+const getStepText = (step: StatementStep | QuestionStep): string => {
+  return step.type === ResponseType.Statement ? (step as StatementStep).text : (step as QuestionStep).question
+}
+
+const handleBotResponse = (
+  response: string,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
+  user: UserType,
+  scenario: string,
+  condition: number,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  onComplete?: () => void
+) => {
+  const botMessage = createMessage("bot", response, user.user_id, scenario)
+  
+  if (Number(condition) === 2) {
+    setIsTyping(true)
+    setTimeout(() => {
+      setMessages(prev => [...prev, botMessage])
+      setIsTyping(false)
+      onComplete?.()
+    }, 2000)
+  } else {
+    setMessages(prev => [...prev, botMessage])
+    onComplete?.()
+  }
+}
+
+const handleNextStep = (
+  currentScenario: Scenario,
+  currentStep: number,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  user: UserType,
+  setIsComplete: React.Dispatch<React.SetStateAction<boolean>>,
+  setQuestionState: React.Dispatch<React.SetStateAction<QuestionState>>
+) => {
+  const nextStep = currentStep + 1
+  
+  // Reset question state before moving to next step
+  setQuestionState({})
+  
+  if (nextStep < currentScenario.steps.length) {
+    const nextStepData = currentScenario.steps[nextStep]
+    const nextBotMessage = createMessage(
+      "bot",
+      getStepText(nextStepData),
+      user.user_id,
+      currentScenario.title
+    )
+
+    if (Number(user.condition) === 2) {
+      setIsTyping(true)
+      setTimeout(() => {
+        setMessages(prev => [...prev, nextBotMessage])
+        setCurrentStep(nextStep)
+        setIsTyping(false)
+      }, 2000)
+    } else {
+      setMessages(prev => [...prev, nextBotMessage])
+      setCurrentStep(nextStep)
+    }
+  } else {
+    const finalMessage = createMessage(
+      "bot",
+      currentScenario.completionMessage || "Thank you for your responses!",
+      user.user_id,
+      currentScenario.title
+    )
+
+    if (Number(user.condition) === 2) {
+      setIsTyping(true)
+      setTimeout(() => {
+        setMessages(prev => [...prev, finalMessage])
+        setIsComplete(true)
+        setIsTyping(false)
+      }, 2000)
+    } else {
+      setMessages(prev => [...prev, finalMessage])
+      setIsComplete(true)
+    }
+  }
+}
+
 export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
@@ -71,233 +171,63 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
   useEffect(() => {
     if (currentScenario?.steps.length > 0 && messages.length === 0) {
       const firstStep = currentScenario.steps[0]
-      const messageText = firstStep.type === ResponseType.Statement
-        ? (firstStep as StatementStep).text
-        : (firstStep as QuestionStep).question
-
-      const initialMessage = {
-        id: crypto.randomUUID(),
-        sender: "bot" as const,
-        text: messageText,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      }
-
+      const initialMessage = createMessage(
+        "bot",
+        getStepText(firstStep),
+        user.user_id,
+        currentScenario.title
+      )
       setMessages([initialMessage])
     }
-  }, [currentScenario, messages.length, user.user_id])
+  }, [])
 
-
+  // Replace the handleResponse function with this simplified version
   const handleResponse = async (response: string) => {
     setIsResponseDisabled(true)
     const currentStepData = currentScenario.steps[currentStep]
 
+    // Add user's response message
+    const userMessage = createMessage("user", response, user.user_id, currentScenario.title)
+    setMessages(prev => [...prev, userMessage])
+
     if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
-
-      // Add the user's response message
-      const userMessage = {
-        id: crypto.randomUUID(),
-        sender: "user" as const,
-        text: response,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      };
-
-      setMessages((prev) => [...prev, userMessage]);
-
-      // Find the matching response based on the current question state
       const matchingResponse = questionStep.responses.find(
         r => r.conditions.willingness.includes(questionState.willingness!) &&
           r.conditions.severity.includes(questionState.severity!)
       )
 
       if (matchingResponse) {
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          setTimeout(() => {
-            const botMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text: matchingResponse.message,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            }
-            setMessages(prev => [...prev, botMessage])
-            setIsTyping(false)
-
-            // Move to next step after the matching response is shown
-            const nextStep = currentStep + 1;
-            if (nextStep < currentScenario.steps.length) {
-              // Reset question state before moving to next step
-              setQuestionState({})
-              
-              // Show typing indicator for next message
-              setIsTyping(true)
-              setTimeout(() => {
-                const nextStepData = currentScenario.steps[nextStep]
-                const nextBotMessage = {
-                  id: crypto.randomUUID(),
-                  sender: "bot" as const,
-                  text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-                  timestamp: new Date(),
-                  user_id: user.user_id,
-                  scenario: currentScenario.title
-                };
-
-                setMessages((prev) => [...prev, nextBotMessage]);
-                setCurrentStep(nextStep);
-                setIsTyping(false)
-              }, 2000);
-            } else {
-              // Handle completion
-              setIsTyping(true)
-              setTimeout(() => {
-                const finalMessage = {
-                  id: crypto.randomUUID(),
-                  sender: "bot" as const,
-                  text: currentScenario.completionMessage || "Thank you for your responses!",
-                  timestamp: new Date(),
-                  user_id: user.user_id,
-                  scenario: currentScenario.title
-                };
-
-                setMessages((prev) => [...prev, finalMessage]);
-                setIsComplete(true);
-                setIsTyping(false)
-              }, 2000);
-            }
-          }, 2000)
-        } else {
-          const botMessage = {
-            id: crypto.randomUUID(),
-            sender: "bot" as const,
-            text: matchingResponse.message,
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          }
-          setMessages(prev => [...prev, botMessage])
-
-          // Move to next step immediately for non-condition-2 cases
-          const nextStep = currentStep + 1;
-          if (nextStep < currentScenario.steps.length) {
-            // Reset question state before moving to next step
-            setQuestionState({})
-            
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-
-            setMessages((prev) => [...prev, nextBotMessage]);
-            setCurrentStep(nextStep);
-          } else {
-            // Handle completion
-            const finalMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-
-            setMessages((prev) => [...prev, finalMessage]);
-            setIsComplete(true);
-          }
-        }
+        handleBotResponse(
+          matchingResponse.message,
+          setMessages,
+          user,
+          currentScenario.title,
+          Number(user.condition),
+          setIsTyping,
+          () => handleNextStep(
+            currentScenario,
+            currentStep,
+            setMessages,
+            setCurrentStep,
+            setIsTyping,
+            user,
+            setIsComplete,
+            setQuestionState
+          )
+        )
       }
     } else {
-      // Handle statement responses
-      const userMessage = {
-        id: crypto.randomUUID(),
-        sender: "user" as const,
-        text: response,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      };
-
-      setMessages((prev) => [...prev, userMessage]);
-
-      // Move to next step
-      const nextStep = currentStep + 1;
-      if (nextStep < currentScenario.steps.length) {
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the message
-          setTimeout(() => {
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-
-            setMessages((prev) => [...prev, nextBotMessage]);
-            setCurrentStep(nextStep);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          // For other conditions, show message immediately
-          const nextStepData = currentScenario.steps[nextStep]
-          const nextBotMessage = {
-            id: crypto.randomUUID(),
-            sender: "bot" as const,
-            text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-
-          setMessages((prev) => [...prev, nextBotMessage]);
-          setCurrentStep(nextStep);
-        }
-      } else {
-        // Handle completion
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the final message
-          setTimeout(() => {
-            const finalMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-
-            setMessages((prev) => [...prev, finalMessage]);
-            setIsComplete(true);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          const finalMessage = {
-            id: crypto.randomUUID(),
-            sender: "bot" as const,
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-
-          setMessages((prev) => [...prev, finalMessage]);
-          setIsComplete(true);
-        }
-      }
+      handleNextStep(
+        currentScenario,
+        currentStep,
+        setMessages,
+        setCurrentStep,
+        setIsTyping,
+        user,
+        setIsComplete,
+        setQuestionState
+      )
     }
   }
   
@@ -308,7 +238,15 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
 
     if (currentStepData.type === ResponseType.Statement) {
       const statementStep = currentStepData as StatementStep
-      return <SelectResponse options={[statementStep.option]} onSelect={handleResponse} disabled={isResponseDisabled} />
+      return (
+        <div className="w-full">
+          <SelectResponse 
+            options={[statementStep.option]} 
+            onSelect={handleResponse} 
+            disabled={isResponseDisabled}
+          />
+        </div>
+      )
     } else if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
 
@@ -457,7 +395,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
             onClick={nextOrCompleteScenario} 
             className="w-full text-sm md:text-base h-10 md:h-11 font-medium"
           >
-            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
+            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task Phase" : "Next Scenario"}
           </Button>
         ) : (
           <div className="space-y-3">

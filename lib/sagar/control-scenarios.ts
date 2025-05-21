@@ -567,7 +567,7 @@ export const controlScenarios: Scenario[] = [
       },
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. We will now move onto the next scenario.",
+      "Thank you for sharing your thoughts and experiences. We will now move onto the final scenario.",
   },
   {
     title: "Work or Studies",
