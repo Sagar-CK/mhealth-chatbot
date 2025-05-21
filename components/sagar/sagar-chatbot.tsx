@@ -68,17 +68,53 @@ const handleBotResponse = (
   scenario: string,
   condition: number,
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsProducingResponse: React.Dispatch<React.SetStateAction<boolean>>,
   onComplete?: () => void
 ) => {
   const botMessage = createMessage("bot", response, user.user_id, scenario)
   
   if (Number(condition) === 2) {
-    setIsTyping(true)
-    setTimeout(() => {
-      setMessages(prev => [...prev, botMessage])
-      setIsTyping(false)
-      onComplete?.()
-    }, 2000)
+    setIsProducingResponse(true)
+    // Calculate typing duration based on message length (roughly 50ms per character)
+    const baseTypingDuration = Math.max(2000, response.length * 50)
+    // Add random variation (±20%)
+    const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+    
+    // Only 70% chance of having a pause
+    const shouldPause = Math.random() < 0.7
+    console.log("shouldPause", shouldPause)
+    const numPauses = shouldPause ? 1 : 0
+    let currentPause = 0
+    
+    const startTyping = () => {
+      setIsTyping(true)
+      
+      if (currentPause < numPauses) {
+        // If we're in a pause, wait longer
+        const pauseDuration = 500 + Math.random() * 1500
+        setTimeout(() => {
+          setIsTyping(false)
+          currentPause++
+          // Wait before starting next typing session
+          setTimeout(startTyping, 300 + Math.random() * 700)
+        }, pauseDuration)
+      } else {
+        // Final typing session - no more pauses
+        const finalTypingDuration = typingDuration / (numPauses + 1)
+        setTimeout(() => {
+          // First fade out the typing indicator
+          setIsTyping(false)
+          // Then wait a bit before showing the message
+          setTimeout(() => {
+            setMessages(prev => [...prev, botMessage])
+            setIsProducingResponse(false)
+            onComplete?.()
+          }, 300) // Small delay between typing disappearing and message appearing
+        }, finalTypingDuration)
+      }
+    }
+    
+    startTyping()
   } else {
     setMessages(prev => [...prev, botMessage])
     onComplete?.()
@@ -93,7 +129,8 @@ const handleNextStep = (
   setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
   user: UserType,
   setIsComplete: React.Dispatch<React.SetStateAction<boolean>>,
-  setQuestionState: React.Dispatch<React.SetStateAction<QuestionState>>
+  setQuestionState: React.Dispatch<React.SetStateAction<QuestionState>>,
+  setIsProducingResponse: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const nextStep = currentStep + 1
   
@@ -110,12 +147,47 @@ const handleNextStep = (
     )
 
     if (Number(user.condition) === 2) {
-      setIsTyping(true)
-      setTimeout(() => {
-        setMessages(prev => [...prev, nextBotMessage])
-        setCurrentStep(nextStep)
-        setIsTyping(false)
-      }, 2000)
+      setIsProducingResponse(true)
+      // Calculate typing duration based on message length (roughly 50ms per character)
+      const baseTypingDuration = Math.max(2000, getStepText(nextStepData).length * 50)
+      // Add random variation (±20%)
+      const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+      
+      // Only 70% chance of having a pause
+      const shouldPause = Math.random() < 0.7
+      console.log("shouldPause", shouldPause)
+      const numPauses = shouldPause ? 1 : 0
+      let currentPause = 0
+      
+      const startTyping = () => {
+        setIsTyping(true)
+        
+        if (currentPause < numPauses) {
+          // If we're in a pause, wait longer
+          const pauseDuration = 500 + Math.random() * 1500
+          setTimeout(() => {
+            setIsTyping(false)
+            currentPause++
+            // Wait before starting next typing session
+            setTimeout(startTyping, 300 + Math.random() * 700)
+          }, pauseDuration)
+        } else {
+          // Final typing session - no more pauses
+          const finalTypingDuration = typingDuration / (numPauses + 1)
+          setTimeout(() => {
+            // First fade out the typing indicator
+            setIsTyping(false)
+            // Then wait a bit before showing the message
+            setTimeout(() => {
+              setMessages(prev => [...prev, nextBotMessage])
+              setCurrentStep(nextStep)
+              setIsProducingResponse(false)
+            }, 300) // Small delay between typing disappearing and message appearing
+          }, finalTypingDuration)
+        }
+      }
+      
+      startTyping()
     } else {
       setMessages(prev => [...prev, nextBotMessage])
       setCurrentStep(nextStep)
@@ -129,18 +201,55 @@ const handleNextStep = (
     )
 
     if (Number(user.condition) === 2) {
-      setIsTyping(true)
-      setTimeout(() => {
-        setMessages(prev => [...prev, finalMessage])
-        setIsComplete(true)
-        setIsTyping(false)
-      }, 2000)
+      setIsProducingResponse(true)
+      // Calculate typing duration based on message length (roughly 50ms per character)
+      const baseTypingDuration = Math.max(2000, (currentScenario.completionMessage || "Thank you for your responses!").length * 50)
+      // Add random variation (±20%)
+      const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+      
+      // Only 70% chance of having a pause
+      const shouldPause = Math.random() < 0.7
+      console.log("shouldPause", shouldPause)
+      const numPauses = shouldPause ? 1 : 0
+      let currentPause = 0
+      
+      const startTyping = () => {
+        setIsTyping(true)
+        
+        if (currentPause < numPauses) {
+          // If we're in a pause, wait longer
+          const pauseDuration = 500 + Math.random() * 1500
+          setTimeout(() => {
+            setIsTyping(false)
+            currentPause++
+            // Wait before starting next typing session
+            setTimeout(startTyping, 300 + Math.random() * 700)
+          }, pauseDuration)
+        } else {
+          // Final typing session - no more pauses
+          const finalTypingDuration = typingDuration / (numPauses + 1)
+          setTimeout(() => {
+            // First fade out the typing indicator
+            setIsTyping(false)
+            // Then wait a bit before showing the message
+            setTimeout(() => {
+              setMessages(prev => [...prev, finalMessage])
+              setIsComplete(true)
+              setIsProducingResponse(false)
+            }, 300) // Small delay between typing disappearing and message appearing
+          }, finalTypingDuration)
+        }
+      }
+      
+      startTyping()
     } else {
       setMessages(prev => [...prev, finalMessage])
       setIsComplete(true)
     }
   }
 }
+
+
 
 export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps) {
   const router = useRouter()
@@ -151,6 +260,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
   const [isTyping, setIsTyping] = useState(false)
   const [questionState, setQuestionState] = useState<QuestionState>({})
   const [isResponseDisabled, setIsResponseDisabled] = useState(false)
+  const [isProducingResponse, setIsProducingResponse] = useState(false)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScenario = scenarios[currentScenarioIndex]
@@ -205,6 +315,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
           currentScenario.title,
           Number(user.condition),
           setIsTyping,
+          setIsProducingResponse,
           () => handleNextStep(
             currentScenario,
             currentStep,
@@ -213,7 +324,8 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
             setIsTyping,
             user,
             setIsComplete,
-            setQuestionState
+            setQuestionState,
+            setIsProducingResponse
           )
         )
       }
@@ -226,13 +338,14 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
         setIsTyping,
         user,
         setIsComplete,
-        setQuestionState
+        setQuestionState,
+        setIsProducingResponse
       )
     }
   }
   
   const renderResponseComponent = () => {
-    if (isComplete) return null
+    if (isComplete || isResponseDisabled || isTyping || isProducingResponse) return null
 
     const currentStepData = currentScenario.steps[currentStep]
 
@@ -294,11 +407,11 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
       const currentStepData = currentScenario.steps[currentStep]
       if (currentStepData.type === ResponseType.Question) {
         const questionStep = currentStepData as QuestionStep
-        const willingness = questionState.willingness // Store in variable to satisfy type checker
-        const severity = questionState.severity // Store in variable to satisfy type checker
-        const capturedStep = currentStep // Capture the current step
+        const willingness = questionState.willingness
+        const severity = questionState.severity
+        const capturedStep = currentStep
         
-        // Store self-disclosure data when we have both willingness and severity
+        setIsProducingResponse(true)
         createSelfDisclosure.mutate({
           user_id: user.user_id,
           scenario: currentScenario.title,
@@ -309,10 +422,10 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
           timestamp: new Date()
         }, {
           onSuccess: () => {
-            // Use the captured step to ensure we're using the correct step data
             const stepData = currentScenario.steps[capturedStep]
             if (stepData.type === ResponseType.Question) {
               const qStep = stepData as QuestionStep
+              setIsResponseDisabled(true)
               handleResponse(stringifyWillingnessSeverity(willingness, severity, qStep.likertScale))
             }
           }
@@ -365,16 +478,20 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
+            className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"}`}
           >
-            <div className="flex items-start gap-2 max-w-[85%] md:max-w-[75%]">
+            <div className={`flex items-start gap-2 max-w-[85%] md:max-w-[75%] animate-[fadeInUp_0.3s_ease-out_forwards]`}>
               {message.sender === "bot" && (
                 <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0 mt-1">
                   <BotMessageSquareIcon className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
                 </Avatar>
               )}
 
-              <Card className={`p-2.5 md:p-3.5 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"} shadow-sm`}>
+              <Card className={`p-2.5 md:p-3.5 ${
+                message.sender === "bot" 
+                  ? "bg-muted" 
+                  : "bg-primary text-primary-foreground"
+              } shadow-sm`}>
                 <p className="text-sm md:text-base break-words leading-relaxed">{message.text}</p>
               </Card>
 
@@ -386,7 +503,9 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
             </div>
           </div>
         ))}
-        {isTyping && Number(user.condition) === 2 && <TypingIndicator />}
+        <div className={`transition-all duration-300 ${isTyping && Number(user.condition) === 2 ? 'opacity-100 animate-[fadeInUp_0.3s_ease-out_forwards]' : 'opacity-0 animate-[fadeOutDown_0.3s_ease-out_forwards]'}`}>
+          <TypingIndicator />
+        </div>
       </div>
 
       <div className="flex-shrink-0 p-3 md:p-4 border-t bg-card">
