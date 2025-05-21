@@ -28,6 +28,7 @@ merged_data = pd.merge(merged_data, task_data, left_on='ResponseID', right_on='u
 ## Select only rows where study is sagar
 study = "sagar"
 merged_data = merged_data[merged_data['study'] == study]
+merged_data = merged_data.drop(columns=['uid','ResponseID'])
 
 ## Drop all columns having null values or empty values
 merged_data = merged_data.dropna(axis=1, how='all')
