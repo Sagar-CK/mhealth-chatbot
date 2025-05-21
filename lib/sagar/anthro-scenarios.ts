@@ -1,7 +1,7 @@
 import { type Scenario, ResponseType } from "@/lib/sagar/types";
 import { Severity } from "@/lib/sagar/types";
 
-export const controlScenarios: Scenario[] = [
+export const anthroScenarios: Scenario[] = [
   {
     title: "Tastes and Interests",
     steps: [
@@ -29,7 +29,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s completely okay if you’re not ready to explore what social settings feel comforting. We can take things slow.",
+              "No worries at all 💛 If this feels like too much right now, we can totally circle back to it later. You get to set the pace.",
           },
           {
             conditions: {
@@ -37,7 +37,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for considering the question. Even a little reflection on your social preferences can be helpful.",
+              "Appreciate you giving it a thought 😊 Even noticing small things—like if you're more of a coffee-shop-chatter or cozy-blanket-texts kind of person—can be surprisingly insightful.",
           },
           {
             conditions: {
@@ -45,7 +45,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Great to see you're open to reflecting on what energizes you socially. That kind of insight can be really empowering.",
+              "I love that you're open to exploring this! You know how some people come alive at big parties while others feel most themselves in cozy one-on-one chats? Understanding what works for you is really special - it helps you take care of yourself better. ❤️",
           },
 
           // MEDIUM SEVERITY
@@ -55,7 +55,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This can be a bit of a vulnerable topic, and it's okay if you're not ready to dive into it. No pressure at all.",
+              "This might stir up some deeper stuff, so there’s *zero* pressure to go there right now. We can keep things gentle.",
           },
           {
             conditions: {
@@ -63,7 +63,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for taking a moment to consider your social environment preferences—it’s not always easy to do.",
+              "Thanks for taking a moment with this. Even lightly noticing what feels draining or comforting socially can give you a little compass 🫶.",
           },
           {
             conditions: {
@@ -71,7 +71,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Your openness to think about where you feel most at ease socially really matters. That awareness is valuable.",
+              "Thanks for being so thoughtful about this 🤗. Understanding what social situations work best for you is really valuable.",
           },
 
           // HIGH SEVERITY
@@ -81,7 +81,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This is a deeply personal topic, and it's completely understandable if you don’t feel ready to share anything about it right now.",
+              "That’s a big topic. ❤️ Totally understandable if you’re not ready to go there right now. You’re not alone in that.",
           },
           {
             conditions: {
@@ -89,7 +89,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I recognize this question touches on something sensitive. Your willingness to reflect on it, even quietly, means a lot.",
+              "This question can carry some emotional weight. Just sitting with it quietly is already a powerful thing. Thanks for being open 🫶.",
           },
           {
             conditions: {
@@ -97,7 +97,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for being open to such a personal reflection. Understanding what makes us feel socially safe can be a powerful step.",
+              "Thank you for being open to this kind of reflection. Social safety and comfort are deeply personal, and your openness here really matters and is appreciated. 🫶",
           },
         ],
       },
@@ -121,7 +121,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "If this feels a little uncomfortable, that’s totally understandable. We can always move at your pace.",
+              "Totally okay if this feels a bit off to explore right now 💛 These kinds of reflections can take time, and that’s more than okay.",
           },
           {
             conditions: {
@@ -129,7 +129,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for taking a moment to consider a sensitive question. Disagreements can bring up more than we expect.",
+              "Appreciate you giving this a bit of thought. Sometimes even small disagreements can poke at larger feelings, and that's totally normal.",
           },
           {
             conditions: {
@@ -137,7 +137,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Appreciate your openness — social tensions can have an emotional impact, and it's worth acknowledging that.",
+              "I really appreciate how you're being open to this! It's a big thing to notice how disagreements can affect you emotionally. 🫶",
           },
 
           // MEDIUM SEVERITY
@@ -147,7 +147,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This can be a tough one. If thinking about emotionally charged disagreements is difficult right now, that’s okay.",
+              "If it feels too close to touch right now, that’s completely okay. You don’t have to go there before you're ready. ❤️",
           },
           {
             conditions: {
@@ -155,7 +155,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thanks for considering a question that many find difficult. Emotional triggers from disagreement are more common than we often admit.",
+              "Thanks for hanging in with this one. Disagreements can rattle more than we expect. You’re not alone in that.",
           },
           {
             conditions: {
@@ -163,7 +163,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Your willingness to reflect on emotionally triggering social conflict is important — it shows strong self-awareness.",
+              "Despite the question being a bit heavy, I really appreciate how you're being open to this. It's a big thing to notice how disagreements can affect you emotionally!",
           },
 
           // HIGH SEVERITY
@@ -173,7 +173,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This kind of question can bring up heavy feelings, and it’s completely valid if you’re not ready to engage with it right now.",
+              "I completely understand if this feels too heavy to explore right now. It's okay to take space from it.",
           },
           {
             conditions: {
@@ -181,7 +181,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "It takes courage to even approach questions like this. Thank you for giving it your attention, even quietly.",
+              "I really appreciate how you're being open to this, despite the question being a bit heavy.",
           },
           {
             conditions: {
@@ -189,7 +189,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I appreciate your openness in reflecting on a topic that can be deeply triggering for many. That kind of insight takes strength.",
+              "Thank you for being open to this kind of reflection. ❤️ It's a big thing to notice how disagreements can affect you emotionally!",
           },
         ],
       },
@@ -213,7 +213,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "If you’re not feeling up to thinking about this right now, that’s absolutely fine.",
+              "Totally okay to skip this one for now, if you're not willing to reflect on it.",
           },
           {
             conditions: {
@@ -221,7 +221,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for reflecting on the question — even small emotional cues in music or media can make a real impact.",
+              "Thanks for sitting with the question 😊 Even something like avoiding sad songs when you're already feeling low can be a quiet act of care.",
           },
           {
             conditions: {
@@ -229,7 +229,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s great that you're open to thinking about how media affects your mood. That awareness is valuable for emotional wellbeing.",
+              "I appreciate that you're willing to reflect on this question! I know that media can be a source of comfort or discomfort, and it's important to be able to recognize that! 🤗",
           },
 
           // MEDIUM SEVERITY
@@ -239,7 +239,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This kind of question can stir up more than expected. No need to go there if it doesn’t feel right at the moment.",
+              "I understand if reflecting on the impact of media on your mood is too much right now. Let's move on to the next question.",
           },
           {
             conditions: {
@@ -247,7 +247,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Appreciate you taking the time to consider how certain content can affect your emotional space. It’s more common than people think.",
+              "It means a lot that you're giving this some thought. 💛 It's important to be able to recognize how media can affect your mood!",
           },
           {
             conditions: {
@@ -255,7 +255,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for engaging with a nuanced question. Being aware of emotional triggers in stories or music shows strong self-care.",
+              "Really appreciate how present you are with this one. 💛 It's important to be able to recognize how media can affect your mood!",
           },
 
           // HIGH SEVERITY
@@ -265,7 +265,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This may bring up some personal or even painful memories — it’s completely okay if you’d rather not go there right now.",
+              "I completely understand if this feels too heavy to explore right now. It's okay to take space from it.",
           },
           {
             conditions: {
@@ -273,7 +273,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for gently engaging with this. Avoiding certain content can be an important form of emotional protection.",
+              "Thank you for considering this question. Choosing what to avoid is a quiet but powerful form of emotional protection!",
           },
           {
             conditions: {
@@ -281,13 +281,13 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Your willingness to reflect on how media affects your emotional state shows deep insight and resilience. That’s powerful, thank you for being open.",
+              "Your openness here really shows your depth and care for yourself. Recognizing what shakes us—and choosing to step back—is strength, not weakness. 💪❤️",
           },
         ],
       },
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
+      "I appreciate your responses on your tastes and interests! 💪 We will now move onto the next scenario.",
   },
   {
     title: "Interpersonal Relations and Self-Concept",
@@ -304,8 +304,7 @@ export const controlScenarios: Scenario[] = [
       },
       {
         type: ResponseType.Question,
-        question:
-          "Do you ever feel a sense of loss or longing when you think about them?",
+        question: "Do you ever feel a sense of loss or longing when you think about them?",
         severity: Severity.Low,
         likertScale: 5,
         responses: [
@@ -316,7 +315,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s okay if you’re not ready to explore feelings like loss or longing. There’s no need to push yourself.",
+              "Totally okay if this feels like a bit much right now. You don’t have to unpack anything you’re not ready for. 🤗",
           },
           {
             conditions: {
@@ -324,7 +323,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "These kinds of feelings can be subtle but still meaningful. Thank you for considering them.",
+              "Even gentle feelings of longing can say something important. Thanks for giving it some thought—it matters. 🫶",
           },
           {
             conditions: {
@@ -332,9 +331,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Even when the emotions aren’t intense, reflecting on any sense of longing can reveal a lot. I appreciate your openness.",
+              "Even when the feeling is quiet, reflecting on it can open up something meaningful. I really appreciate your openness here!",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -342,7 +341,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thinking about loss or longing can be difficult. It’s okay to hold space for those feelings without needing to express them.",
+              "This kind of reflection can stir up more than expected. It’s completely okay to hold it gently or even set it down for now.",
           },
           {
             conditions: {
@@ -350,7 +349,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "It means a lot that you’re willing to engage with something this emotionally complex. Thank you for going there, even a little.",
+              "It means a lot that you’re giving this question some space. Even small steps into these feelings are real and valid. 🫶",
           },
           {
             conditions: {
@@ -358,9 +357,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Your openness to reflect on feelings of loss or longing is powerful. That kind of honesty can support healing.",
+              "That kind of emotional honesty takes courage. Being open to exploring loss or longing—even a little—can be powerful!",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -368,7 +367,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This is a very personal and painful area to touch on. It’s completely valid if you don’t feel ready to go there.",
+              "This is tender territory. If now’s not the right time to go there, that’s more than okay. You get to set the boundaries.",
           },
           {
             conditions: {
@@ -376,7 +375,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for allowing yourself to even think about this. Just acknowledging the question takes courage.",
+              "Just considering a question like this shows a lot of strength. It’s brave to even let the thought surface, thanks for being willing to reflect on that with me!",
           },
           {
             conditions: {
@@ -384,7 +383,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I really appreciate your willingness to engage with such a deeply emotional question. That reflection can carry a lot of meaning.",
+              "It takes a lot to sit with feelings like these. Your willingness to reflect here really matters and is appreciated! ❤️",
           },
         ],
       },
@@ -402,7 +401,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It's completely okay if you're not ready to reflect on relationship experiences right now.",
+              "Totally okay if this isn’t something you want to dive into right now. You get to choose when and how to explore this stuff. 💛",
           },
           {
             conditions: {
@@ -410,7 +409,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for considering the question. Even gentle reflection on past relationships can be meaningful.",
+              "Thanks for giving it a moment of thought. Even just noticing how past experiences made you feel is a gentle kind of self-care.",
           },
           {
             conditions: {
@@ -418,9 +417,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It's great that you're open to exploring your past experiences. That kind of self-awareness can really support emotional growth.",
+              "Appreciate you being open to this. Looking back on relationship stuff—even the small hurts—can really teach us what we need.",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -428,7 +427,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This is a tender topic for many people—it's absolutely okay to take your time with it.",
+              "This kind of reflection can stir up more than we expect. If it feels like too much right now, that's completely valid. 🫶",
           },
           {
             conditions: {
@@ -436,7 +435,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for being willing to think about this. It can be hard to revisit emotional hurt, even quietly.",
+              "Thank you for sitting with this. Relationship pain isn’t easy to revisit—even quietly—but your care in thinking about it matters.",
           },
           {
             conditions: {
@@ -444,9 +443,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Your openness to reflect on emotionally difficult experiences says a lot about your resilience. Thanks for being open.",
+              "It takes strength to reflect on emotional hurt and I appreciate your willingness to do that. That willingness to look inward is part of how healing starts. 💪",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -454,7 +453,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This question can touch on deep emotional pain. If it's too much right now, it's absolutely okay to step back.",
+              "This question can bring up some heavy feelings. If it’s not the right time, it’s more than okay to take a step back. ❤️",
           },
           {
             conditions: {
@@ -462,7 +461,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I really appreciate your willingness to sit with such a personal question. Even acknowledging it takes courage.",
+              "Really grateful for your willingness here. Just acknowledging that this kind of pain exists takes quiet courage. 🫶",
           },
           {
             conditions: {
@@ -470,10 +469,10 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for your openness. Reflecting on past emotional hurt in relationships is never easy, but it can be a powerful part of healing.",
+              "Thank you for showing up for this reflection. Looking back on emotional hurt in relationships takes real courage—and it can be a meaningful part of healing. 💛",
           },
         ],
-      },
+      },      
       {
         type: ResponseType.Statement,
         text: "Those feelings can run deep. Sometimes looking back reminds us of who we are. Let’s look at the present now.",
@@ -493,7 +492,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "No worries if you are not ready to reflect on this right now. We can come back to this when you are ready.",
+              "Totally okay if you are not ready to reflect on this right now. We can come back to it anytime you feel up for it. 🤗",
           },
           {
             conditions: {
@@ -501,7 +500,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for taking a moment to reflect. Even small wins or quiet moments can be deeply meaningful.",
+              "Thanks for giving this a little space. Even the tiniest wins or quiet joys can hold more meaning than we realize.",
           },
           {
             conditions: {
@@ -509,9 +508,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s great that you’re open to reflecting on what brings you pride or fulfillment. Recognizing those moments matters.",
+              "Love that you’re leaning into this! 🫶 Whether it’s a major milestone or just a moment that made you smile—your pride is valid.",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -519,7 +518,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thinking about what makes us proud or fulfilled isn’t always easy—and that’s okay. Take your time with it.",
+              "This kind of question can be a lot sometimes—and that’s completely okay. No need to rush it. 💛",
           },
           {
             conditions: {
@@ -527,7 +526,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for engaging with a question like this. These moments of fulfillment, big or small, deserve attention.",
+              "Thanks for sitting with this! It's great that you're open to reflecting on what brings you pride or fulfillment. 💛",
           },
           {
             conditions: {
@@ -535,9 +534,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "I really appreciate your willingness to reflect on something meaningful. Recognizing what fulfills you is powerful.",
+              "Appreciate you being open with this one 🫶 Noticing what brings you pride or purpose is a really powerful thing.",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -545,7 +544,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This might be a tough question to consider right now, and that’s completely valid. You’re not alone in that.",
+              "This might feel a bit heavy right now, and that’s totally valid ❤️ No need to go there if it’s not the time.",
           },
           {
             conditions: {
@@ -553,7 +552,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "It means a lot that you're open to exploring a question like this. Feeling proud or fulfilled can sometimes be hard to access, but it’s worth noticing.",
+              "Really appreciate you showing up for this. These questions can touch on deep stuff—there’s no wrong way to feel about it. 🫶",
           },
           {
             conditions: {
@@ -561,13 +560,13 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Your openness is truly appreciated. Recognizing what gives you a sense of pride or emotional fulfillment can be a meaningful step in self-understanding.",
+              "Your openness here means a lot. ❤️ Reflecting on what gives you pride or fulfillment can be a big step toward self-understanding.",
           },
         ],
       },
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. We will now move onto the next scenario.",
+      "You did a great job reflecting on relationships and self-concept! 🎉 We will now move onto the next scenario.",
   },
   {
     title: "Work or Studies",
@@ -597,7 +596,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "No worries if you're not ready to reflect on your strengths. We can come back to this when it feels right.",
+              "Totally okay if you are not willing to reflect on this right now. We can come back to it whenever you're ready. 💛",
           },
           {
             conditions: {
@@ -605,7 +604,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Even just thinking about what keeps you grounded can be a valuable step. Thanks for engaging with the idea.",
+              "Appreciate you thinking about this. Even noticing little things that help you stay steady is a step forward. 💪",
           },
           {
             conditions: {
@@ -613,9 +612,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s great to see you’re open to recognizing the strengths you use to stay balanced—those insights can be empowering.",
+              "Love that you’re open to this! Knowing what keeps you grounded can really make a difference. 💪",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -623,7 +622,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This kind of reflection can feel a bit vulnerable, and it's totally okay to take your time with it.",
+              "No pressure to go deep right now. These kinds of questions can take time—and that’s okay. ❤️",
           },
           {
             conditions: {
@@ -631,7 +630,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for being willing to reflect a little. Identifying what helps you stay balanced isn't always easy, but it's meaningful.",
+              "Thanks for sitting with this a bit. Figuring out what helps you stay balanced isn’t always easy, but it matters. 🫶",
           },
           {
             conditions: {
@@ -639,9 +638,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "It’s valuable that you're open to considering your inner resources. That kind of self-awareness can really support your growth.",
+              "Really glad you’re open to this kind of reflection. Your inner strengths can carry more power than you think. 💪",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -649,7 +648,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Questions like this can touch on some deeply personal areas. It’s okay if it doesn’t feel comfortable to explore right now.",
+              "These questions can stir up a lot. If it’s not the right time to go there, that’s completely valid. ❤️",
           },
           {
             conditions: {
@@ -657,7 +656,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Reflecting on what keeps you mentally steady can be tough, especially during challenging times. Your openness is appreciated.",
+              "Despite the question being a bit heavy, I really appreciate your willingness to reflect on it!"
           },
           {
             conditions: {
@@ -665,10 +664,10 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for your willingness to engage with a deeply personal question. Knowing your strengths can be a powerful source of resilience.",
+              "Thank you for engaging with something this personal. Recognizing your strengths can be such a powerful anchor. 💛",
           },
         ],
-      },
+      },      
       {
         type: ResponseType.Statement,
         text: "Knowing your strengths can buffer stress. But even strong people feel pressure from time to time.",
@@ -688,7 +687,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s okay if you don’t want to talk about your current stress levels right now. We can revisit whenever you feel comfortable.",
+              "Totally okay if this isn’t something you want to get into right now. We can come back to it whenever you're ready. 💛",
           },
           {
             conditions: {
@@ -696,7 +695,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for thinking about how work or studies might be affecting you, even if just a little.",
+              "Thanks for pausing to think about how work or school might be weighing on you, even just a little bit.",
           },
           {
             conditions: {
@@ -704,9 +703,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s great you’re open to recognizing the effects of your work or academic life. Awareness is a helpful first step.",
+              "Noticing how work or academics affect you is a great step. That kind of awareness really helps. 💪",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -714,7 +713,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Stress or mental fatigue can be tough to talk about, so it’s completely okay if you’re not ready to discuss it yet.",
+              "Stress and mental fatigue can feel heavy, so if it’s not the right time to talk about it, that’s completely okay. 🫶",
           },
           {
             conditions: {
@@ -722,7 +721,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "I appreciate you reflecting on how your work or studies might be impacting your wellbeing.",
+              "I really respect you taking a moment to consider how your workload or studies might be affecting you. That matters.",
           },
           {
             conditions: {
@@ -730,9 +729,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Recognizing stress related to work or academics is important. Thanks for being open to thinking about it.",
+              "It takes real self-awareness to recognize when work or academic pressure is getting to you. I’m glad you’re reflecting on it. 🤞",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -740,7 +739,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Feeling overwhelmed by work or studies is very personal, and it’s okay if you don’t feel ready to share your experience right now.",
+              "If things feel overwhelming, I completely understand that talking about it might not feel right just now. No pressure at all. ❤️",
           },
           {
             conditions: {
@@ -748,7 +747,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I understand this is a sensitive topic. Your willingness to consider it quietly means a lot.",
+              "This kind of stress can go deep, and even just quietly acknowledging it is a meaningful step. 🫶",
           },
           {
             conditions: {
@@ -756,10 +755,10 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for being open to reflecting on how work or academic stress affects you. That awareness is a key step toward support.",
+              "It’s not easy to face this kind of stress, so thank you for being open. That kind of honesty is a powerful move toward support. ❤️",
           },
         ],
-      },
+      },      
       {
         type: ResponseType.Statement,
         text: "Have you always had clear goals in regards to your studies and work?",
@@ -780,7 +779,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s okay if this feels tough to think about right now. We can explore it whenever you feel ready.",
+              "It’s okay if you are not willing to reflect on this right now. We can explore it whenever you feel ready. 💛",
           },
           {
             conditions: {
@@ -788,7 +787,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Thanks for reflecting on your journey so far. Even small insights can help clarify your path.",
+              "Thanks for reflecting on your journey so far. Even small insights can help clarify your path. 🫶",
           },
           {
             conditions: {
@@ -796,9 +795,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s great to see you’re open to thinking about your professional or academic direction—this kind of reflection is valuable.",
+              "I really appreciate your openness here. Taking time to reflect on where you're headed can be more powerful than it seems. 💪",
           },
-
+      
           // MEDIUM SEVERITY
           {
             conditions: {
@@ -806,7 +805,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Feeling overwhelmed can be really challenging. It’s okay if you’re not ready to talk about it just yet.",
+              "Feeling overwhelmed can be really heavy. If it’s not the right time to talk about it, that’s totally okay. 💛",
           },
           {
             conditions: {
@@ -814,7 +813,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for considering your feelings about your path. It’s not easy to confront uncertainty.",
+              "Thank you for giving this some thought. Sitting with uncertainty like this takes quiet strength. 🫶",
           },
           {
             conditions: {
@@ -822,9 +821,9 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Your openness to reflect on these challenges is important and can help you find clarity over time.",
+              "It’s meaningful that you’re reflecting on this. Sorting through doubt can take time, but your awareness already matters a lot. 💪",
           },
-
+      
           // HIGH SEVERITY
           {
             conditions: {
@@ -832,7 +831,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This is a deeply personal and difficult topic. It’s completely okay if you don’t feel ready to share your feelings about it now.",
+              "This is a deeply personal and difficult space to enter. It’s completely okay to hold off if you’re not ready. ❤️",
           },
           {
             conditions: {
@@ -840,7 +839,7 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I recognize how hard it can be to face these feelings. Even silently reflecting on them is a meaningful step.",
+              "I see how hard this can be. Even quietly noticing these feelings is a step forward. 🫶",
           },
           {
             conditions: {
@@ -848,10 +847,11 @@ export const controlScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for your courage in considering such a personal challenge. Understanding these feelings is key to finding your way forward.",
+              "Thank you for leaning into something so personal. Understanding where that overwhelm comes from is part of finding your own direction. 💛",
           },
         ],
-      },
+      }
+      
     ],
     completionMessage:
       "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
