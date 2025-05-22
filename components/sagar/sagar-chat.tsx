@@ -11,7 +11,7 @@ interface SagarChatProps {
 
 export function SagarChat({ user }: SagarChatProps) {
   // Condition 1: Control, Condition 2: Anthro
-  const scenarios = user.condition === 1 ? controlScenarios : anthroScenarios;
+  const scenarios = Number(user.condition) === 1 ? controlScenarios : anthroScenarios;
 
   return (
     <div className="flex w-full h-[calc(100vh-4rem)] items-center justify-center">
