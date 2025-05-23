@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { sagarScenarios } from "@/lib/sagar/sagar-scenarios";
+import { controlScenarios } from "@/lib/sagar/control-scenarios";
+import { anthroScenarios } from "@/lib/sagar/anthro-scenarios";
 import { User } from "@/server/api/models/user";
 import { SagarChatInterface } from "@/components/sagar/sagar-chatbot";
 
@@ -11,18 +10,12 @@ interface SagarChatProps {
 }
 
 export function SagarChat({ user }: SagarChatProps) {
+  // Condition 1: Control, Condition 2: Anthro
+  const scenarios = Number(user.condition) === 1 ? controlScenarios : anthroScenarios;
 
   return (
-    <div className="flex w-full items-center justify-center">
-      <Card className="w-4/5 h-full bg-slate-50">
-        <CardHeader className="w-full flex justify-between items-center">
-          <CardTitle>Interact with your mHealth Chatbot!</CardTitle>
-        </CardHeader>
-        <Separator />
-        <CardContent>
-          <SagarChatInterface scenarios={sagarScenarios} user={user} />
-        </CardContent>
-      </Card>
+    <div className="flex w-full h-[calc(100vh-4rem)] items-center justify-center">
+      <SagarChatInterface scenarios={scenarios} user={user} />
     </div>
   );
 } 

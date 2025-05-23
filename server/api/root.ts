@@ -1,10 +1,14 @@
 import { createCallerFactory, createTRPCRouter } from "./trpc";
 import { usersRouter } from "./routes/users";
 import { messagesRouter } from "./routes/messages";
+import { selfDisclosureRouter } from "./routes/self-disclosure";
+import { sdiScoreRouter } from "./routes/sdi-score";
 
 export const appRouter = createTRPCRouter({
     users: usersRouter,
     messages: messagesRouter,
+    selfDisclosure: selfDisclosureRouter,
+    sdiScore:sdiScoreRouter,
 })
 
 // export type definition of API

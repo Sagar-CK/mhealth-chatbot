@@ -17,6 +17,8 @@ import {
 } from "@/lib/constants";
 
 import SagarTaskInstructions from "./sagar/sagar-task-instructions";
+import YushanTaskInstructions from "./yushan/yushan-task-instructions";
+import ManuTaskInstructions from "./manu/manu-task-instructions";
 import LinaTaskInstructions from "./lina/lina-task-instructions";
 
 export function TaskInstructionButton() {
@@ -34,9 +36,9 @@ export function TaskInstructionButton() {
             {pathname.includes(sagarStudy) ? (
               <SagarTaskInstructions />
             ) : pathname.includes(manuStudy) ? (
-              <p>Manu Instructions</p>
+              <ManuTaskInstructions />
             ) : pathname.includes(yushanStudy) ? (
-              <p>Yushan Instructions</p>
+                <YushanTaskInstructions />
             ) : pathname.includes(linaStudy) ? (
               < LinaTaskInstructions />
             ) : (

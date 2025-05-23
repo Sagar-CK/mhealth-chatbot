@@ -24,12 +24,18 @@ export const usersRouter = createTRPCRouter({
 
       console.log("lastUser", lastUser);
 
+      console.log("lastUser", lastUser);
+
 
       let newUserCondition = 1;
 
       if (lastUser) {
         const lastCondition = Number(lastUser.condition);
-        newUserCondition = lastCondition === 1 ? 2 : 1;
+        if (input.study === "yushan") { // Cycle through  1 → 2 → 0 → 1 → ...
+              newUserCondition = (lastCondition + 1) % 3;
+        } else {
+            newUserCondition = lastCondition === 1 ? 2 : 1;
+        }
       }
 
       const created_at = new Date();
@@ -70,7 +76,11 @@ export const usersRouter = createTRPCRouter({
         let newUserCondition = 1;
         if (lastUser) {
           const lastCondition = Number(lastUser.condition);
-          newUserCondition = lastCondition === 1 ? 2 : 1;
+          if (input.study === "yushan") { // Cycle through  1 → 2 → 0 → 1 → ...
+              newUserCondition = (lastCondition + 1) % 3;
+          } else {
+              newUserCondition = lastCondition === 1 ? 2 : 1;
+          }
         }
         const created_at = new Date();
         const revoked_consent = true;
@@ -83,4 +93,3 @@ export const usersRouter = createTRPCRouter({
       return updatedUser as User;
     }),
 });
-  

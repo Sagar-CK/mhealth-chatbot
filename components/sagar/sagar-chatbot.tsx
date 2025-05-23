@@ -17,18 +17,17 @@ import { mapWillingnessToNumber, stringifyWillingnessSeverity } from "@/lib/util
 interface SagarChatInterfaceProps {
   scenarios: Scenario[];
   user: UserType;
-  height?: string
 }
 
 // Add TypingIndicator component
 const TypingIndicator = () => {
   return (
     <div className="flex items-center gap-2">
-      <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
-        <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
+      <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0">
+        <BotMessageSquareIcon className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
       </Avatar>
-      <Card className="p-3 bg-muted w-[60px] flex items-center justify-center">
-        <div className="flex space-x-1">
+      <Card className="p-2.5 md:p-3 bg-muted w-[60px] flex items-center justify-center shadow-sm">
+        <div className="flex space-x-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0ms' }}></span>
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '150ms' }}></span>
           <span className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '300ms' }}></span>
@@ -43,7 +42,216 @@ interface QuestionState {
   severity?: Severity
 }
 
-export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarChatInterfaceProps) {
+// Add these helper functions after the TypingIndicator component
+const createMessage = (
+  sender: "bot" | "user",
+  text: string,
+  user_id: string,
+  scenario: string
+): Message => ({
+  id: crypto.randomUUID(),
+  sender,
+  text,
+  timestamp: new Date(),
+  user_id,
+  scenario
+})
+
+const getStepText = (step: StatementStep | QuestionStep): string => {
+  return step.type === ResponseType.Statement ? (step as StatementStep).text : (step as QuestionStep).question
+}
+
+const handleBotResponse = (
+  response: string,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
+  user: UserType,
+  scenario: string,
+  condition: number,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsProducingResponse: React.Dispatch<React.SetStateAction<boolean>>,
+  onComplete?: () => void
+) => {
+  const botMessage = createMessage("bot", response, user.user_id, scenario)
+  
+  if (Number(condition) === 2) {
+    setIsProducingResponse(true)
+    // Calculate typing duration based on message length (roughly 50ms per character)
+    const baseTypingDuration = Math.max(2000, response.length * 50)
+    // Add random variation (±20%)
+    const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+    
+    // Only 70% chance of having a pause
+    const shouldPause = Math.random() < 0.7
+    console.log("shouldPause", shouldPause)
+    const numPauses = shouldPause ? 1 : 0
+    let currentPause = 0
+    
+    const startTyping = () => {
+      setIsTyping(true)
+      
+      if (currentPause < numPauses) {
+        // If we're in a pause, wait longer
+        const pauseDuration = 500 + Math.random() * 1500
+        setTimeout(() => {
+          setIsTyping(false)
+          currentPause++
+          // Wait before starting next typing session
+          setTimeout(startTyping, 300 + Math.random() * 700)
+        }, pauseDuration)
+      } else {
+        // Final typing session - no more pauses
+        const finalTypingDuration = typingDuration / (numPauses + 1)
+        setTimeout(() => {
+          // First fade out the typing indicator
+          setIsTyping(false)
+          // Then wait a bit before showing the message
+          setTimeout(() => {
+            setMessages(prev => [...prev, botMessage])
+            setIsProducingResponse(false)
+            onComplete?.()
+          }, 300) // Small delay between typing disappearing and message appearing
+        }, finalTypingDuration)
+      }
+    }
+    
+    startTyping()
+  } else {
+    setMessages(prev => [...prev, botMessage])
+    onComplete?.()
+  }
+}
+
+const handleNextStep = (
+  currentScenario: Scenario,
+  currentStep: number,
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>,
+  setIsTyping: React.Dispatch<React.SetStateAction<boolean>>,
+  user: UserType,
+  setIsComplete: React.Dispatch<React.SetStateAction<boolean>>,
+  setQuestionState: React.Dispatch<React.SetStateAction<QuestionState>>,
+  setIsProducingResponse: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const nextStep = currentStep + 1
+  
+  // Reset question state before moving to next step
+  setQuestionState({})
+  
+  if (nextStep < currentScenario.steps.length) {
+    const nextStepData = currentScenario.steps[nextStep]
+    const nextBotMessage = createMessage(
+      "bot",
+      getStepText(nextStepData),
+      user.user_id,
+      currentScenario.title
+    )
+
+    if (Number(user.condition) === 2) {
+      setIsProducingResponse(true)
+      // Calculate typing duration based on message length (roughly 50ms per character)
+      const baseTypingDuration = Math.max(2000, getStepText(nextStepData).length * 50)
+      // Add random variation (±20%)
+      const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+      
+      // Only 70% chance of having a pause
+      const shouldPause = Math.random() < 0.7
+      console.log("shouldPause", shouldPause)
+      const numPauses = shouldPause ? 1 : 0
+      let currentPause = 0
+      
+      const startTyping = () => {
+        setIsTyping(true)
+        
+        if (currentPause < numPauses) {
+          // If we're in a pause, wait longer
+          const pauseDuration = 500 + Math.random() * 1500
+          setTimeout(() => {
+            setIsTyping(false)
+            currentPause++
+            // Wait before starting next typing session
+            setTimeout(startTyping, 300 + Math.random() * 700)
+          }, pauseDuration)
+        } else {
+          // Final typing session - no more pauses
+          const finalTypingDuration = typingDuration / (numPauses + 1)
+          setTimeout(() => {
+            // First fade out the typing indicator
+            setIsTyping(false)
+            // Then wait a bit before showing the message
+            setTimeout(() => {
+              setMessages(prev => [...prev, nextBotMessage])
+              setCurrentStep(nextStep)
+              setIsProducingResponse(false)
+            }, 300) // Small delay between typing disappearing and message appearing
+          }, finalTypingDuration)
+        }
+      }
+      
+      startTyping()
+    } else {
+      setMessages(prev => [...prev, nextBotMessage])
+      setCurrentStep(nextStep)
+    }
+  } else {
+    const finalMessage = createMessage(
+      "bot",
+      currentScenario.completionMessage || "Thank you for your responses!",
+      user.user_id,
+      currentScenario.title
+    )
+
+    if (Number(user.condition) === 2) {
+      setIsProducingResponse(true)
+      // Calculate typing duration based on message length (roughly 50ms per character)
+      const baseTypingDuration = Math.max(2000, (currentScenario.completionMessage || "Thank you for your responses!").length * 50)
+      // Add random variation (±20%)
+      const typingDuration = baseTypingDuration * (0.8 + Math.random() * 0.4)
+      
+      // Only 70% chance of having a pause
+      const shouldPause = Math.random() < 0.7
+      console.log("shouldPause", shouldPause)
+      const numPauses = shouldPause ? 1 : 0
+      let currentPause = 0
+      
+      const startTyping = () => {
+        setIsTyping(true)
+        
+        if (currentPause < numPauses) {
+          // If we're in a pause, wait longer
+          const pauseDuration = 500 + Math.random() * 1500
+          setTimeout(() => {
+            setIsTyping(false)
+            currentPause++
+            // Wait before starting next typing session
+            setTimeout(startTyping, 300 + Math.random() * 700)
+          }, pauseDuration)
+        } else {
+          // Final typing session - no more pauses
+          const finalTypingDuration = typingDuration / (numPauses + 1)
+          setTimeout(() => {
+            // First fade out the typing indicator
+            setIsTyping(false)
+            // Then wait a bit before showing the message
+            setTimeout(() => {
+              setMessages(prev => [...prev, finalMessage])
+              setIsComplete(true)
+              setIsProducingResponse(false)
+            }, 300) // Small delay between typing disappearing and message appearing
+          }, finalTypingDuration)
+        }
+      }
+      
+      startTyping()
+    } else {
+      setMessages(prev => [...prev, finalMessage])
+      setIsComplete(true)
+    }
+  }
+}
+
+
+
+export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps) {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
   const [currentStep, setCurrentStep] = useState(0)
@@ -51,73 +259,133 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
   const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
   const [isTyping, setIsTyping] = useState(false)
   const [questionState, setQuestionState] = useState<QuestionState>({})
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [isResponseDisabled, setIsResponseDisabled] = useState(false)
+  const [isProducingResponse, setIsProducingResponse] = useState(false)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScenario = scenarios[currentScenarioIndex]
 
-  const createMessage = api.messages.create.useMutation()
+  const createSelfDisclosure = api.selfDisclosure.create.useMutation()
 
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }, [messages])
 
   // Initialize with first bot message
   useEffect(() => {
     if (currentScenario?.steps.length > 0 && messages.length === 0) {
       const firstStep = currentScenario.steps[0]
-      const messageText = firstStep.type === ResponseType.Statement 
-        ? (firstStep as StatementStep).text 
-        : (firstStep as QuestionStep).question
-
-      const initialMessage = {
-        id: `${currentScenario.title}-0-bot`,
-        sender: "bot" as const,
-        text: messageText,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      }
-
+      const initialMessage = createMessage(
+        "bot",
+        getStepText(firstStep),
+        user.user_id,
+        currentScenario.title
+      )
       setMessages([initialMessage])
-      createMessage.mutate(initialMessage)
     }
-  }, [currentScenario, messages.length, user.user_id, createMessage])
+  }, [])
 
-  // Auto-scroll to bottom of messages with smooth animation
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      const scrollOptions = { behavior: "smooth" as const }
-      messagesEndRef.current.scrollIntoView(scrollOptions)
+  // Replace the handleResponse function with this simplified version
+  const handleResponse = async (response: string) => {
+    setIsResponseDisabled(true)
+    const currentStepData = currentScenario.steps[currentStep]
+
+    // Add user's response message
+    const userMessage = createMessage("user", response, user.user_id, currentScenario.title)
+    setMessages(prev => [...prev, userMessage])
+
+    if (currentStepData.type === ResponseType.Question) {
+      const questionStep = currentStepData as QuestionStep
+      const matchingResponse = questionStep.responses.find(
+        r => r.conditions.willingness.includes(questionState.willingness!) &&
+          r.conditions.severity.includes(questionState.severity!)
+      )
+
+      if (matchingResponse) {
+        handleBotResponse(
+          matchingResponse.message,
+          setMessages,
+          user,
+          currentScenario.title,
+          Number(user.condition),
+          setIsTyping,
+          setIsProducingResponse,
+          () => handleNextStep(
+            currentScenario,
+            currentStep,
+            setMessages,
+            setCurrentStep,
+            setIsTyping,
+            user,
+            setIsComplete,
+            setQuestionState,
+            setIsProducingResponse
+          )
+        )
+      }
+    } else {
+      handleNextStep(
+        currentScenario,
+        currentStep,
+        setMessages,
+        setCurrentStep,
+        setIsTyping,
+        user,
+        setIsComplete,
+        setQuestionState,
+        setIsProducingResponse
+      )
     }
-  }, [messages])
-
+  }
+  
   const renderResponseComponent = () => {
-    if (isComplete) return null
+    console.log("isComplete", isComplete,
+      "isResponseDisabled", isResponseDisabled,
+      "isTyping", isTyping,
+      "isProducingResponse", isProducingResponse
+    )
+    if (isComplete || isResponseDisabled || isTyping || isProducingResponse) return null
 
     const currentStepData = currentScenario.steps[currentStep]
 
     if (currentStepData.type === ResponseType.Statement) {
       const statementStep = currentStepData as StatementStep
-      return <SelectResponse options={statementStep.options} onSelect={handleResponse} />
+      return (
+        <div className="w-full">
+          <SelectResponse 
+            options={[statementStep.option]} 
+            onSelect={handleResponse} 
+            disabled={isResponseDisabled}
+          />
+        </div>
+      )
     } else if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
-      
+
       // If we haven't asked about willingness yet
       if (questionState.willingness === undefined && !isTyping) {
         return (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground mb-2">How willing are you to answer this question?</p>
             <LikertResponse
-              question="Willingness to self-disclose"
+              question="How willing are you to answer this question?"
               onSelect={(willingness) => {
                 // we need to map willingness to a number from the likert scale
                 const willingnessNum = mapWillingnessToNumber(willingness)
                 setQuestionState(prev => ({ ...prev, willingness: willingnessNum }))
               }}
               scale={questionStep.likertScale}
+              disabled={isResponseDisabled}
             />
           </div>
         )
       }
-      
+
       // If we have willingness but not severity
       if (questionState.severity === undefined && questionState.willingness !== undefined) {
         return (
@@ -128,9 +396,8 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
               onSelect={(severity) => {
                 const severityValue = severity as Severity
                 setQuestionState(prev => ({ ...prev, severity: severityValue }))
-                // Send both responses together
-                handleResponse(stringifyWillingnessSeverity(questionState.willingness!, severityValue, questionStep.likertScale))
               }}
+              disabled={isResponseDisabled}
             />
           </div>
         )
@@ -139,210 +406,46 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
     return null
   }
 
-  const handleResponse = async (response: string) => {
-    const currentStepData = currentScenario.steps[currentStep]
-    
-    if (currentStepData.type === ResponseType.Question) {
-      const questionStep = currentStepData as QuestionStep
-      
-      // Add the user's response message
-      const userMessage = {
-        id: `${currentScenario.title}-${currentStep}-user-${Date.now()}`,
-        sender: "user" as const,
-        text: response,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      };
-      
-      setMessages((prev) => [...prev, userMessage]);
-      createMessage.mutate(userMessage)
-
-      // Find the matching response based on the current question state
-      const matchingResponse = questionStep.responses.find(
-        r => r.willingness === questionState.willingness && r.severity === questionState.severity
-      )
-      
-      if (matchingResponse) {
-        // Add the bot's response message
-        const botMessage = {
-          id: `${currentScenario.title}-${currentStep}-bot-response-${Date.now()}`,
-          sender: "bot" as const,
-          text: matchingResponse.message,
-          timestamp: new Date(),
+  // Add effect to handle response after severity is set
+  useEffect(() => {
+    if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+      const currentStepData = currentScenario.steps[currentStep]
+      if (currentStepData.type === ResponseType.Question) {
+        const questionStep = currentStepData as QuestionStep
+        const willingness = questionState.willingness
+        const severity = questionState.severity
+        const capturedStep = currentStep
+        
+        setIsProducingResponse(true)
+        createSelfDisclosure.mutate({
           user_id: user.user_id,
-          scenario: currentScenario.title
-        }
-        
-        setMessages(prev => [...prev, botMessage])
-        createMessage.mutate(botMessage)
-      }
-      
-      // Move to next step
-      const nextStep = currentStep + 1;
-      if (nextStep < currentScenario.steps.length) {
-        // Reset question state before moving to next step
-        setQuestionState({})
-        
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the message
-          setTimeout(() => {
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
-              sender: "bot" as const,
-              text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-            
-            setMessages((prev) => [...prev, nextBotMessage]);
-            createMessage.mutate(nextBotMessage)
-            setCurrentStep(nextStep);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          // For other conditions, show message immediately
-          const nextStepData = currentScenario.steps[nextStep]
-          const nextBotMessage = {
-            id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
-            sender: "bot" as const,
-            text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-          
-          setMessages((prev) => [...prev, nextBotMessage]);
-          createMessage.mutate(nextBotMessage)
-          setCurrentStep(nextStep);
-        }
-      } else {
-        // Handle completion
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the final message
-          setTimeout(() => {
-            const finalMessage = {
-              id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
-              sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-            
-            setMessages((prev) => [...prev, finalMessage]);
-            createMessage.mutate(finalMessage)
-            setIsComplete(true);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          const finalMessage = {
-            id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
-            sender: "bot" as const,
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-          
-          setMessages((prev) => [...prev, finalMessage]);
-          createMessage.mutate(finalMessage)
-          setIsComplete(true);
-        }
-      }
-    } else {
-      // Handle statement responses
-      const userMessage = {
-        id: `${currentScenario.title}-${currentStep}-user-${Date.now()}`,
-        sender: "user" as const,
-        text: response,
-        timestamp: new Date(),
-        user_id: user.user_id,
-        scenario: currentScenario.title
-      };
-      
-      setMessages((prev) => [...prev, userMessage]);
-      createMessage.mutate(userMessage)
-
-      // Move to next step
-      const nextStep = currentStep + 1;
-      if (nextStep < currentScenario.steps.length) {
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the message
-          setTimeout(() => {
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
-              sender: "bot" as const,
-              text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-            
-            setMessages((prev) => [...prev, nextBotMessage]);
-            createMessage.mutate(nextBotMessage)
-            setCurrentStep(nextStep);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          // For other conditions, show message immediately
-          const nextStepData = currentScenario.steps[nextStep]
-          const nextBotMessage = {
-            id: `${currentScenario.title}-${nextStep}-bot-${Date.now()}`,
-            sender: "bot" as const,
-            text: nextStepData.type === ResponseType.Statement ? (nextStepData as StatementStep).text : (nextStepData as QuestionStep).question,
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-          
-          setMessages((prev) => [...prev, nextBotMessage]);
-          createMessage.mutate(nextBotMessage)
-          setCurrentStep(nextStep);
-        }
-      } else {
-        // Handle completion
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the final message
-          setTimeout(() => {
-            const finalMessage = {
-              id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
-              sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title
-            };
-            
-            setMessages((prev) => [...prev, finalMessage]);
-            createMessage.mutate(finalMessage)
-            setIsComplete(true);
-            setIsTyping(false)
-          }, 2000);
-        } else {
-          const finalMessage = {
-            id: `${currentScenario.title}-${currentScenario.steps.length}-bot-${Date.now()}`,
-            sender: "bot" as const,
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-          };
-          
-          setMessages((prev) => [...prev, finalMessage]);
-          createMessage.mutate(finalMessage)
-          setIsComplete(true);
-        }
+          scenario: currentScenario.title,
+          question: questionStep.question,
+          question_severity: questionStep.severity,
+          user_willingness: willingness,
+          user_severity: severity,
+          timestamp: new Date()
+        }, {
+          onSuccess: () => {
+            const stepData = currentScenario.steps[capturedStep]
+            if (stepData.type === ResponseType.Question) {
+              const qStep = stepData as QuestionStep
+              setIsResponseDisabled(true)
+              setIsProducingResponse(false)
+              handleResponse(stringifyWillingnessSeverity(willingness, severity, qStep.likertScale))
+            }
+          }
+        })
       }
     }
-  }
+  }, [questionState.severity, questionState.willingness, currentStep, currentScenario.steps])
+
+  // Add effect to re-enable responses when moving to next step
+  useEffect(() => {
+    if (!isTyping) {
+      setIsResponseDisabled(false)
+    }
+  }, [currentStep, isTyping])
 
   const nextOrCompleteScenario = () => {
     if (currentScenarioIndex < scenarios.length - 1) {
@@ -350,13 +453,13 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
       setCurrentScenarioIndex(prev => prev + 1)
       const nextScenario = scenarios[currentScenarioIndex + 1]
       const firstStep = nextScenario.steps[0]
-      const messageText = firstStep.type === ResponseType.Statement 
-        ? (firstStep as StatementStep).text 
+      const messageText = firstStep.type === ResponseType.Statement
+        ? (firstStep as StatementStep).text
         : (firstStep as QuestionStep).question
 
       setMessages([
         {
-          id: `${nextScenario.title}-0-bot`,
+          id: crypto.randomUUID(),
           sender: "bot",
           text: messageText,
           timestamp: new Date(),
@@ -373,50 +476,56 @@ export function SagarChatInterface({ scenarios, user, height = "600px" }: SagarC
   }
 
   return (
-    <div
-      className="flex flex-col rounded-lg border shadow-sm overflow-hidden"
-      style={{ height }}
-    >
+    <div className="flex flex-col w-full h-full max-h-[600px] md:max-h-[700px] rounded-lg border shadow-sm overflow-hidden bg-background">
       <div
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
-        style={{ scrollBehavior: "smooth" }}
+        className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-3 md:p-4 space-y-3 md:space-y-4 bg-muted/10"
       >
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
+            className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"}`}
           >
-            <div className="flex items-center gap-2 max-w-[80%]">
+            <div className={`flex items-start gap-2 max-w-[85%] md:max-w-[75%] animate-[fadeInUp_0.3s_ease-out_forwards]`}>
               {message.sender === "bot" && (
-                <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
-                  <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
+                <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-primary flex items-center justify-center shrink-0 mt-1">
+                  <BotMessageSquareIcon className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
                 </Avatar>
               )}
 
-              <Card className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
-                <p>{message.text}</p>
+              <Card className={`p-2.5 md:p-3.5 ${
+                message.sender === "bot" 
+                  ? "bg-muted" 
+                  : "bg-primary text-primary-foreground"
+              } shadow-sm`}>
+                <p className="text-sm md:text-base break-words leading-relaxed">{message.text}</p>
               </Card>
 
               {message.sender === "user" && (
-                <Avatar className="h-8 w-8 bg-secondary flex items-center justify-center shrink-0">
-                  <User className="h-4 w-4 text-secondary-foreground" />
+                <Avatar className="h-7 w-7 md:h-8 md:w-8 bg-secondary flex items-center justify-center shrink-0 mt-1">
+                  <User className="h-4 w-4 md:h-5 md:w-5 text-secondary-foreground" />
                 </Avatar>
               )}
             </div>
           </div>
         ))}
-        {isTyping && Number(user.condition) === 2 && <TypingIndicator />}
-        <div ref={messagesEndRef} />
+        <div className={`transition-all duration-300 ${isTyping && Number(user.condition) === 2 ? 'opacity-100 animate-[fadeInUp_0.3s_ease-out_forwards]' : 'opacity-0 animate-[fadeOutDown_0.3s_ease-out_forwards]'}`}>
+          <TypingIndicator />
+        </div>
       </div>
 
-      <div className="p-4 border-t bg-card">
+      <div className="flex-shrink-0 p-3 md:p-4 border-t bg-card">
         {isComplete ? (
-          <Button onClick={nextOrCompleteScenario} className="w-full">
-            {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
+          <Button 
+            onClick={nextOrCompleteScenario} 
+            className="w-full text-sm md:text-base h-10 md:h-11 font-medium"
+          >
+            {currentScenarioIndex === scenarios.length - 1 ? "Complete Task Phase" : "Next Scenario"}
           </Button>
         ) : (
-          renderResponseComponent()
+          <div className="space-y-3">
+            {renderResponseComponent()}
+          </div>
         )}
       </div>
     </div>
