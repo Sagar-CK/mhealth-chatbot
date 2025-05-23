@@ -17,7 +17,7 @@ export function YushanChat({user}: YushanChatProps) {
         <div className="flex w-full items-center justify-center">
             <Card className="w-4/5 h-full bg-slate-50">
                 <CardHeader className="w-full flex justify-between items-center">
-                    <CardTitle>Interact with Chatbot!</CardTitle>
+                    <CardTitle>Interact with Chatbot! Condition: {Number(user.condition)}</CardTitle>
                     <BotIcon/>
                 </CardHeader>
                 <Separator/>
