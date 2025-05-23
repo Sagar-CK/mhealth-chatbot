@@ -61,8 +61,8 @@ export function stringifyWillingness(
     if (willingness < 0 || willingness >= 5) {
         throw new Error("Willingness must be between 0 and 5");
     }
-  const amounts = ["very little", "a bit of", "some", "quite a bit of", "a lot of"];
-  const res = userRespond + " (and you talked " + amounts[willingness] + " information about " + topic + ")";
+  const amounts = ["very little", "a bit", "some", "quite a bit", "a lot"];
+  const res = userRespond + " (and you shared " + amounts[willingness] + " about " + topic + ")";
     console.log(res);
     return res;
 }
