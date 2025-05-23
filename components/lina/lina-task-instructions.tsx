@@ -10,19 +10,16 @@ export default function LinaTaskInstructions() {
             </div>
 
             <p>
-                In the next part of the study, you will interact with a chatbot.
-                It will present questions to you and ask how willing you would be to share certain
-                types of information.
+                In the next part of the study, you will interact with a chatbot that will ask you a series of questions.
+            </p>
+            <p>
+                Some questions will have a single response option, while others will ask you to rate your
+                willingness to share on a scale.
+                For each question, please select the option that <strong>best reflects how willing you are to share</strong>.
             </p>
 
             <p>
-                Some questions will have only one response option, while others will use a scale.
-                You need to <strong>simply indicate your willingness to share</strong> information regarding that
-                question.
-            </p>
-
-            <p>
-                There are no right or wrong answers; please respond as <strong>honestly</strong> as you
+                There are no right or wrong answers, please respond as <strong>honestly</strong> as you
                 can.
             </p>
 

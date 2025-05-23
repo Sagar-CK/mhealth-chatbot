@@ -29,11 +29,26 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     const [isTyping, setIsTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
+    const taskInstructionsRef = useRef<HTMLButtonElement>(null)
 
     const currentScenario = scenarios[currentScenarioIndex]
 
     const createMessage = api.messages.create.useMutation()
 
+    useEffect(() => {
+        const clickTaskInstructions = (attempts = 0) => {
+            const button = Array.from(document.querySelectorAll('button'))
+                .find(btn => btn.textContent?.trim() === 'Task Instructions');
+
+            if (button) {
+                button.click();
+            } else if (attempts < 10) {
+                setTimeout(() => clickTaskInstructions(attempts + 1), 500);
+            }
+        };
+
+        setTimeout(clickTaskInstructions, 1000);
+    }, []);
 
     // Initialize with first bot message
     useEffect(() => {
@@ -164,8 +179,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                 setCurrentStep(nextStep);
                                 setIsTyping(false);
                                 scrollToBottom(); // Scroll after bot message
-                            }, 1500);
-                        }, 1000);
+                            }, 1000);
+                        }, 500);
                     } else {
                         // Chat is complete
                         setTimeout(() => {
@@ -186,10 +201,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                 setIsComplete(true);
                                 setIsTyping(false);
                                 scrollToBottom(); // Scroll after final message
-                            }, 1500);
-                        }, 1000);
+                            }, 1000);
+                        }, 500);
                     }
-                }, 1500);
+                }, 1000);
             }
         }
 
@@ -214,7 +229,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                     setCurrentStep(nextStep);
                     setIsTyping(false);
                     scrollToBottom(); // Scroll after bot message
-                }, 1500);
+                }, 1000);
             } else {
                 setIsTyping(true);
                 scrollToBottom(); // Scroll when typing starts
@@ -233,7 +248,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                     setIsComplete(true);
                     setIsTyping(false);
                     scrollToBottom(); // Scroll after final message
-                }, 1500);
+                }, 1000);
             }
         }
     }
