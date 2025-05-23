@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -16,6 +16,10 @@ const likertValues7 = ['Strongly disagree', 'Disagree', 'Somewhat disagree', 'Ne
 
 export function LikertResponse({ question, onSelect, scale, disabled }: LikertResponseProps) {
   const [selectedValue, setSelectedValue] = useState<string | string>()
+
+  useEffect(() => {
+    setSelectedValue(undefined)
+  }, [question, scale])
 
   const handleSelect = (value: string) => {
     setSelectedValue(value)

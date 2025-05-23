@@ -7,7 +7,7 @@ export const anthroScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let’s talk about personal interests and how they impact our well-being.",
+        text: "Let's talk about personal interests and how they impact our well-being.",
         option: "Sure, I am comfortable discussing my interests",
       },
       {
@@ -55,7 +55,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This might stir up some deeper stuff, so there’s *zero* pressure to go there right now. We can keep things gentle.",
+              "This might stir up some deeper stuff, so there's *zero* pressure to go there right now. We can keep things gentle.",
           },
           {
             conditions: {
@@ -81,7 +81,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "That’s a big topic. ❤️ Totally understandable if you’re not ready to go there right now. You’re not alone in that.",
+              "That's a big topic. ❤️ Totally understandable if you're not ready to go there right now. You're not alone in that.",
           },
           {
             conditions: {
@@ -121,7 +121,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Totally okay if this feels a bit off to explore right now 💛 These kinds of reflections can take time, and that’s more than okay.",
+              "Totally okay if this feels a bit off to explore right now 💛 These kinds of reflections can take time, and that's more than okay.",
           },
           {
             conditions: {
@@ -147,7 +147,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "If it feels too close to touch right now, that’s completely okay. You don’t have to go there before you're ready. ❤️",
+              "If it feels too close to touch right now, that's completely okay. You don't have to go there before you're ready. ❤️",
           },
           {
             conditions: {
@@ -155,7 +155,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thanks for hanging in with this one. Disagreements can rattle more than we expect. You’re not alone in that.",
+              "Thanks for hanging in with this one. Disagreements can rattle more than we expect. You're not alone in that.",
           },
           {
             conditions: {
@@ -173,7 +173,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I completely understand if this feels too heavy to explore right now. It's okay to take space from it.",
+              "This is tender territory. If now's not the right time to go there, that's more than okay. You get to set the boundaries.",
           },
           {
             conditions: {
@@ -181,7 +181,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I really appreciate how you're being open to this, despite the question being a bit heavy.",
+              "This question can bring up some heavy feelings. If it's not the right time, it's more than okay to take a step back. ❤️",
           },
           {
             conditions: {
@@ -189,7 +189,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Thank you for being open to this kind of reflection. ❤️ It's a big thing to notice how disagreements can affect you emotionally!",
+              "Thank you for showing up for this reflection. Looking back on emotional hurt in relationships takes real courage—and it can be a meaningful part of healing. 💛",
           },
         ],
       },
@@ -265,7 +265,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "I completely understand if this feels too heavy to explore right now. It's okay to take space from it.",
+              "Totally okay if reflecting on this is too much right now. We can come back to it anytime you feel up for it. 🤗",
           },
           {
             conditions: {
@@ -294,7 +294,7 @@ export const anthroScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let’s now take a moment to reflect on your relationships with others and yourself.",
+        text: "Let's now take a moment to reflect on your relationships with others and yourself.",
         option: "Yes, I'm okay with that.",
       },
       {
@@ -315,7 +315,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Totally okay if this feels like a bit much right now. You don’t have to unpack anything you’re not ready for. 🤗",
+              "Totally okay if this feels like a bit much right now. You don't have to unpack anything you're not ready for. 🤗",
           },
           {
             conditions: {
@@ -341,7 +341,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This kind of reflection can stir up more than expected. It’s completely okay to hold it gently or even set it down for now.",
+              "This kind of reflection can stir up more than expected. It's completely okay to hold it gently or even set it down for now.",
           },
           {
             conditions: {
@@ -349,7 +349,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "It means a lot that you’re giving this question some space. Even small steps into these feelings are real and valid. 🫶",
+              "It means a lot that you're giving this question some space. Even small steps into these feelings are real and valid. 🫶",
           },
           {
             conditions: {
@@ -367,7 +367,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This is tender territory. If now’s not the right time to go there, that’s more than okay. You get to set the boundaries.",
+              "This is tender territory. If now's not the right time to go there, that's more than okay. You get to set the boundaries.",
           },
           {
             conditions: {
@@ -375,7 +375,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Just considering a question like this shows a lot of strength. It’s brave to even let the thought surface, thanks for being willing to reflect on that with me!",
+              "Just considering a question like this shows a lot of strength. It's brave to even let the thought surface, thanks for being willing to reflect on that with me!",
           },
           {
             conditions: {
@@ -401,7 +401,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Totally okay if this isn’t something you want to dive into right now. You get to choose when and how to explore this stuff. 💛",
+              "Totally okay if this isn't something you want to dive into right now. You get to choose when and how to explore this stuff. 💛",
           },
           {
             conditions: {
@@ -435,7 +435,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thank you for sitting with this. Relationship pain isn’t easy to revisit—even quietly—but your care in thinking about it matters.",
+              "Thank you for sitting with this. Relationship pain isn't easy to revisit—even quietly—but your care in thinking about it matters.",
           },
           {
             conditions: {
@@ -453,7 +453,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This question can bring up some heavy feelings. If it’s not the right time, it’s more than okay to take a step back. ❤️",
+              "This question can bring up some heavy feelings. If it's not the right time, it's more than okay to take a step back. ❤️",
           },
           {
             conditions: {
@@ -475,13 +475,13 @@ export const anthroScenarios: Scenario[] = [
       },      
       {
         type: ResponseType.Statement,
-        text: "Those feelings can run deep. Sometimes looking back reminds us of who we are. Let’s look at the present now.",
+        text: "Those feelings can run deep. Sometimes looking back reminds us of who we are. Let's look at the present now.",
         option: "Yes, I would like to talk about something more positive",
       },
       {
         type: ResponseType.Question,
         question:
-          "What is something you’ve done recently that made you feel genuinely proud or emotionally fulfilled?",
+          "What is something you've done recently that made you feel genuinely proud or emotionally fulfilled?",
         severity: Severity.Medium,
         likertScale: 5,
         responses: [
@@ -508,7 +508,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Love that you’re leaning into this! 🫶 Whether it’s a major milestone or just a moment that made you smile—your pride is valid.",
+              "Love that you're leaning into this! 🫶 Whether it's a major milestone or just a moment that made you smile—your pride is valid.",
           },
       
           // MEDIUM SEVERITY
@@ -518,7 +518,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "This kind of question can be a lot sometimes—and that’s completely okay. No need to rush it. 💛",
+              "This kind of question can be a lot sometimes—and that's completely okay. No need to rush it. 💛",
           },
           {
             conditions: {
@@ -544,7 +544,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This might feel a bit heavy right now, and that’s totally valid ❤️ No need to go there if it’s not the time.",
+              "This might feel a bit heavy right now, and that's totally valid ❤️ No need to go there if it's not the time.",
           },
           {
             conditions: {
@@ -552,7 +552,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "Really appreciate you showing up for this. These questions can touch on deep stuff—there’s no wrong way to feel about it. 🫶",
+              "Really appreciate you showing up for this. These questions can touch on deep stuff—there's no wrong way to feel about it. 🫶",
           },
           {
             conditions: {
@@ -573,8 +573,8 @@ export const anthroScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let’s now take a small pivot and talk about another part of your life - Work and Studies",
-        option: "Okay, I’m ready.",
+        text: "Let's now take a small pivot and talk about another part of your life - Work and Studies",
+        option: "Okay, I'm ready.",
       },
       {
         type: ResponseType.Statement,
@@ -612,7 +612,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Love that you’re open to this! Knowing what keeps you grounded can really make a difference. 💪",
+              "Love that you're open to this! Knowing what keeps you grounded can really make a difference. 💪",
           },
       
           // MEDIUM SEVERITY
@@ -622,7 +622,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "No pressure to go deep right now. These kinds of questions can take time—and that’s okay. ❤️",
+              "No pressure to go deep right now. These kinds of questions can take time—and that's okay. ❤️",
           },
           {
             conditions: {
@@ -630,7 +630,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Thanks for sitting with this a bit. Figuring out what helps you stay balanced isn’t always easy, but it matters. 🫶",
+              "Thanks for sitting with this a bit. Figuring out what helps you stay balanced isn't always easy, but it matters. 🫶",
           },
           {
             conditions: {
@@ -638,7 +638,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Really glad you’re open to this kind of reflection. Your inner strengths can carry more power than you think. 💪",
+              "Really glad you're open to this kind of reflection. Your inner strengths can carry more power than you think. 💪",
           },
       
           // HIGH SEVERITY
@@ -648,7 +648,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "These questions can stir up a lot. If it’s not the right time to go there, that’s completely valid. ❤️",
+              "These questions can stir up a lot. If it's not the right time to go there, that's completely valid. ❤️",
           },
           {
             conditions: {
@@ -687,7 +687,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "Totally okay if this isn’t something you want to get into right now. We can come back to it whenever you're ready. 💛",
+              "Totally okay if this isn't something you want to get into right now. We can come back to it whenever you're ready. 💛",
           },
           {
             conditions: {
@@ -713,7 +713,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Stress and mental fatigue can feel heavy, so if it’s not the right time to talk about it, that’s completely okay. 🫶",
+              "Stress and mental fatigue can feel heavy, so if it's not the right time to talk about it, that's completely okay. 🫶",
           },
           {
             conditions: {
@@ -729,7 +729,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "It takes real self-awareness to recognize when work or academic pressure is getting to you. I’m glad you’re reflecting on it. 🤞",
+              "It takes real self-awareness to recognize when work or academic pressure is getting to you. I'm glad you're reflecting on it. 🤞",
           },
       
           // HIGH SEVERITY
@@ -755,7 +755,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "It’s not easy to face this kind of stress, so thank you for being open. That kind of honesty is a powerful move toward support. ❤️",
+              "It's not easy to face this kind of stress, so thank you for being open. That kind of honesty is a powerful move toward support. ❤️",
           },
         ],
       },      
@@ -779,7 +779,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Low],
             },
             message:
-              "It’s okay if you are not willing to reflect on this right now. We can explore it whenever you feel ready. 💛",
+              "It's okay if you are not willing to reflect on this right now. We can explore it whenever you feel ready. 💛",
           },
           {
             conditions: {
@@ -805,7 +805,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "Feeling overwhelmed can be really heavy. If it’s not the right time to talk about it, that’s totally okay. 💛",
+              "Feeling overwhelmed can be really heavy. If it's not the right time to talk about it, that's totally okay. 💛",
           },
           {
             conditions: {
@@ -821,7 +821,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.Medium],
             },
             message:
-              "It’s meaningful that you’re reflecting on this. Sorting through doubt can take time, but your awareness already matters a lot. 💪",
+              "It's meaningful that you're reflecting on this. Sorting through doubt can take time, but your awareness already matters a lot. 💪",
           },
       
           // HIGH SEVERITY
@@ -831,7 +831,7 @@ export const anthroScenarios: Scenario[] = [
               severity: [Severity.High],
             },
             message:
-              "This is a deeply personal and difficult space to enter. It’s completely okay to hold off if you’re not ready. ❤️",
+              "This is a deeply personal and difficult space to enter. It's completely okay to hold off if you're not ready. ❤️",
           },
           {
             conditions: {

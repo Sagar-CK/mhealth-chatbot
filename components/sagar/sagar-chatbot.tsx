@@ -345,6 +345,11 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
   }
   
   const renderResponseComponent = () => {
+    console.log("isComplete", isComplete,
+      "isResponseDisabled", isResponseDisabled,
+      "isTyping", isTyping,
+      "isProducingResponse", isProducingResponse
+    )
     if (isComplete || isResponseDisabled || isTyping || isProducingResponse) return null
 
     const currentStepData = currentScenario.steps[currentStep]
@@ -426,6 +431,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
             if (stepData.type === ResponseType.Question) {
               const qStep = stepData as QuestionStep
               setIsResponseDisabled(true)
+              setIsProducingResponse(false)
               handleResponse(stringifyWillingnessSeverity(willingness, severity, qStep.likertScale))
             }
           }
