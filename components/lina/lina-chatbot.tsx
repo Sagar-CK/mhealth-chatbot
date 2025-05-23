@@ -90,7 +90,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         const currentStepscenario = currentScenario.steps[currentStep];
         let customResponse = "";
 
-        if (currentStepscenario.responseType === ResponseType.Likert) {
+        // Check if this is the last question in the scenario
+        const isLastQuestion = currentStep === currentScenario.steps.length - 1;
+
+        if (currentStepscenario.responseType === ResponseType.Likert && !isLastQuestion) {
             if (user.condition === '2') {
                 if (response === "Not willing") {
                     customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It's okay, I am here to listen to you and guide you to reflect on your mental health. 🌱";
@@ -175,8 +178,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             }
         }
 
-        // Move to next step if not a Likert response or if no custom response
-        if (currentStepscenario.responseType !== ResponseType.Likert || !customResponse) {
+        // Move to next step if not a Likert response, if no custom response, or if it's the last question
+        if (currentStepscenario.responseType !== ResponseType.Likert || !customResponse || isLastQuestion) {
             const nextStep = currentStep + 1;
             if (nextStep < currentScenario.steps.length) {
                 setIsTyping(true);
@@ -231,6 +234,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             case ResponseType.Likert:
                 return (
                     <LikertResponse
+                        key={`likert-${currentStep}`}
                         question={currentStepscenario.likertQuestion || "Rate your willingness to share:"}
                         onSelect={handleResponse}
                         scale={(currentStepscenario.likertScale === 5 ? 5 : 7)}
