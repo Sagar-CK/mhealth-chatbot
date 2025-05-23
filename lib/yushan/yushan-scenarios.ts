@@ -10,7 +10,8 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
-                userRespond:  "I’ve been underperforming academically ..."
+                topic: "your worst fears",
+                userRespond: "I’ve been underperforming academically ..."
             },
             // My deepest feelings
             {
@@ -18,6 +19,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your deepest feelings?",
+                topic: "your deepest feelings",
                 userRespond: "I’m having a hard time managing my stress ..."
             },
             // Things I wouldn't do in public
@@ -25,7 +27,8 @@ export const yushanScenarios: Scenario[] = [
                 question: "What thoughts go through your mind in these situations?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about thought which you wouldn't disclosure in public?",
+                likertQuestion: "How much are you willing to disclose about things which you wouldn't disclosure in public?",
+                topic: "things which you wouldn't disclosure in public",
                 userRespond: "I just try not to think about it too much, but ... "
             },
             // My personal habits
@@ -34,6 +37,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
+                topic: "your personal habits",
                 userRespond: "I try to attend classes, but I often lose focus and ..."
             },
             // My Close Relationships with Other People
@@ -42,8 +46,8 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
-                // Different in Honesty-Accuracy
-                userRespond:  "I’ve been keeping to myself a lot lately ..."
+                topic: "your close relationships with others",                // Different in Honesty-Accuracy
+                userRespond: "I’ve been keeping to myself a lot lately ..."
             },
         ],
         completionMessage:
@@ -60,7 +64,8 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
-                userRespond:  "I’ve been underperforming academically ..."
+                topic: "your worst fears",
+                userRespond: "I’ve been underperforming academically ..."
             },
             // My deepest feelings
             {
@@ -68,6 +73,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your deepest feelings?",
+                topic: "your deepest feelings",
                 userRespond: "I’m having a hard time managing my stress ..."
             },
             // Things I wouldn't do in public
@@ -75,7 +81,8 @@ export const yushanScenarios: Scenario[] = [
                 question: "Understanding how you’re feeling helps me get a clearer picture of your situation and identify which challenges to address first. What kinds of thoughts usually go through your mind during these moments?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about thoughts which you wouldn't disclose in public?",
+                likertQuestion: "How much are you willing to disclose about things which you wouldn't disclosure in public?",
+                topic: "things which you wouldn't disclosure in public",
                 userRespond: "I just try not to think about it too much, but ... "
             },
             // My personal habits
@@ -84,6 +91,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
+                topic: "your personal habits", 
                 userRespond: "I try to attend classes, but I often lose focus and ..."
             },
             // My Close Relationships with Other People
@@ -92,7 +100,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
-                userRespond:  "I’ve been keeping to myself a lot lately..."
+                topic: "your close relationships with others",                userRespond: "I’ve been keeping to myself a lot lately..."
             }
         ],
         completionMessage:
@@ -109,7 +117,8 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
-                userRespond:  "I’ve been underperforming academically ..."
+                topic: "your worst fears",
+                userRespond: "I’ve been underperforming academically ..."
             },
             // My deepest feelings
             {
@@ -117,6 +126,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your deepest feelings?",
+                topic: "your deepest feelings",
                 userRespond: "I’m having a hard time managing my stress ..."
             },
             // Things I wouldn't do in public
@@ -124,7 +134,8 @@ export const yushanScenarios: Scenario[] = [
                 question: "There have been times when I had racing thoughts I was too afraid to say out loud. You’re not alone—many people have difficult thoughts. What thoughts usually go through your mind in moments like these?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
-                likertQuestion: "How much are you willing to disclose about thoughts which you wouldn't disclose in public?",
+                likertQuestion: "How much are you willing to disclose about things which you wouldn't disclosure in public?",
+                topic: "things which you wouldn't disclosure in public",
                 userRespond: "I just try not to think about it too much, but ... "
             },
             // My personal habits
@@ -133,6 +144,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
+                topic: "your personal habits", 
                 userRespond: "I try to attend classes, but I often lose focus and ..."
             },
             // My Close Relationships with Other People
@@ -141,7 +153,8 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
-                userRespond:  "I’ve been keeping to myself a lot lately..."
+                topic: "your close relationships with others",
+                userRespond: "I’ve been keeping to myself a lot lately..."
             }
         ],
         completionMessage:

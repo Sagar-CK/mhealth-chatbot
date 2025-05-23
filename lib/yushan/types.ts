@@ -7,6 +7,7 @@ export interface LikertWithRespondStep {
     question: string
     likertScale: 5 | 7
     likertQuestion: string
+    topic: string
     userRespond: string
 }
 

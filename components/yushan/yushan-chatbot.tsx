@@ -90,7 +90,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 <LikertResponse
                     question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
                     onSelect={(willingness) => {
-                        handleResponse(stringifyWillingness(mapWillingnessToNumber(willingness) - 1, likertWithRespondStep.options))
+                        handleResponse(stringifyWillingness(mapWillingnessToNumber(willingness) - 1, likertWithRespondStep.userRespond, likertWithRespondStep.topic))
                     }}
                     scale={likertWithRespondStep.likertScale}
                 />

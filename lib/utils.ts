@@ -54,16 +54,17 @@ export function stringifyWillingnessSeverity(
 }
 
 export function stringifyWillingness(
-  willingness: number,
-  options: string[]
+    willingness: number,
+    userRespond: string,
+    topic: string
 ): string {
-  if (willingness < 0 || willingness >= options.length) {
-    throw new Error(`Willingness must be between 0 and ${options.length}`);
-  }
-
-  const res = options[willingness];
-  console.log(res);
-  return res;
+    if (willingness < 0 || willingness >= 5) {
+        throw new Error("Willingness must be between 0 and 5");
+    }
+  const amounts = ["very little", "a bit of", "some", "quite a bit of", "a lot of"];
+  const res = userRespond + " (and you talked " + amounts[willingness] + " information about " + topic + ")";
+    console.log(res);
+    return res;
 }
 
 export function validateResponseCoverage(scenarios: Scenario[]) {
