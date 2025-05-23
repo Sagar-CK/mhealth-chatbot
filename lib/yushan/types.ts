@@ -7,7 +7,7 @@ export interface LikertWithRespondStep {
     question: string
     likertScale: 5 | 7
     likertQuestion: string
-    options: string[]
+    userRespond: string
 }
 
 export type ChatStep = LikertWithRespondStep
