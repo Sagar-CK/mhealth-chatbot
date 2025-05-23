@@ -6,7 +6,7 @@ import {Button} from "@/components/ui/button"
 import {Card} from "@/components/ui/card"
 import {BotMessageSquareIcon, User} from 'lucide-react'
 import {LikertResponse} from "@/components/chat/likert-response"
-import {type Scenario, type Message, ResponseType, type LikertWithRespondStep} from "@/lib/yushan/types"
+import {type Scenario, type Message, ResponseType} from "@/lib/yushan/types"
 import {useRouter} from "next/navigation"
 import {api} from "@/trpc/react"
 import {yushanStudy} from "@/lib/constants"
@@ -40,37 +40,58 @@ const TypingIndicator = () => {
     )
 }
 
+const UserTypingIndicator = () => {
+    return (
+        <div className="flex items-center gap-2 justify-end">
+            <Card className="p-3 bg-primary text-primary-foreground w-[60px] flex items-center justify-center">
+                <div className="flex space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce"
+                          style={{animationDelay: '0ms'}}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce"
+                          style={{animationDelay: '150ms'}}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce"
+                          style={{animationDelay: '300ms'}}></span>
+                </div>
+            </Card>
+            <Avatar className="h-8 w-8 bg-secondary flex items-center justify-center shrink-0">
+                <User className="h-4 w-4 text-secondary-foreground"/>
+            </Avatar>
+        </div>
+    );
+};
+
+
 
 export function YushanChatInterface({scenarios, user, height = "600px"}: YushanChatInterfaceProps) {
     const router = useRouter()
     const [messages, setMessages] = useState<Message[]>([])
     const [currentStep, setCurrentStep] = useState(0)
     const [isComplete, setIsComplete] = useState(false)
-    const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
-    const [isTyping, setIsTyping] = useState(false)
+    const [chatbotIndex] = useState<number>(Math.floor(Math.random() * 3));
+    const [userTyping, setUserTyping] = useState(false)
+    const [chatbotTyping, setChatbotTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-    const currentScenario = scenarios[currentScenarioIndex]
-
     const createMessage = api.messages.create.useMutation()
 
+    const selectedScenario = scenarios[chatbotIndex];
 
     // Initialize with first bot message
     useEffect(() => {
-        if (currentScenario?.steps.length > 0 && messages.length === 0) {
+        if (selectedScenario?.steps.length > 0 && messages.length === 0) {
             setMessages([
                 {
-                    id: `${currentScenario.title}-0-bot`,
+                    id: `${selectedScenario.title}-0-bot`,
                     sender: "bot",
-                    text: currentScenario.steps[0].question,
+                    text: selectedScenario.steps[0].question,
                     timestamp: new Date(),
                     user_id: user.user_id,
-                    scenario: currentScenario.title
+                    scenario: selectedScenario.title,
                 },
-            ])
+            ]);
         }
-    }, [currentScenario, messages.length, user.user_id])
+    }, [chatbotIndex, messages.length, user.user_id]);
 
     // Auto-scroll to bottom of messages with smooth animation
     useEffect(() => {
@@ -80,17 +101,29 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         }
     }, [messages])
 
+
+    useEffect(() => {
+        const currentStepData = selectedScenario.steps[currentStep];
+        if (!isComplete && currentStepData.type === ResponseType.LikertWithRespond) {
+            setUserTyping(true);
+        }
+    }, [currentStep, selectedScenario, isComplete]);
+
     const renderResponseComponent = () => {
         if (isComplete) return null
 
-        const likertWithRespondStep = currentScenario.steps[currentStep]
+        const likertWithRespondStep = selectedScenario.steps[currentStep]
 
         if (likertWithRespondStep.type === ResponseType.LikertWithRespond) {
             return (
                 <LikertResponse
                     question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
                     onSelect={(willingness) => {
-                        handleResponse(stringifyWillingness(mapWillingnessToNumber(willingness) - 1, likertWithRespondStep.userRespond, likertWithRespondStep.topic))
+                        setUserTyping(false);
+                        handleResponse(stringifyWillingness(
+                            mapWillingnessToNumber(willingness) - 1,
+                            likertWithRespondStep.userRespond,
+                            likertWithRespondStep.topic))
                     }}
                     scale={likertWithRespondStep.likertScale}
                 />
@@ -102,12 +135,12 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     const handleResponse = async (response: string) => {
         // Add user response
         const userMessage = {
-            id: `${currentScenario.title}-${currentStep}-user`,
+            id: `${selectedScenario.title}-${currentStep}-user`,
             sender: "user" as const,
             text: response,
             timestamp: new Date(),
             user_id: user.user_id,
-            scenario: currentScenario.title
+            scenario: selectedScenario.title
         };
 
         setMessages((prev) => [...prev, userMessage]);
@@ -118,61 +151,46 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         // Move to next step
         const nextStep = currentStep + 1;
 
-        if (nextStep < currentScenario.steps.length) {
+        if (nextStep < selectedScenario.steps.length) {
             // Add next bot message after a short delay
+            setChatbotTyping(true);
             setTimeout(() => {
                 const botMessage = {
-                    id: `${currentScenario.title}-${nextStep}-bot`,
+                    id: `${selectedScenario.title}-${nextStep}-bot`,
                     sender: "bot" as const,
-                    text: currentScenario.steps[nextStep].question,
+                    text: selectedScenario.steps[nextStep].question,
                     timestamp: new Date(),
                     user_id: user.user_id,
-                    scenario: currentScenario.title
+                    scenario: selectedScenario.title
                 };
 
                 setMessages((prev) => [...prev, botMessage]);
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
+                setChatbotTyping(false);
             }, 500);
         } else {
             // Chat is complete
             setTimeout(() => {
                 const finalMessage = {
-                    id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+                    id: `${selectedScenario.title}-${selectedScenario.steps.length}-bot`,
                     sender: "bot" as const,
-                    text: currentScenario.completionMessage || "Thank you for your responses!",
+                    text: selectedScenario.completionMessage || "Thank you for your responses!",
                     timestamp: new Date(),
                     user_id: user.user_id,
-                    scenario: currentScenario.title
+                    scenario: selectedScenario.title
                 };
 
                 setMessages((prev) => [...prev, finalMessage]);
                 createMessage.mutate(finalMessage)
                 setIsComplete(true);
+                setChatbotTyping(false);
             }, 500);
         }
     }
 
     const nextOrCompleteScenario = () => {
-        if (currentScenarioIndex < scenarios.length - 1) {
-            // Move to next scenario
-            setCurrentScenarioIndex(prev => prev + 1)
-            setMessages([
-                {
-                    id: `${scenarios[currentScenarioIndex + 1].title}-0-bot`,
-                    sender: "bot",
-                    text: scenarios[currentScenarioIndex + 1].steps[0].question,
-                    timestamp: new Date(),
-                    user_id: user.user_id,
-                    scenario: scenarios[currentScenarioIndex + 1].title
-                },
-            ])
-            setCurrentStep(0)
-            setIsComplete(false)
-        } else {
-            // All scenarios complete, navigate to completion page
-            router.push(`/completion?study_id=${yushanStudy}&uid=${user.user_id}`)
-        }
+        router.push(`/completion?study_id=${yushanStudy}&uid=${user.user_id}`)
     }
 
     return (
@@ -210,14 +228,15 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                         </div>
                     </div>
                 ))}
-                {isTyping && Number(user.condition) === 2 && <TypingIndicator/>}
+                {chatbotTyping && Number(user.condition) === 2 && <TypingIndicator/>}
+                {userTyping && <UserTypingIndicator />}
                 <div ref={messagesEndRef}/>
             </div>
 
             <div className="p-4 border-t bg-card">
                 {isComplete ? (
                     <Button onClick={nextOrCompleteScenario} className="w-full">
-                        {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
+                        End Conversation
                     </Button>
                 ) : (
                     renderResponseComponent()

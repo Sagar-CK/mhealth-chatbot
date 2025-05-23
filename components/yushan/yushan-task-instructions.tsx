@@ -9,15 +9,14 @@ export default function YushanTaskInstructions() {
             <hr/>
 
             <p>
-                You will interact with <strong>three different versions</strong> of a mental health support chatbot.
+                You will interact with a mental health support chatbot.
                 During each interaction, please imagine that <strong>you are the person described in the role-play
                 scenario below</strong>.
             </p>
 
             <p>
                 For each question, simply rate how <strong>willing</strong> you are to disclose the <strong>specific
-                topic</strong> mentioned in the willingness question. A pre-written, mocked response will be shown based
-                on your selected rating.
+                topic</strong> mentioned in the willingness question.
             </p>
 
             <hr/>
