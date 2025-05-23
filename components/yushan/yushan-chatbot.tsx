@@ -11,7 +11,8 @@ import {useRouter} from "next/navigation"
 import {api} from "@/trpc/react"
 import {yushanStudy} from "@/lib/constants"
 import {User as UserType} from "@/server/api/models/user"
-import {mapWillingnessToNumber, stringifyWillingness} from "@/lib/utils"
+import {mapWillingnessToNumber, stringifyWillingness, stringifyWillingnessSeverity} from "@/lib/utils"
+import type {QuestionStep} from "@/lib/sagar/types";
 
 interface YushanChatInterfaceProps {
     scenarios: Scenario[];
@@ -61,7 +62,6 @@ const UserTypingIndicator = () => {
 };
 
 
-
 export function YushanChatInterface({scenarios, user, height = "600px"}: YushanChatInterfaceProps) {
     const router = useRouter()
     const [messages, setMessages] = useState<Message[]>([])
@@ -76,6 +76,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
 
     const chatbotIndex = Number(user.condition);
     const selectedScenario = scenarios[chatbotIndex];
+    const createSdiScore = api.sdiScore.create.useMutation()
 
     // Initialize with first bot message
     useEffect(() => {
@@ -89,7 +90,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     timestamp: new Date(),
                     user_id: user.user_id,
                     scenario: selectedScenario.title,
-                    },
+                },
                 ]);
                 setChatbotTyping(false);
             }, 1000);
@@ -113,27 +114,48 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     }, [currentStep, selectedScenario, isComplete]);
 
     const renderResponseComponent = () => {
-        if (isComplete) return null
+        if (isComplete) return null;
 
-        const likertWithRespondStep = selectedScenario.steps[currentStep]
+        const step = selectedScenario.steps[currentStep];
+        if (!step) return null;
 
-        if (likertWithRespondStep.type === ResponseType.LikertWithRespond) {
+        if (step.type === ResponseType.LikertWithRespond) {
             return (
                 <LikertResponse
-                    question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
+                    question={step.likertQuestion || "Rate your willingness:"}
+                    scale={step.likertScale}
                     onSelect={(willingness) => {
                         setUserTyping(false);
-                        handleResponse(stringifyWillingness(
-                            mapWillingnessToNumber(willingness) - 1,
-                            likertWithRespondStep.userRespond,
-                            likertWithRespondStep.topic))
+                        const numericWillingness = mapWillingnessToNumber(willingness);
+
+                        createSdiScore.mutate(
+                            {
+                                user_id: user.user_id,
+                                scenario: selectedScenario.title,
+                                topic: step.topic,
+                                user_willingness: numericWillingness,
+                                timestamp: new Date(),
+                            },
+                            {
+                                onSuccess: () => {
+                                    handleResponse(
+                                        stringifyWillingness(
+                                            numericWillingness - 1,
+                                            step.userRespond,
+                                            step.topic
+                                        )
+                                    );
+                                },
+                            }
+                        );
                     }}
-                    scale={likertWithRespondStep.likertScale}
                 />
-            )
+            );
         }
-        return null
-    }
+
+        return null;
+    };
+
 
     const handleResponse = async (response: string) => {
         // Add user response
@@ -232,7 +254,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     </div>
                 ))}
                 {chatbotTyping && <TypingIndicator/>}
-                {userTyping && <UserTypingIndicator />}
+                {userTyping && <UserTypingIndicator/>}
                 <div ref={messagesEndRef}/>
             </div>
 
