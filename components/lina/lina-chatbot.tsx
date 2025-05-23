@@ -26,6 +26,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     const [currentStep, setCurrentStep] = useState(0)
     const [isComplete, setIsComplete] = useState(false)
     const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
+    const [isTyping, setIsTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
 
@@ -37,16 +38,20 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     // Initialize with first bot message
     useEffect(() => {
         if (currentScenario?.steps.length > 0 && messages.length === 0) {
-            setMessages([
-                {
-                    id: `${currentScenario.title}-0-bot`,
-                    sender: "bot",
-                    text: currentScenario.steps[0].question,
-                    timestamp: new Date(),
-                    user_id: user.user_id,
-                    scenario: currentScenario.title
-                },
-            ])
+            setIsTyping(true);
+            setTimeout(() => {
+                setMessages([
+                    {
+                        id: `${currentScenario.title}-0-bot`,
+                        sender: "bot",
+                        text: currentScenario.steps[0].question,
+                        timestamp: new Date(),
+                        user_id: user.user_id,
+                        scenario: currentScenario.title
+                    },
+                ]);
+                setIsTyping(false);
+            }, 1500);
         }
     }, [currentScenario, messages.length, user.user_id])
 
@@ -56,7 +61,15 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             const scrollOptions = { behavior: "smooth" as const }
             messagesEndRef.current.scrollIntoView(scrollOptions)
         }
-    }, [messages])
+    }, [messages, isTyping])
+
+    // Add a function to handle scrolling
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            const scrollOptions = { behavior: "smooth" as const }
+            messagesEndRef.current.scrollIntoView(scrollOptions)
+        }
+    }
 
     const handleResponse = async (response: string) => {
         // Add user response
@@ -70,18 +83,17 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         };
 
         setMessages((prev) => [...prev, userMessage]);
-
-        // Save message to server
         createMessage.mutate(userMessage)
+        scrollToBottom(); // Scroll after user response
 
         // Add custom response for Likert scale
         const currentStepscenario = currentScenario.steps[currentStep];
+        let customResponse = "";
+
         if (currentStepscenario.responseType === ResponseType.Likert) {
-            let customResponse = "";
-            // Only apply custom responses for linaScenarioEmpathetic (condition 2)
             if (user.condition === '2') {
                 if (response === "Not willing") {
-                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It’s okay, I am here to listen to you and guide you to reflect on your mental health. 🌱";
+                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It's okay, I am here to listen to you and guide you to reflect on your mental health. 🌱";
                 } else {
                     customResponse = "Thank you very much for agreeing to share with me. I am here to listen to you and guide you to reflect on your mental health. Sharing can be very beneficial to you.";
                 }
@@ -96,6 +108,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             }
 
             if (customResponse) {
+                setIsTyping(true);
+                scrollToBottom(); // Scroll when typing starts
                 setTimeout(() => {
                     const customBotMessage = {
                         id: `${currentScenario.title}-${currentStep}-bot-custom`,
@@ -107,45 +121,102 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                     };
                     setMessages((prev) => [...prev, customBotMessage]);
                     createMessage.mutate(customBotMessage);
-                }, 500);
+                    setIsTyping(false);
+                    scrollToBottom(); // Scroll after custom response
+
+                    // Move to next step after custom response
+                    const nextStep = currentStep + 1;
+                    if (nextStep < currentScenario.steps.length) {
+                        // Add next bot message after a delay
+                        setTimeout(() => {
+                            setIsTyping(true);
+                            scrollToBottom(); // Scroll when typing starts
+                            setTimeout(() => {
+                                const botMessage = {
+                                    id: `${currentScenario.title}-${nextStep}-bot`,
+                                    sender: "bot" as const,
+                                    text: currentScenario.steps[nextStep].question,
+                                    timestamp: new Date(),
+                                    user_id: user.user_id,
+                                    scenario: currentScenario.title
+                                };
+
+                                setMessages((prev) => [...prev, botMessage]);
+                                createMessage.mutate(botMessage)
+                                setCurrentStep(nextStep);
+                                setIsTyping(false);
+                                scrollToBottom(); // Scroll after bot message
+                            }, 1500);
+                        }, 1000);
+                    } else {
+                        // Chat is complete
+                        setTimeout(() => {
+                            setIsTyping(true);
+                            scrollToBottom(); // Scroll when typing starts
+                            setTimeout(() => {
+                                const finalMessage = {
+                                    id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+                                    sender: "bot" as const,
+                                    text: currentScenario.completionMessage || "Thank you for your responses!",
+                                    timestamp: new Date(),
+                                    user_id: user.user_id,
+                                    scenario: currentScenario.title
+                                };
+
+                                setMessages((prev) => [...prev, finalMessage]);
+                                createMessage.mutate(finalMessage)
+                                setIsComplete(true);
+                                setIsTyping(false);
+                                scrollToBottom(); // Scroll after final message
+                            }, 1500);
+                        }, 1000);
+                    }
+                }, 1500);
             }
         }
 
-        // Move to next step
-        const nextStep = currentStep + 1;
+        // Move to next step if not a Likert response or if no custom response
+        if (currentStepscenario.responseType !== ResponseType.Likert || !customResponse) {
+            const nextStep = currentStep + 1;
+            if (nextStep < currentScenario.steps.length) {
+                setIsTyping(true);
+                scrollToBottom(); // Scroll when typing starts
+                setTimeout(() => {
+                    const botMessage = {
+                        id: `${currentScenario.title}-${nextStep}-bot`,
+                        sender: "bot" as const,
+                        text: currentScenario.steps[nextStep].question,
+                        timestamp: new Date(),
+                        user_id: user.user_id,
+                        scenario: currentScenario.title
+                    };
 
-        if (nextStep < currentScenario.steps.length) {
-            // Add next bot message after a short delay
-            setTimeout(() => {
-                const botMessage = {
-                    id: `${currentScenario.title}-${nextStep}-bot`,
-                    sender: "bot" as const,
-                    text: currentScenario.steps[nextStep].question,
-                    timestamp: new Date(),
-                    user_id: user.user_id,
-                    scenario: currentScenario.title
-                };
+                    setMessages((prev) => [...prev, botMessage]);
+                    createMessage.mutate(botMessage)
+                    setCurrentStep(nextStep);
+                    setIsTyping(false);
+                    scrollToBottom(); // Scroll after bot message
+                }, 1500);
+            } else {
+                setIsTyping(true);
+                scrollToBottom(); // Scroll when typing starts
+                setTimeout(() => {
+                    const finalMessage = {
+                        id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+                        sender: "bot" as const,
+                        text: currentScenario.completionMessage || "Thank you for your responses!",
+                        timestamp: new Date(),
+                        user_id: user.user_id,
+                        scenario: currentScenario.title
+                    };
 
-                setMessages((prev) => [...prev, botMessage]);
-                createMessage.mutate(botMessage)
-                setCurrentStep(nextStep);
-            }, 2000); // Increased delay to account for custom response
-        } else {
-            // Chat is complete
-            setTimeout(() => {
-                const finalMessage = {
-                    id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
-                    sender: "bot" as const,
-                    text: currentScenario.completionMessage || "Thank you for your responses!",
-                    timestamp: new Date(),
-                    user_id: user.user_id,
-                    scenario: currentScenario.title
-                };
-
-                setMessages((prev) => [...prev, finalMessage]);
-                createMessage.mutate(finalMessage)
-                setIsComplete(true);
-            }, 1000); // Increased delay to account for custom response
+                    setMessages((prev) => [...prev, finalMessage]);
+                    createMessage.mutate(finalMessage)
+                    setIsComplete(true);
+                    setIsTyping(false);
+                    scrollToBottom(); // Scroll after final message
+                }, 1500);
+            }
         }
     }
 
@@ -192,9 +263,9 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         }
     }
 
-    return (
+    const renderChatInterface = () => (
         <div
-            className="flex flex-col rounded-lg border shadow-sm overflow-hidden"
+            className="flex flex-col rounded-lg border shadow-sm overflow-hidden h-full"
             style={{ height }}
         >
             <div
@@ -207,7 +278,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         key={message.id}
                         className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
                     >
-                        <div className="flex items-center gap-2 max-w-[80%]">
+                        <div className="flex items-center gap-2 max-w-[85%]">
                             {message.sender === "bot" && (
                                 <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
                                     <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
@@ -226,18 +297,38 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         </div>
                     </div>
                 ))}
+                {isTyping && (
+                    <div className="flex justify-start animate-fade-in">
+                        <div className="flex items-center gap-2 max-w-[85%]">
+                            <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
+                                <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
+                            </Avatar>
+                            <Card className="p-3 bg-muted">
+                                <div className="flex space-x-1">
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                </div>
+                            </Card>
+                        </div>
+                    </div>
+                )}
                 <div ref={messagesEndRef} />
             </div>
 
-            <div className="p-4 border-t bg-card">
+            <div className="p-4 border-t bg-card mt-auto">
                 {isComplete ? (
                     <Button onClick={nextOrCompleteScenario} className="w-full">
                         {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
                     </Button>
                 ) : (
-                    renderResponseComponent()
+                    <div className="overflow-x-auto pb-2">
+                        {renderResponseComponent()}
+                    </div>
                 )}
             </div>
         </div>
     )
+
+    return renderChatInterface()
 }
