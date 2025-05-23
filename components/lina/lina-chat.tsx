@@ -13,12 +13,16 @@ interface LinaChatProps {
 
 export function LinaChat({ user }: LinaChatProps) {
     const scenariosToUse = user.condition === '2' ? linaScenarioEmpathetic : linaScenarios;
+    const titleText =
+        user.condition === '2'
+            ? 'Time for a quick mental check-in with Echo?'
+            : 'Time for a quick mental check-in?';
 
     return (
         <div className="flex w-full items-center justify-center">
             <Card className="w-4/5 h-full bg-slate-50">
                 <CardHeader className="w-full flex justify-between items-center">
-                    <CardTitle>Time for a quick mental check-in with Echo? 💬</CardTitle>
+                    <CardTitle>{titleText}</CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent>

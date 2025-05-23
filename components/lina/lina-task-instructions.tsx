@@ -9,11 +9,8 @@ export default function LinaTaskInstructions() {
             </div>
 
             <p>
-                In the next part of the study, you will interact with a chatbot named <strong>Echo</strong>.
-            </p>
-
-            <p>
-                Echo will present a few short scenarios and ask how willing you would be to share certain types of information.
+                In the next part of the study, you will interact with a chatbot.
+                It will present questions to you and ask how willing you would be to share certain types of information.
             </p>
 
             <p>
@@ -21,7 +18,7 @@ export default function LinaTaskInstructions() {
             </p>
 
             <p>
-                There are <strong>no right or wrong answers</strong> — please respond as honestly as you can.
+                There are <strong>no right or wrong answers</strong>, please respond as honestly as you can.
             </p>
 
             <p>

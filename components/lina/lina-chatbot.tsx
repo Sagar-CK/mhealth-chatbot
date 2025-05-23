@@ -96,11 +96,26 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         if (currentStepscenario.responseType === ResponseType.Likert && !isLastQuestion) {
             if (user.condition === '2') {
                 if (response === "Not willing") {
-                    customResponse = "Thank you for your answer. I understand that it is not always easy to share information. It's okay, I am here to listen to you and guide you to reflect on your mental health. 🌱";
+                    const notWillingMessages = [
+                        "Thank you for your answer. I understand that it is not always easy to share information.",
+                        "That’s completely okay. Everyone opens up at their own pace. I’m here when you're ready.",
+                        "No pressure at all. Just know that you're not alone, I'm here to support you.",
+                        "I respect your choice. Talking about personal things can be hard.",
+                        "Thank you for your honesty. I'm here whenever you feel ready to share more."
+                    ];
+                    customResponse = notWillingMessages[Math.floor(Math.random() * notWillingMessages.length)];
                 } else {
-                    customResponse = "Thank you very much for agreeing to share with me. I am here to listen to you and guide you to reflect on your mental health. Sharing can be very beneficial to you.";
+                    const willingMessages = [
+                        "Thank you for agreeing to share with me. I'm here to listen to you and guide you to reflect on your mental health.",
+                        "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
+                        "It's great that you are open to talking. It can make a real difference in your well-being.",
+                        "Thank you for trusting me, please know I'm here to help.",
+                        "I'm really glad you’re willing to share."
+                    ];
+                    customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
                 }
             }
+
 
             if (user.condition === '1') {
                 if (response === "Not willing") {
@@ -289,8 +304,9 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                 </Avatar>
                             )}
 
-                            <Card className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"} break-words`}>
-                                <p className="whitespace-pre-wrap">{message.text}</p>
+                            <Card
+                                className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
+                                <p>{message.text}</p>
                             </Card>
 
                             {message.sender === "user" && (
