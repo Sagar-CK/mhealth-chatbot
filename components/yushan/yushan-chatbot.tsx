@@ -61,7 +61,6 @@ const UserTypingIndicator = () => {
 };
 
 
-
 export function YushanChatInterface({scenarios, user, height = "600px"}: YushanChatInterfaceProps) {
     const router = useRouter()
     const [messages, setMessages] = useState<Message[]>([])
@@ -71,16 +70,19 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     const [chatbotTyping, setChatbotTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
+    const [userWillingness, setUserWillingness] = useState<number[]>([-1, -1, -1, -1, -1]);
 
     const createMessage = api.messages.create.useMutation()
 
     const chatbotIndex = Number(user.condition);
     const selectedScenario = scenarios[chatbotIndex];
+    const createSdiScore = api.sdiScore.create.useMutation()
 
     // Initialize with first bot message
     useEffect(() => {
         if (selectedScenario?.steps.length > 0 && messages.length === 0) {
             setChatbotTyping(true);
+            setUserTyping(false);
             setTimeout(() => {
                 setMessages([{
                     id: `${selectedScenario.title}-0-bot`,
@@ -89,9 +91,10 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     timestamp: new Date(),
                     user_id: user.user_id,
                     scenario: selectedScenario.title,
-                    },
+                },
                 ]);
                 setChatbotTyping(false);
+                setUserTyping(true);
             }, 1000);
         }
     }, [chatbotIndex, messages.length, user.user_id]);
@@ -104,36 +107,36 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         }
     }, [messages])
 
-
-    useEffect(() => {
-        const currentStepData = selectedScenario.steps[currentStep];
-        if (!isComplete && currentStepData.type === ResponseType.LikertWithRespond) {
-            setUserTyping(true);
-        }
-    }, [currentStep, selectedScenario, isComplete]);
-
     const renderResponseComponent = () => {
         if (isComplete) return null
 
         const likertWithRespondStep = selectedScenario.steps[currentStep]
-
         if (likertWithRespondStep.type === ResponseType.LikertWithRespond) {
             return (
                 <LikertResponse
                     question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
                     onSelect={(willingness) => {
                         setUserTyping(false);
+                        const numericWillingness = mapWillingnessToNumber(willingness);
+
+                        // update willingness
+                        const newWillingness = [...userWillingness];
+                        newWillingness[currentStep] = numericWillingness;
+                        setUserWillingness(newWillingness);
+
+                        // rander
                         handleResponse(stringifyWillingness(
-                            mapWillingnessToNumber(willingness) - 1,
+                            numericWillingness - 1,
                             likertWithRespondStep.userRespond,
                             likertWithRespondStep.topic))
                     }}
                     scale={likertWithRespondStep.likertScale}
                 />
-            )
+            );
         }
-        return null
-    }
+        return null;
+    };
+
 
     const handleResponse = async (response: string) => {
         // Add user response
@@ -157,6 +160,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         if (nextStep < selectedScenario.steps.length) {
             // Add next bot message after a short delay
             setChatbotTyping(true);
+            setUserTyping(false);
             setTimeout(() => {
                 const botMessage = {
                     id: `${selectedScenario.title}-${nextStep}-bot`,
@@ -171,6 +175,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
                 setChatbotTyping(false);
+                setUserTyping(true);
             }, 1000);
         } else {
             // Chat is complete
@@ -184,10 +189,28 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     scenario: selectedScenario.title
                 };
 
+                // add SDI to db
+                const allAnswered = userWillingness.every(w => w !== -1);
+                if (allAnswered) {
+                    createSdiScore.mutate({
+                        user_id: user.user_id,
+                        scenario: selectedScenario.title,
+                        user_willingness_1: userWillingness[0],
+                        user_willingness_2: userWillingness[1],
+                        user_willingness_3: userWillingness[2],
+                        user_willingness_4: userWillingness[3],
+                        user_willingness_5: userWillingness[4],
+                        timestamp: new Date()
+                    });
+                } else {
+                    console.warn("SDI score submission skipped: not all responses completed.");
+                }
+
                 setMessages((prev) => [...prev, finalMessage]);
                 createMessage.mutate(finalMessage)
                 setIsComplete(true);
                 setChatbotTyping(false);
+                setUserTyping(false);
             }, 1000);
         }
     }
@@ -232,7 +255,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     </div>
                 ))}
                 {chatbotTyping && <TypingIndicator/>}
-                {userTyping && <UserTypingIndicator />}
+                {userTyping && <UserTypingIndicator/>}
                 <div ref={messagesEndRef}/>
             </div>
 
