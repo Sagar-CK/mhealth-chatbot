@@ -11,8 +11,7 @@ import {useRouter} from "next/navigation"
 import {api} from "@/trpc/react"
 import {yushanStudy} from "@/lib/constants"
 import {User as UserType} from "@/server/api/models/user"
-import {mapWillingnessToNumber, stringifyWillingness, stringifyWillingnessSeverity} from "@/lib/utils"
-import type {QuestionStep} from "@/lib/sagar/types";
+import {mapWillingnessToNumber, stringifyWillingness} from "@/lib/utils"
 
 interface YushanChatInterfaceProps {
     scenarios: Scenario[];
@@ -71,6 +70,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     const [chatbotTyping, setChatbotTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
+    const [userWillingness, setUserWillingness] = useState<number[]>([-1, -1, -1, -1, -1]);
 
     const createMessage = api.messages.create.useMutation()
 
@@ -82,6 +82,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     useEffect(() => {
         if (selectedScenario?.steps.length > 0 && messages.length === 0) {
             setChatbotTyping(true);
+            setUserTyping(false);
             setTimeout(() => {
                 setMessages([{
                     id: `${selectedScenario.title}-0-bot`,
@@ -93,6 +94,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 },
                 ]);
                 setChatbotTyping(false);
+                setUserTyping(true);
             }, 1000);
         }
     }, [chatbotIndex, messages.length, user.user_id]);
@@ -105,54 +107,33 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         }
     }, [messages])
 
-
-    useEffect(() => {
-        const currentStepData = selectedScenario.steps[currentStep];
-        if (!isComplete && currentStepData.type === ResponseType.LikertWithRespond) {
-            setUserTyping(true);
-        }
-    }, [currentStep, selectedScenario, isComplete]);
-
     const renderResponseComponent = () => {
-        if (isComplete) return null;
+        if (isComplete) return null
 
-        const step = selectedScenario.steps[currentStep];
-        if (!step) return null;
-
-        if (step.type === ResponseType.LikertWithRespond) {
+        const likertWithRespondStep = selectedScenario.steps[currentStep]
+        if (likertWithRespondStep.type === ResponseType.LikertWithRespond) {
             return (
                 <LikertResponse
-                    question={step.likertQuestion || "Rate your willingness:"}
-                    scale={step.likertScale}
+                    question={likertWithRespondStep.likertQuestion || "Rate your willingness:"}
                     onSelect={(willingness) => {
                         setUserTyping(false);
                         const numericWillingness = mapWillingnessToNumber(willingness);
 
-                        createSdiScore.mutate(
-                            {
-                                user_id: user.user_id,
-                                scenario: selectedScenario.title,
-                                topic: step.topic,
-                                user_willingness: numericWillingness,
-                                timestamp: new Date(),
-                            },
-                            {
-                                onSuccess: () => {
-                                    handleResponse(
-                                        stringifyWillingness(
-                                            numericWillingness - 1,
-                                            step.userRespond,
-                                            step.topic
-                                        )
-                                    );
-                                },
-                            }
-                        );
+                        // update willingness
+                        const newWillingness = [...userWillingness];
+                        newWillingness[currentStep] = numericWillingness;
+                        setUserWillingness(newWillingness);
+
+                        // rander
+                        handleResponse(stringifyWillingness(
+                            numericWillingness - 1,
+                            likertWithRespondStep.userRespond,
+                            likertWithRespondStep.topic))
                     }}
+                    scale={likertWithRespondStep.likertScale}
                 />
             );
         }
-
         return null;
     };
 
@@ -179,6 +160,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         if (nextStep < selectedScenario.steps.length) {
             // Add next bot message after a short delay
             setChatbotTyping(true);
+            setUserTyping(false);
             setTimeout(() => {
                 const botMessage = {
                     id: `${selectedScenario.title}-${nextStep}-bot`,
@@ -193,6 +175,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
                 setChatbotTyping(false);
+                setUserTyping(true);
             }, 1000);
         } else {
             // Chat is complete
@@ -206,10 +189,28 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     scenario: selectedScenario.title
                 };
 
+                // add SDI to db
+                const allAnswered = userWillingness.every(w => w !== -1);
+                if (allAnswered) {
+                    createSdiScore.mutate({
+                        user_id: user.user_id,
+                        scenario: selectedScenario.title,
+                        user_willingness_1: userWillingness[0],
+                        user_willingness_2: userWillingness[1],
+                        user_willingness_3: userWillingness[2],
+                        user_willingness_4: userWillingness[3],
+                        user_willingness_5: userWillingness[4],
+                        timestamp: new Date()
+                    });
+                } else {
+                    console.warn("SDI score submission skipped: not all responses completed.");
+                }
+
                 setMessages((prev) => [...prev, finalMessage]);
                 createMessage.mutate(finalMessage)
                 setIsComplete(true);
                 setChatbotTyping(false);
+                setUserTyping(false);
             }, 1000);
         }
     }
