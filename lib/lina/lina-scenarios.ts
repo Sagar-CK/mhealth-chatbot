@@ -6,15 +6,13 @@ export const linaScenarios: Scenario[] = [
         steps: [
             {
                 question:
-                    "Hello! My name is Echo. I'm here to listen and help you explore your thoughts and feelings.\n" +
-                    "In some parts of this check-up, I will present a situation with only one possible response for you to select. " +
-                    "In other ones, I will ask questions where you need to answer how comfortable you would feel sharing information. " +
-                    "You can answer at your own pace, there are no right or wrong responses.\n" +
-                    "Let’s start with a simple situation. Let’s imagine something that might happen on a long day.\n\n" +
+                    "Hello! My name is Echo. I am here to listen and help you explore your thoughts and feelings.\n\n" +
+                    "In this check-in, we will talk about your mental health and how you have been feeling lately. You can click on the task instructions if you would like more information about what to expect.\n\n" +
+                    "Let’s start with a simple situation. Imagine it’s been a long day…\n\n" +
                     "You’ve had a heavy day, and you're just not feeling like yourself.\n\n" +
                     "How have you been feeling today?",
                 responseType: ResponseType.Select,
-                options: ["I’ve been feeling off today, but I haven’t really talked about it with anyone."],
+                options: ["I have been feeling off today, but I haven’t really talked about it with anyone."],
             },
             {
                 question:

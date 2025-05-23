@@ -214,8 +214,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                 </Avatar>
                             )}
 
-                            <Card className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
-                                <p>{message.text}</p>
+                            <Card className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"} break-words`}>
+                                <p className="whitespace-pre-wrap">{message.text}</p>
                             </Card>
 
                             {message.sender === "user" && (
