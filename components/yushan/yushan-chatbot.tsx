@@ -67,7 +67,6 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     const [messages, setMessages] = useState<Message[]>([])
     const [currentStep, setCurrentStep] = useState(0)
     const [isComplete, setIsComplete] = useState(false)
-    const [chatbotIndex] = useState<number>(Math.floor(Math.random() * 3));
     const [userTyping, setUserTyping] = useState(false)
     const [chatbotTyping, setChatbotTyping] = useState(false)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -75,21 +74,25 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
 
     const createMessage = api.messages.create.useMutation()
 
+    const chatbotIndex = Number(user.condition);
     const selectedScenario = scenarios[chatbotIndex];
 
     // Initialize with first bot message
     useEffect(() => {
         if (selectedScenario?.steps.length > 0 && messages.length === 0) {
-            setMessages([
-                {
+            setChatbotTyping(true);
+            setTimeout(() => {
+                setMessages([{
                     id: `${selectedScenario.title}-0-bot`,
                     sender: "bot",
                     text: selectedScenario.steps[0].question,
                     timestamp: new Date(),
                     user_id: user.user_id,
                     scenario: selectedScenario.title,
-                },
-            ]);
+                    },
+                ]);
+                setChatbotTyping(false);
+            }, 1000);
         }
     }, [chatbotIndex, messages.length, user.user_id]);
 
@@ -168,7 +171,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 createMessage.mutate(botMessage)
                 setCurrentStep(nextStep);
                 setChatbotTyping(false);
-            }, 500);
+            }, 1000);
         } else {
             // Chat is complete
             setTimeout(() => {
@@ -185,7 +188,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                 createMessage.mutate(finalMessage)
                 setIsComplete(true);
                 setChatbotTyping(false);
-            }, 500);
+            }, 1000);
         }
     }
 
@@ -228,7 +231,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                         </div>
                     </div>
                 ))}
-                {chatbotTyping && Number(user.condition) === 2 && <TypingIndicator/>}
+                {chatbotTyping && <TypingIndicator/>}
                 {userTyping && <UserTypingIndicator />}
                 <div ref={messagesEndRef}/>
             </div>
