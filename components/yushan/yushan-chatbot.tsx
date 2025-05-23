@@ -71,7 +71,6 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
     const [userWillingness, setUserWillingness] = useState<number[]>([-1, -1, -1, -1, -1]);
-
     const createMessage = api.messages.create.useMutation()
 
     const chatbotIndex = Number(user.condition);
@@ -123,8 +122,7 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                         const newWillingness = [...userWillingness];
                         newWillingness[currentStep] = numericWillingness;
                         setUserWillingness(newWillingness);
-
-                        // rander
+                        // render
                         handleResponse(stringifyWillingness(
                             numericWillingness - 1,
                             likertWithRespondStep.userRespond,
@@ -137,6 +135,27 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
         return null;
     };
 
+    useEffect(() => {
+        console.warn("✅ Updated userWillingness: ", userWillingness);
+
+        // add SDI to db
+        const allAnswered = userWillingness.every(w => w !== -1);
+        if (allAnswered) {
+            createSdiScore.mutate({
+                user_id: user.user_id,
+                scenario: selectedScenario.title,
+                user_willingness_1: userWillingness[0],
+                user_willingness_2: userWillingness[1],
+                user_willingness_3: userWillingness[2],
+                user_willingness_4: userWillingness[3],
+                user_willingness_5: userWillingness[4],
+                timestamp: new Date()
+            });
+            setIsComplete(true);
+        } else {
+            console.warn("SDI score submission skipped: not all responses completed.");
+        }
+    }, [userWillingness]);
 
     const handleResponse = async (response: string) => {
         // Add user response
@@ -188,27 +207,8 @@ export function YushanChatInterface({scenarios, user, height = "600px"}: YushanC
                     user_id: user.user_id,
                     scenario: selectedScenario.title
                 };
-
-                // add SDI to db
-                const allAnswered = userWillingness.every(w => w !== -1);
-                if (allAnswered) {
-                    createSdiScore.mutate({
-                        user_id: user.user_id,
-                        scenario: selectedScenario.title,
-                        user_willingness_1: userWillingness[0],
-                        user_willingness_2: userWillingness[1],
-                        user_willingness_3: userWillingness[2],
-                        user_willingness_4: userWillingness[3],
-                        user_willingness_5: userWillingness[4],
-                        timestamp: new Date()
-                    });
-                } else {
-                    console.warn("SDI score submission skipped: not all responses completed.");
-                }
-
                 setMessages((prev) => [...prev, finalMessage]);
                 createMessage.mutate(finalMessage)
-                setIsComplete(true);
                 setChatbotTyping(false);
                 setUserTyping(false);
             }, 1000);
