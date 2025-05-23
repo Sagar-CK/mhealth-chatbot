@@ -2,23 +2,28 @@ import { BotIcon } from "lucide-react";
 
 export default function LinaTaskInstructions() {
     return (
-        <div className="w-full h-full flex flex-col items-start justify-center gap-y-4 px-4 py-6 text-left text-base leading-relaxed max-w-xl">
+        <div
+            className="w-full h-full flex flex-col items-start justify-center gap-y-4 px-4 py-6 text-left text-base leading-relaxed max-w-xl">
             <div className="flex items-center gap-x-2 text-lg font-semibold">
-                <BotIcon />
+                <BotIcon/>
                 <span>Chatbot Task Instructions</span>
             </div>
 
             <p>
                 In the next part of the study, you will interact with a chatbot.
-                It will present questions to you and ask how willing you would be to share certain types of information.
+                It will present questions to you and ask how willing you would be to share certain
+                types of information.
             </p>
 
             <p>
                 Some questions will have only one response option, while others will use a scale.
+                You need to <strong>simply indicate your willingness to share</strong> information regarding that
+                question.
             </p>
 
             <p>
-                There are <strong>no right or wrong answers</strong>, please respond as honestly as you can.
+                There are no right or wrong answers; please respond as <strong>honestly</strong> as you
+                can.
             </p>
 
             <p>
@@ -26,7 +31,8 @@ export default function LinaTaskInstructions() {
             </p>
 
             <p>
-                You can <strong>revoke your consent at any time</strong> by clicking the <em>"Revoke Consent"</em> button at the top of the screen.
+                You can <strong>revoke your consent at any time</strong> by clicking the <em>"Revoke
+                Consent"</em> button at the top of the screen.
             </p>
         </div>
     );

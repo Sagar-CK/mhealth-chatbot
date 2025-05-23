@@ -6,7 +6,7 @@ export const linaScenarios: Scenario[] = [
         steps: [
             {
                 question:
-                    "Hello! My name is Echo. I'm here to listen and help you explore your thoughts and feelings.\n\n" +
+                    "Hello! I am you mental health chatbot. I am here to listen and help you explore your thoughts and feelings.\n\n" +
                     "In this check-in, we will talk about your mental health and how you have been feeling lately.\n\n" +
                     "Let’s begin whenever you’re ready.",
                 responseType: ResponseType.Select,
@@ -14,25 +14,25 @@ export const linaScenarios: Scenario[] = [
             },
             {
                 question:
-                    "Do you want to talk more about how you’re feeling right now?",
+                    "Could you describe your most pleasant situation today?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
                 question:
-                    "Have you been feeling stressed recently?",
+                    "How stressed do you feel right now?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
                 question:
-                    "Have you felt lonely at any point today?",
+                    "How lonely do you feel at the moment?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
                 question:
-                    "Have you experienced any strong emotions today?",
+                    "Could you describe your most unpleasant situation today?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
@@ -51,23 +51,23 @@ export const linaScenarios: Scenario[] = [
             {
                 question:
                     "Thank you for sharing. \n" +
-                    "Have you been interested in exploring new things?",
+                    "Have you been interested in new things?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
-                question: "Have you exercised at least once recently?",
+                question: "Did you exercise today?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
-                question: "Have you been dealing with your problems in a good way?",
+                question: "Have you been dealing with your problems well?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
                 question:
-                    "Have you been consuming alcohol or other substances to pass the time or cope with issues?",
+                    "What substances did you use last night and how much? (e.g., alcohol, cigarettes, soft drugs, hard drugs)",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
