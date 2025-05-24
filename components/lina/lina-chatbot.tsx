@@ -109,7 +109,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         const isLastQuestion = currentStep === currentScenario.steps.length - 1;
 
         if (currentStepscenario.responseType === ResponseType.Likert && !isLastQuestion) {
-            if (user.condition === '2') {
+            if (Number(user.condition) === 2) {
                 if (response === "Not willing") {
                     const notWillingMessages = [
                         "Thank you for your answer. I understand that it is not always easy to share information.",
@@ -132,7 +132,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             }
 
 
-            if (user.condition === '1') {
+            if (Number(user.condition) === 1) {
                 if (response === "Not willing") {
                     customResponse = "Thank you for your answer.";
                 } else {

@@ -12,9 +12,9 @@ interface LinaChatProps {
 }
 
 export function LinaChat({ user }: LinaChatProps) {
-    const scenariosToUse = user.condition === '2' ? linaScenarioEmpathetic : linaScenarios;
+    const scenariosToUse = Number(user.condition) === 2 ? linaScenarioEmpathetic : linaScenarios;
     const titleText =
-        user.condition === '2'
+        Number(user.condition) === 2
             ? 'Time for a quick mental check-in with Echo?'
             : 'Time for a quick mental check-in?';
 
