@@ -43,7 +43,7 @@ export const linaScenarios: Scenario[] = [
         steps: [
             {
                 question:
-                    "Now let’s imagine you've had a quiet day to yourself only. You’ve spent the day at home.\n\n" +
+                    "Now let’s imagine you have had a quiet day to yourself only. You have spent the day at home.\n\n" +
                     "Did you get a chance to do anything active or outdoors today?",
                 responseType: ResponseType.Select,
                 options: ["Not really, I stayed inside all day."],
