@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button"
 
 interface AudioMessageProps {
   audioUrl: string
+  onAudioComplete?: () => void
 }
 
-export function AudioMessage({ audioUrl }: AudioMessageProps) {
+export function AudioMessage({ audioUrl, onAudioComplete }: AudioMessageProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
+  const [hasCompletedOnce, setHasCompletedOnce] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -155,6 +157,12 @@ export function AudioMessage({ audioUrl }: AudioMessageProps) {
       // Only change the playing state, don't reset the currentTime
       setIsPlaying(false)
       // Keep currentTime at the end so the waveform stays fully colored
+
+      // Mark as completed and call the callback if provided
+      if (!hasCompletedOnce) {
+        setHasCompletedOnce(true)
+        onAudioComplete?.()
+      }
     }
 
     if (audio) {
@@ -170,14 +178,13 @@ export function AudioMessage({ audioUrl }: AudioMessageProps) {
         audio.removeEventListener("ended", handleEnded)
       }
     }
-  }, [])
+  }, [hasCompletedOnce, onAudioComplete])
 
   return (
     <div
       className="flex items-center bg-gray-50 rounded-full py-2 px-3 w-full max-w-md shadow-sm border border-gray-100"
       ref={containerRef}
     >
-      
       <Button
         variant="ghost"
         size="icon"

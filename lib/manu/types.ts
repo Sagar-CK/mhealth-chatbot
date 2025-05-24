@@ -13,7 +13,7 @@ export interface StatementStep {
   type: ResponseType.Statement
   text: string
   textAudio: string
-  options: string[]
+  option: string
 }
 
 export interface QuestionStep {
@@ -28,7 +28,7 @@ export interface QuestionStep {
       severity: Severity[]
     }
     message: string
-    audioUrl?: string
+    audioUrl: string
   }[]
 }
 
@@ -37,7 +37,8 @@ export type ChatStep = StatementStep | QuestionStep
 export interface Scenario {
   title: string
   steps: ChatStep[]
-  completionMessage?: string
+  completionMessage: string
+  completionAudio: string
 }
 
 export interface Message {
