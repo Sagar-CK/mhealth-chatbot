@@ -42,12 +42,18 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
 
             if (button) {
                 button.click();
-            } else if (attempts < 10) {
-                setTimeout(() => clickTaskInstructions(attempts + 1), 500);
+                return; // Stop trying once button is found
+            } else if (attempts < 50) { // Increased attempts and longer timeout
+                setTimeout(() => clickTaskInstructions(attempts + 1), 200); // More frequent checks
             }
         };
 
-        setTimeout(clickTaskInstructions, 1000);
+        // Wait longer before starting to look for the button
+        const timeoutId = setTimeout(() => {
+            clickTaskInstructions();
+        }, 2000); // Increased initial delay
+
+        return () => clearTimeout(timeoutId);
     }, []);
 
     // Initialize with first bot message
@@ -113,7 +119,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 if (response === "Not willing") {
                     const notWillingMessages = [
                         "Thank you for your answer. I understand that it is not always easy to share information.",
-                        "That’s completely okay. Everyone opens up at their own pace. I’m here when you're ready.",
+                        "That's completely okay. Everyone opens up at their own pace. I'm here when you're ready.",
                         "No pressure at all. Just know that you're not alone, I'm here to support you.",
                         "I respect your choice. Talking about personal things can be hard.",
                         "Thank you for your honesty. I'm here whenever you feel ready to share more."
@@ -125,7 +131,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
                         "It's great that you are open to talking. It can make a real difference in your well-being.",
                         "Thank you for trusting me, please know I'm here to help.",
-                        "I'm really glad you’re willing to share."
+                        "I'm really glad you're willing to share."
                     ];
                     customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
                 }
