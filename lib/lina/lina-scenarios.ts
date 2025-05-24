@@ -8,7 +8,7 @@ export const linaScenarios: Scenario[] = [
                 question:
                     "Hello! I am you mental health chatbot. I am here to listen and help you explore your thoughts and feelings.\n\n" +
                     "In this check-in, we will talk about your mental health and how you have been feeling lately.\n\n" +
-                    "Let’s begin whenever you’re ready.",
+                    "Let’s begin whenever you are ready.",
                 responseType: ResponseType.Select,
                 options: ["I am ready to share my feelings."],
             },
