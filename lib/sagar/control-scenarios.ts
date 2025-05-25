@@ -574,7 +574,7 @@ export const controlScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let's take a small pivot and talk about another part of your life - Work and Studies",
+        text: "Let's now talk about an important part of your life - Work and Studies",
         option: "Okay, I'm ready.",
       },
       {
