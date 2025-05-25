@@ -27,6 +27,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     const [isComplete, setIsComplete] = useState(false)
     const [currentScenarioIndex, setCurrentScenarioIndex] = useState(0)
     const [isTyping, setIsTyping] = useState(false)
+    const [likertQuestionCounter, setLikertQuestionCounter] = useState(0) // Track Likert question number
+    const [userResponsesData, setUserResponsesData] = useState<{[key: string]: number}>({}) // Store Likert responses
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
     const taskInstructionsRef = useRef<HTMLButtonElement>(null)
@@ -34,6 +36,26 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     const currentScenario = scenarios[currentScenarioIndex]
 
     const createMessage = api.messages.create.useMutation()
+    const createUserResponse = api.userResponses.create.useMutation({
+        onError: (error) => {
+            console.error('Failed to save user response:', error);
+        },
+        onSuccess: (data) => {
+            console.log('User response saved successfully:', data);
+        }
+    })
+
+    // Helper function to convert Likert response to number
+    const convertLikertToNumber = (response: string): number => {
+        const likertMap: {[key: string]: number} = {
+            "Not willing": 1,
+            "Slightly willing": 2,
+            "Moderately willing": 3,
+            "Very willing": 4,
+            "Extremely willing": 5
+        }
+        return likertMap[response] || 0;
+    }
 
     useEffect(() => {
         const clickTaskInstructions = (attempts = 0) => {
@@ -56,6 +78,13 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         return () => clearTimeout(timeoutId);
     }, []);
 
+    useEffect(() => {
+        const responseCount = Object.keys(userResponsesData).length;
+        if (responseCount === 8) {
+            saveUserResponses();
+        }
+    }, [userResponsesData]);
+
     // Initialize with first bot message
     useEffect(() => {
         if (currentScenario?.steps.length > 0 && messages.length === 0) {
@@ -74,7 +103,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 setIsTyping(false);
             }, 1500);
         }
-    }, [currentScenario, messages.length, user.user_id])
+    }, [currentScenario, messages.length, user.user_id]);
 
     // Auto-scroll to bottom of messages with smooth animation
     useEffect(() => {
@@ -92,192 +121,272 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         }
     }
 
-    const handleResponse = async (response: string) => {
-        // Add user response
-        const userMessage = {
-            id: `${currentScenario.title}-${currentStep}-user`,
-            sender: "user" as const,
-            text: response,
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title
-        };
+    // Function to save user responses to the database with provided data
+    const saveUserResponsesWithData = async (responseData: {[key: string]: number}) => {
+        try {
+            const dbResponseData = {
+                user_id: user.user_id,
+                user_condition: user.condition.toString(),
+                scenario: currentScenario.title,
+                // Initialize all Likert responses to 0
+                question_1_likert_response: 0,
+                question_2_likert_response: 0,
+                question_3_likert_response: 0,
+                question_4_likert_response: 0,
+                question_5_likert_response: 0,
+                question_6_likert_response: 0,
+                question_7_likert_response: 0,
+                question_8_likert_response: 0,
+                timestamp: new Date(),
+            };
 
-        setMessages((prev) => [...prev, userMessage]);
-        createMessage.mutate(userMessage)
-        scrollToBottom(); // Scroll after user response
-
-        // Add custom response for Likert scale
-        const currentStepscenario = currentScenario.steps[currentStep];
-        let customResponse = "";
-
-        // Check if this is the last question in the scenario
-        const isLastQuestion = currentStep === currentScenario.steps.length - 1;
-
-        if (currentStepscenario.responseType === ResponseType.Likert && !isLastQuestion) {
-            if (Number(user.condition) === 2) {
-                if (response === "Not willing") {
-                    const notWillingMessages = [
-                        "Thank you for your answer. I understand that it is not always easy to share information.",
-                        "That's completely okay. Everyone opens up at their own pace. I'm here when you're ready.",
-                        "No pressure at all. Just know that you're not alone, I'm here to support you.",
-                        "I respect your choice. Talking about personal things can be hard.",
-                        "Thank you for your honesty. I'm here whenever you feel ready to share more."
-                    ];
-                    customResponse = notWillingMessages[Math.floor(Math.random() * notWillingMessages.length)];
-                } else {
-                    const willingMessages = [
-                        "Thank you for agreeing to share with me. I'm here to listen to you and guide you to reflect on your mental health.",
-                        "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
-                        "It's great that you are open to talking. It can make a real difference in your well-being.",
-                        "Thank you for trusting me, please know I'm here to help.",
-                        "I'm really glad you're willing to share."
-                    ];
-                    customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
+            // Update Likert responses if they exist
+            Object.entries(responseData).forEach(([key, value]) => {
+                if (key.startsWith('question_')) {
+                    const questionNumber = key.split('_')[1];
+                    const responseKey = `question_${questionNumber}_likert_response`;
+                    dbResponseData[responseKey] = value;
                 }
+            });
+
+            try {
+                await createUserResponse.mutateAsync(dbResponseData);
+            } catch (error) {
+                console.error('Error saving response data:', error);
             }
-
-
-            if (Number(user.condition) === 1) {
-                if (response === "Not willing") {
-                    customResponse = "Thank you for your answer.";
-                } else {
-                    customResponse = "Thank you for your answer.";
-                }
-            }
-
-            if (customResponse) {
-                setIsTyping(true);
-                scrollToBottom(); // Scroll when typing starts
-                setTimeout(() => {
-                    const customBotMessage = {
-                        id: `${currentScenario.title}-${currentStep}-bot-custom`,
-                        sender: "bot" as const,
-                        text: customResponse,
-                        timestamp: new Date(),
-                        user_id: user.user_id,
-                        scenario: currentScenario.title
-                    };
-                    setMessages((prev) => [...prev, customBotMessage]);
-                    createMessage.mutate(customBotMessage);
-                    setIsTyping(false);
-                    scrollToBottom(); // Scroll after custom response
-
-                    // Move to next step after custom response
-                    const nextStep = currentStep + 1;
-                    if (nextStep < currentScenario.steps.length) {
-                        // Add next bot message after a delay
-                        setTimeout(() => {
-                            setIsTyping(true);
-                            scrollToBottom(); // Scroll when typing starts
-                            setTimeout(() => {
-                                const botMessage = {
-                                    id: `${currentScenario.title}-${nextStep}-bot`,
-                                    sender: "bot" as const,
-                                    text: currentScenario.steps[nextStep].question,
-                                    timestamp: new Date(),
-                                    user_id: user.user_id,
-                                    scenario: currentScenario.title
-                                };
-
-                                setMessages((prev) => [...prev, botMessage]);
-                                createMessage.mutate(botMessage)
-                                setCurrentStep(nextStep);
-                                setIsTyping(false);
-                                scrollToBottom(); // Scroll after bot message
-                            }, 1000);
-                        }, 500);
-                    } else {
-                        // Chat is complete
-                        setTimeout(() => {
-                            setIsTyping(true);
-                            scrollToBottom(); // Scroll when typing starts
-                            setTimeout(() => {
-                                const finalMessage = {
-                                    id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
-                                    sender: "bot" as const,
-                                    text: currentScenario.completionMessage || "Thank you for your responses!",
-                                    timestamp: new Date(),
-                                    user_id: user.user_id,
-                                    scenario: currentScenario.title
-                                };
-
-                                setMessages((prev) => [...prev, finalMessage]);
-                                createMessage.mutate(finalMessage)
-                                setIsComplete(true);
-                                setIsTyping(false);
-                                scrollToBottom(); // Scroll after final message
-                            }, 1000);
-                        }, 500);
-                    }
-                }, 1000);
-            }
+        } catch (error) {
+            console.error('Error in saveUserResponsesWithData:', error);
         }
+    }
 
-        // Move to next step if not a Likert response, if no custom response, or if it's the last question
-        if (currentStepscenario.responseType !== ResponseType.Likert || !customResponse || isLastQuestion) {
-            const nextStep = currentStep + 1;
-            if (nextStep < currentScenario.steps.length) {
-                setIsTyping(true);
-                scrollToBottom(); // Scroll when typing starts
-                setTimeout(() => {
-                    const botMessage = {
-                        id: `${currentScenario.title}-${nextStep}-bot`,
-                        sender: "bot" as const,
-                        text: currentScenario.steps[nextStep].question,
-                        timestamp: new Date(),
-                        user_id: user.user_id,
-                        scenario: currentScenario.title
-                    };
+// Keep the original function but modify it to use the new one
+    const saveUserResponses = async () => {
+        await saveUserResponsesWithData(userResponsesData);
+    }
 
-                    setMessages((prev) => [...prev, botMessage]);
-                    createMessage.mutate(botMessage)
-                    setCurrentStep(nextStep);
-                    setIsTyping(false);
-                    scrollToBottom(); // Scroll after bot message
-                }, 1000);
-            } else {
-                setIsTyping(true);
-                scrollToBottom(); // Scroll when typing starts
-                setTimeout(() => {
-                    const finalMessage = {
-                        id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
-                        sender: "bot" as const,
-                        text: currentScenario.completionMessage || "Thank you for your responses!",
-                        timestamp: new Date(),
-                        user_id: user.user_id,
-                        scenario: currentScenario.title
-                    };
+    const handleResponse = async (response: string) => {
+        try {
+            const userMessage = {
+                id: `${currentScenario.title}-${currentStep}-user`,
+                sender: "user" as const,
+                text: response,
+                timestamp: new Date(),
+                user_id: user.user_id,
+                scenario: currentScenario.title
+            };
 
-                    setMessages((prev) => [...prev, finalMessage]);
-                    createMessage.mutate(finalMessage)
-                    setIsComplete(true);
-                    setIsTyping(false);
-                    scrollToBottom(); // Scroll after final message
-                }, 1000);
+            setMessages((prev) => [...prev, userMessage]);
+            createMessage.mutate(userMessage);
+            scrollToBottom();
+
+            // Handle response data collection
+            const currentStepscenario = currentScenario.steps[currentStep];
+            const isLastQuestion = currentStep === currentScenario.steps.length - 1;
+
+            let updatedUserResponsesData = { ...userResponsesData };
+
+            if (currentStepscenario.responseType === ResponseType.Likert) {
+                const globalLikertNumber = (currentScenarioIndex * 4) + (currentStep - 1) + 1;
+                const numericResponse = convertLikertToNumber(response);
+
+                updatedUserResponsesData = {
+                    ...updatedUserResponsesData,
+                    [`question_${globalLikertNumber}`]: numericResponse
+                };
+
+                // Update state
+                setUserResponsesData(updatedUserResponsesData);
+
+                setLikertQuestionCounter(prev => prev + 1);
+            } else if (currentStepscenario.responseType === ResponseType.Select) {
+                updatedUserResponsesData = {
+                    ...updatedUserResponsesData,
+                    [`select_${currentScenarioIndex}_${currentStep}`]: 7
+                };
+                setUserResponsesData(updatedUserResponsesData);
             }
+
+            // Add custom response for Likert scale
+            let customResponse = "";
+
+            if (currentStepscenario.responseType === ResponseType.Likert && !isLastQuestion) {
+                if (Number(user.condition) === 2) {
+                    if (response === "Not willing") {
+                        const notWillingMessages = [
+                            "Thank you for your answer. I understand that it is not always easy to share information.",
+                            "That's completely okay. Everyone opens up at their own pace. I'm here when you're ready.",
+                            "No pressure at all. Just know that you're not alone, I'm here to support you.",
+                            "I respect your choice. Talking about personal things can be hard.",
+                            "Thank you for your honesty. I'm here whenever you feel ready to share more."
+                        ];
+                        customResponse = notWillingMessages[Math.floor(Math.random() * notWillingMessages.length)];
+                    } else {
+                        const willingMessages = [
+                            "Thank you for agreeing to share with me. I'm here to listen to you and guide you to reflect on your mental health.",
+                            "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
+                            "It's great that you are open to talking. It can make a real difference in your well-being.",
+                            "Thank you for trusting me, please know I'm here to help.",
+                            "I'm really glad you're willing to share."
+                        ];
+                        customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
+                    }
+                }
+
+                if (Number(user.condition) === 1) {
+                    if (response === "Not willing") {
+                        customResponse = "Thank you for your answer.";
+                    } else {
+                        customResponse = "Thank you for your answer.";
+                    }
+                }
+
+                if (customResponse) {
+                    setIsTyping(true);
+                    scrollToBottom();
+                    setTimeout(() => {
+                        const customBotMessage = {
+                            id: `${currentScenario.title}-${currentStep}-bot-custom`,
+                            sender: "bot" as const,
+                            text: customResponse,
+                            timestamp: new Date(),
+                            user_id: user.user_id,
+                            scenario: currentScenario.title
+                        };
+                        setMessages((prev) => [...prev, customBotMessage]);
+                        createMessage.mutate(customBotMessage);
+                        setIsTyping(false);
+                        scrollToBottom();
+
+                        // Move to next step after custom response
+                        const nextStep = currentStep + 1;
+
+                        if (nextStep < currentScenario.steps.length) {
+                            // Add next bot message after a delay
+                            setTimeout(() => {
+                                setIsTyping(true);
+                                scrollToBottom();
+                                setTimeout(() => {
+                                    const botMessage = {
+                                        id: `${currentScenario.title}-${nextStep}-bot`,
+                                        sender: "bot" as const,
+                                        text: currentScenario.steps[nextStep].question,
+                                        timestamp: new Date(),
+                                        user_id: user.user_id,
+                                        scenario: currentScenario.title
+                                    };
+
+                                    setMessages((prev) => [...prev, botMessage]);
+                                    createMessage.mutate(botMessage)
+                                    setCurrentStep(nextStep);
+                                    setIsTyping(false);
+                                    scrollToBottom();
+                                }, 1000);
+                            }, 500);
+                        } else {
+                            setTimeout(() => {
+                                setIsTyping(true);
+                                scrollToBottom();
+                                setTimeout(() => {
+                                    const finalMessage = {
+                                        id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+                                        sender: "bot" as const,
+                                        text: currentScenario.completionMessage || "Thank you for your responses!",
+                                        timestamp: new Date(),
+                                        user_id: user.user_id,
+                                        scenario: currentScenario.title
+                                    };
+
+                                    setMessages((prev) => [...prev, finalMessage]);
+                                    createMessage.mutate(finalMessage)
+                                    setIsComplete(true);
+                                    setIsTyping(false);
+                                    scrollToBottom();
+
+                                    saveUserResponsesWithData(updatedUserResponsesData);
+                                }, 1000);
+                            }, 500);
+                        }
+                    }, 1000);
+                }
+            }
+
+            // Move to next step if not a Likert response, if no custom response, or if it's the last question
+            if (currentStepscenario.responseType !== ResponseType.Likert || !customResponse || isLastQuestion) {
+                const nextStep = currentStep + 1;
+
+                if (nextStep < currentScenario.steps.length) {
+                    setIsTyping(true);
+                    scrollToBottom();
+                    setTimeout(() => {
+                        const botMessage = {
+                            id: `${currentScenario.title}-${nextStep}-bot`,
+                            sender: "bot" as const,
+                            text: currentScenario.steps[nextStep].question,
+                            timestamp: new Date(),
+                            user_id: user.user_id,
+                            scenario: currentScenario.title
+                        };
+
+                        setMessages((prev) => [...prev, botMessage]);
+                        createMessage.mutate(botMessage)
+                        setCurrentStep(nextStep);
+                        setIsTyping(false);
+                        scrollToBottom();
+                    }, 1000);
+                } else {
+                    setIsTyping(true);
+                    scrollToBottom();
+                    setTimeout(() => {
+                        const finalMessage = {
+                            id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
+                            sender: "bot" as const,
+                            text: currentScenario.completionMessage || "Thank you for your responses!",
+                            timestamp: new Date(),
+                            user_id: user.user_id,
+                            scenario: currentScenario.title
+                        };
+
+                        setMessages((prev) => [...prev, finalMessage]);
+                        createMessage.mutate(finalMessage)
+                        setIsComplete(true);
+                        setIsTyping(false);
+                        scrollToBottom();
+
+                        saveUserResponsesWithData(updatedUserResponsesData);
+                    }, 1000);
+                }
+            }
+        } catch (error) {
+            console.error('Error in handleResponse:', error);
         }
     }
 
     const renderResponseComponent = () => {
-        if (isComplete) return null
+        if (isComplete) {
+            return null;
+        }
 
-        const currentStepscenario = currentScenario.steps[currentStep]
+        const currentStepscenario = currentScenario.steps[currentStep];
 
         switch (currentStepscenario.responseType) {
             case ResponseType.Select:
-                return <SelectResponse options={currentStepscenario.options || []} onSelect={handleResponse} />
+                return (
+                    <SelectResponse
+                        options={currentStepscenario.options || []}
+                        onSelect={handleResponse}
+                    />
+                );
             case ResponseType.Likert:
                 return (
                     <LikertResponse
-                        key={`likert-${currentStep}`}
+                        key={`likert-${currentScenarioIndex}-${currentStep}`}
                         question={currentStepscenario.likertQuestion || "Rate your willingness to share regarding this question:"}
-                        onSelect={handleResponse}
+                        onSelect={(response) => handleResponse(response)}
                         scale={(currentStepscenario.likertScale === 5 ? 5 : 7)}
                     />
-                )
+                );
             default:
-                return null
+                return null;
         }
     }
 
@@ -297,6 +406,9 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             ])
             setCurrentStep(0)
             setIsComplete(false)
+            // Reset Likert tracking for new scenario
+            setLikertQuestionCounter(0)
+            setUserResponsesData({})
         } else {
             // All scenarios complete, navigate to completion page
             router.push(`/completion?study_id=${linaStudy}&uid=${user.user_id}`)

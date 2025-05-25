@@ -3,12 +3,14 @@ import { usersRouter } from "./routes/users";
 import { messagesRouter } from "./routes/messages";
 import { selfDisclosureRouter } from "./routes/self-disclosure";
 import { sdiScoreRouter } from "./routes/sdi-score";
+import { userResponsesRouter } from "./routes/user-responses";
 
 export const appRouter = createTRPCRouter({
     users: usersRouter,
     messages: messagesRouter,
     selfDisclosure: selfDisclosureRouter,
     sdiScore:sdiScoreRouter,
+    userResponses: userResponsesRouter,
 })
 
 // export type definition of API
