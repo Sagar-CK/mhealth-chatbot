@@ -145,7 +145,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 if (key.startsWith('question_')) {
                     const questionNumber = key.split('_')[1];
                     const responseKey = `question_${questionNumber}_likert_response`;
-                    dbResponseData[responseKey] = value;
+                    (dbResponseData as any)[responseKey] = value;
                 }
             });
 
