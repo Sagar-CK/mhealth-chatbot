@@ -287,7 +287,7 @@ export const anthroScenarios: Scenario[] = [
       },
     ],
     completionMessage:
-      "I appreciate your responses on your tastes and interests! 💪 We will now move onto the next scenario.",
+      "I appreciate your responses on your tastes and interests! 💪",
   },
   {
     title: "Interpersonal Relations and Self-Concept",
@@ -566,14 +566,14 @@ export const anthroScenarios: Scenario[] = [
       },
     ],
     completionMessage:
-      "You did a great job reflecting on relationships and self-concept! 🎉 We will now move onto the next scenario.",
+      "You did a great job reflecting on relationships and self-concept! 🎉 ",
   },
   {
     title: "Work or Studies",
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let's now take a small pivot and talk about another part of your life - Work and Studies",
+        text: "Let's now talk about an important part of your life - Work and Studies",
         option: "Okay, I'm ready.",
       },
       {
@@ -854,6 +854,6 @@ export const anthroScenarios: Scenario[] = [
       
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. You can click the button below to complete the task! 🤗",
+      "Thank you for sharing your thoughts about work and studies! Your reflections matter. 🎉",
   },
 ];
