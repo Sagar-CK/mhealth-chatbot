@@ -6,7 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Volume2, BotMessageSquareIcon, User } from "lucide-react"
 import { api } from "@/trpc/react"
 import type { User as UserType } from "@/server/api/models/user"
-import {type Scenario,type Message,ResponseType,type QuestionStep,type StatementStep,Severity} from "@/lib/manu/types"
+import {
+  type Scenario,
+  type Message,
+  ResponseType,
+  type QuestionStep,
+  type StatementStep,
+  Severity,
+} from "@/lib/manu/types"
 import { Card } from "@/components/ui/card"
 import { mapWillingnessToNumber, stringifyWillingnessSeverity } from "@/lib/utils"
 import { LikertResponse } from "../chat/likert-response"
@@ -14,6 +21,7 @@ import { SelectResponse } from "../chat/select-response"
 import { manuStudy } from "@/lib/constants"
 import { useRouter } from "next/navigation"
 import { AudioMessage } from "@/components/ui/audio-message"
+import { PrivacyPolicyPopup } from "@/components/manu/privacy-popup"
 
 interface AudioChatInterfaceProps {
   scenarios: Scenario[]
@@ -21,7 +29,7 @@ interface AudioChatInterfaceProps {
   height?: string
 }
 
-// Add TypingIndicator component
+// Add TypingIndicator
 const TypingIndicator = () => {
   return (
     <div className="flex items-center gap-2">
@@ -61,13 +69,15 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
   const [questionState, setQuestionState] = useState<QuestionState>({})
   const [isTyping, setIsTyping] = useState(false)
   const [isComplete, setIsComplete] = useState(false)
+  const [showPrivacyPopup, setShowPrivacyPopup] = useState(true)
+  const [responseInProgress, setResponseInProgress] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
   const currentScenario = scenarios[currentScenarioNo]
   const createSelfDisclosure = api.selfDisclosure.create.useMutation()
 
-  // Initialize with first bot message
+  // Initialize with first bot message only after privacy policy is accepted
   useEffect(() => {
     if (currentScenario?.steps.length > 0 && messages.length === 0) {
       const firstStep = currentScenario.steps[0]
@@ -97,14 +107,18 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
     }
   }, [messages])
 
+  const handlePrivacyPolicyConfirm = () => {
+    setShowPrivacyPopup(false)
+  }
+
   const renderResponseComponent = () => {
-    if (isComplete) return null
+    if (isComplete || responseInProgress) return null
 
     const currentStepData = currentScenario.steps[currentStepNo]
 
     if (currentStepData.type === ResponseType.Statement) {
       const statementStep = currentStepData as StatementStep
-      return <SelectResponse options={statementStep.options} onSelect={handleResponse} />
+      return <SelectResponse options={[statementStep.option]} onSelect={handleResponse} />
     } else if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
 
@@ -159,6 +173,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
 
   const handleResponse = async (response: string) => {
     const currentStepData = currentScenario.steps[currentStepNo]
+    setResponseInProgress(true)
 
     if (currentStepData.type === ResponseType.Question) {
       const questionStep = currentStepData as QuestionStep
@@ -200,7 +215,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
         const botMessage = {
           id: crypto.randomUUID(),
           sender: "bot" as const,
-          text: matchingResponse.message,
+          text: matchingResponse.audioUrl,
           timestamp: new Date(),
           user_id: user.user_id,
           scenario: currentScenario.title,
@@ -213,33 +228,11 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
       // Move to next step
       const nextStep = currentStepNo + 1
       if (nextStep < currentScenario.steps.length) {
-        // Reset question state before moving to next step
-        setQuestionState({})
-
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the message
-          setTimeout(() => {
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text:
-                nextStepData.type === ResponseType.Statement
-                  ? (nextStepData as StatementStep).textAudio
-                  : (nextStepData as QuestionStep).questionAudio,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title,
-            }
-
-            setMessages((prev) => [...prev, nextBotMessage])
-            setCurrentStepNo(nextStep)
-            setIsTyping(false)
-          }, 2000)
-        } else {
-          // For other conditions, show message immediately
+        setIsTyping(true)
+        // Show typing indicator for 2 seconds before showing the message
+        setTimeout(() => {
           const nextStepData = currentScenario.steps[nextStep]
+
           const nextBotMessage = {
             id: crypto.randomUUID(),
             sender: "bot" as const,
@@ -254,17 +247,19 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
 
           setMessages((prev) => [...prev, nextBotMessage])
           setCurrentStepNo(nextStep)
-        }
+          // Reset question state before moving to next step
+          setQuestionState({})
+          setIsTyping(false)
+          setResponseInProgress(false)
+        }, 2000)
       } else {
-        // Handle completion
-        if (Number(user.condition) === 2) {
           setIsTyping(true)
           // Show typing indicator for 2 seconds before showing the final message
           setTimeout(() => {
             const finalMessage = {
               id: crypto.randomUUID(),
               sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
+              text: currentScenario.completionAudio,
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title,
@@ -273,20 +268,8 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
             setMessages((prev) => [...prev, finalMessage])
             setIsComplete(true)
             setIsTyping(false)
+            setResponseInProgress(false)
           }, 2000)
-        } else {
-          const finalMessage = {
-            id: crypto.randomUUID(),
-            sender: "bot" as const,
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title,
-          }
-
-          setMessages((prev) => [...prev, finalMessage])
-          setIsComplete(true)
-        }
       }
     } else {
       // Handle statement responses
@@ -304,29 +287,9 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
       // Move to next step
       const nextStep = currentStepNo + 1
       if (nextStep < currentScenario.steps.length) {
-        if (Number(user.condition) === 2) {
-          setIsTyping(true)
-          // Show typing indicator for 2 seconds before showing the message
-          setTimeout(() => {
-            const nextStepData = currentScenario.steps[nextStep]
-            const nextBotMessage = {
-              id: crypto.randomUUID(),
-              sender: "bot" as const,
-              text:
-                nextStepData.type === ResponseType.Statement
-                  ? (nextStepData as StatementStep).textAudio
-                  : (nextStepData as QuestionStep).questionAudio,
-              timestamp: new Date(),
-              user_id: user.user_id,
-              scenario: currentScenario.title,
-            }
-
-            setMessages((prev) => [...prev, nextBotMessage])
-            setCurrentStepNo(nextStep)
-            setIsTyping(false)
-          }, 2000)
-        } else {
-          // For other conditions, show message immediately
+        setIsTyping(true)
+        // Show typing indicator for 2 seconds before showing the message
+        setTimeout(() => {
           const nextStepData = currentScenario.steps[nextStep]
           const nextBotMessage = {
             id: crypto.randomUUID(),
@@ -342,17 +305,17 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
 
           setMessages((prev) => [...prev, nextBotMessage])
           setCurrentStepNo(nextStep)
-        }
+          setIsTyping(false)
+          setResponseInProgress(false)
+        }, 2000)
       } else {
-        // Handle completion
-        if (Number(user.condition) === 2) {
           setIsTyping(true)
           // Show typing indicator for 2 seconds before showing the final message
           setTimeout(() => {
             const finalMessage = {
               id: crypto.randomUUID(),
               sender: "bot" as const,
-              text: currentScenario.completionMessage || "Thank you for your responses!",
+              text: currentScenario.completionAudio,
               timestamp: new Date(),
               user_id: user.user_id,
               scenario: currentScenario.title,
@@ -361,48 +324,25 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
             setMessages((prev) => [...prev, finalMessage])
             setIsComplete(true)
             setIsTyping(false)
+            setResponseInProgress(false)
           }, 2000)
-        } else {
-          const finalMessage = {
-            id: crypto.randomUUID(),
-            sender: "bot" as const,
-            text: currentScenario.completionMessage || "Thank you for your responses!",
-            timestamp: new Date(),
-            user_id: user.user_id,
-            scenario: currentScenario.title,
-          }
-
-          setMessages((prev) => [...prev, finalMessage])
-          setIsComplete(true)
         }
       }
     }
-  }
 
   const nextOrCompleteScenario = () => {
     if (currentScenarioNo < scenarios.length - 1) {
+      // Show privacy policy popup for next scenario
+      if (Number(user.condition) === 2) {
+        setShowPrivacyPopup(true)
+      }
+
       // Move to next scenario
       setCurrentScenarioNo((prev) => prev + 1)
-      const nextScenario = scenarios[currentScenarioNo + 1]
-      const firstStep = nextScenario.steps[0]
-      // Check if this is working
-      const messageText =
-        firstStep.type === ResponseType.Statement
-          ? (firstStep as StatementStep).textAudio
-          : (firstStep as QuestionStep).questionAudio
-
-      setMessages([
-        {
-          id: crypto.randomUUID(),
-          sender: "bot",
-          text: messageText,
-          timestamp: new Date(),
-          user_id: user.user_id,
-          scenario: nextScenario.title,
-        },
-      ])
+      setMessages([]) // Clear messages for new scenario
       setCurrentStepNo(0)
       setIsComplete(false)
+      setQuestionState({})
     } else {
       // All scenarios complete, navigate to completion page
       router.push(`/completion?study_id=${manuStudy}&uid=${user.user_id}`)
@@ -410,66 +350,80 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
   }
 
   return (
-    <div className="flex flex-col rounded-lg border shadow-sm overflow-auto bg-background" style={{ height }}>
-      <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700">
-        <Volume2 className="h-5 w-5" />
-        <p className="text-sm font-medium">Please ensure your speakers are working </p>
-      </div>
+    <>
+      {Number(user.condition) === 2 && (
+        <PrivacyPolicyPopup
+          isOpen={showPrivacyPopup}
+          onConfirm={handlePrivacyPolicyConfirm}
+          audioUrl="audioFilesManu/welcome.mp3" // Replace with actual privacy policy audio URL
+        />
+      )}
 
-    <div className="flex items-center gap-3 px-4 py-3 m-4 bg-blue-50 border border-blue-200 rounded-md text-blue-700 shadow-sm">
-      <Volume2 className="h-5 w-5 text-blue-500" />
-      <p className="text-sm font-medium text-blue-700">Please listen to the privacy policy first</p>
-      <div className="ml-auto">
-        <AudioMessage audioUrl="/path-to-privacy-policy-audio.mp3" />
-      </div>
-    </div>
+      <div className="flex flex-col rounded-lg border shadow-sm overflow-auto bg-background" style={{ height }}>
+        <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700">
+          <Volume2 className="h-5 w-5" />
+          <p className="text-sm font-medium">Please ensure your speakers are working</p>
+        </div>
 
-      <div
-        ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
-        style={{ scrollBehavior: "smooth" }}
-      >
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
-          >
-            <div className="flex items-center gap-2 max-w-[80%]">
-              {message.sender === "bot" && (
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
-                    <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
-                  </Avatar>
-                  <AudioMessage audioUrl={message.text}/>
-                </div>
-              )}
-
-              {message.sender === "user" && (
-                <>
-                  <Avatar className="h-8 w-8 bg-secondary flex items-center justify-center shrink-0">
-                    <User className="h-4 w-4 text-secondary-foreground" />
-                  </Avatar>
-                  <Card className={`p-3 bg-primary text-primary-foreground`}>
-                    <p>{message.text}</p>
-                  </Card>
-                </>
-              )}
-            </div>
+      {Number(user.condition) === 2 && (
+            <div className="flex items-center gap-3 px-4 py-3 m-4 bg-blue-50 border border-blue-200 rounded-md text-blue-700 shadow-sm">
+          <Volume2 className="h-5 w-5 text-blue-500" />
+          <p className="text-sm font-medium text-blue-700">If you have any doubts about the privacy policy, you can listen to it again here.</p>
+          <div className="ml-auto">
+            <AudioMessage audioUrl="/path-to-privacy-policy-audio.mp3" />
           </div>
-        ))}
-        {isTyping && Number(user.condition) === 2 && <TypingIndicator />}
-        <div ref={messagesEndRef} />
-      </div>
+        </div>
+      )}
 
-      <div className="p-4 border-t bg-card">
-        {isComplete ? (
-          <Button onClick={nextOrCompleteScenario} className="w-full">
-            {currentScenarioNo === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
-          </Button>
-        ) : (
-          renderResponseComponent()
-        )}
-      </div>
+        <>
+          <div
+            ref={messagesContainerRef}
+            className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-300 p-4 space-y-4 bg-muted/20"
+            style={{ scrollBehavior: "smooth" }}
+          >
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender === "bot" ? "justify-start" : "justify-end"} animate-fade-in`}
+              >
+                <div className="flex items-center gap-2 max-w-[80%]">
+                  {message.sender === "bot" && (
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
+                        <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
+                      </Avatar>
+                      <AudioMessage audioUrl={message.text} />
+                    </div>
+                  )}
+
+                  {message.sender === "user" && (
+                    <>
+                      <Avatar className="h-8 w-8 bg-secondary flex items-center justify-center shrink-0">
+                        <User className="h-4 w-4 text-secondary-foreground" />
+                      </Avatar>
+                      <Card className={`p-3 bg-primary text-primary-foreground`}>
+                        <p>{message.text}</p>
+                      </Card>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+            {isTyping && <TypingIndicator />}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div className="p-4 border-t bg-card">
+            {isComplete ? (
+              <Button onClick={nextOrCompleteScenario} className="w-full">
+                {currentScenarioNo === scenarios.length - 1 ? "Complete Task" : "Next Scenario"}
+              </Button>
+            ) : (
+              renderResponseComponent()
+            )}
+          </div>
+        </>
     </div>
+  </>
   )
 }

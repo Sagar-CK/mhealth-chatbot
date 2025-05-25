@@ -4,179 +4,632 @@ import { Severity } from "@/lib/manu/types";
 export const manuScenarios: Scenario[] = [
   {
     title: "Tastes and Interests",
-  //   steps: [
-  //     {
-  //       type: ResponseType.Statement,
-  //       text: "Let's talk about mental health and well-being. How would you like to proceed?",
-  //       textAudio: "/audioFilesManu/welcome.mp3",
-  //       options: [
-  //         "I'm comfortable discussing my mental health",
-  //       ]
-  //     },
-  //     {
-  //       type: ResponseType.Question,
-  //       question: "How often do you experience feelings of anxiety or sadness?",
-  //       questionAudio: "",
-  //       severity: Severity.Medium,
-  //       likertScale: 5,
-  //       responses: [
-  //         {
-  //           conditions: {
-  //             willingness: [1, 2],
-  //             severity: [Severity.Low],
-  //           },
-  //           message: "I understand this might be difficult to discuss. Would you like to talk about general stress management instead?"
-  //         },
-  //         {
-  //           conditions: {
-  //             willingness: [2, 3],
-  //             severity: [Severity.Medium],
-  //           },
-  //           message: "Thank you for sharing. How do you typically cope with these feelings?"
-  //         },
-  //         {
-  //           conditions: {
-  //             willingness: [3, 4, 5],
-  //             severity: [Severity.High],
-  //           },
-  //           message: "I appreciate your openness. Have you considered speaking with a mental health professional about this?"
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       type: ResponseType.Statement,
-  //       textAudio: "What activities do you find most helpful for managing stress?",
-  //       text: "",
-  //       options: [
-  //         "Exercise and physical activity",
-  //       ]
-  //     }
-  //   ],
-  //   completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being."
-  // }
   steps: [
   {
     type: ResponseType.Statement,
-    text: "Let’s talk about personal interests and how they impact our well-being.",
-    textAudio: "",
-    options: ["Sure, I am comfortable discussing my interests"]
+    text: "Lets talk about personal interests and how they impact our well-being.",
+    textAudio: "audioFilesManu/Scenario1/Scenario1-Step1.mp3",
+    option: "Sure, I am comfortable discussing my interests"
   },
   {
     type: ResponseType.Statement,
     text: "How do you like to spend your free time? What activities do you enjoy?",
-    textAudio: "",
-    options: ["I enjoy spending time with friends as well as alone time."]
+    textAudio: "audioFilesManu/Scenario1/Scenario1-Step2.mp3",
+    option: "I enjoy spending time with friends as well as alone time."
   },
   {
     type: ResponseType.Question,
     question: "What types of social environments do you find most comforting or energizing?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario1/Scenario1-Step3.mp3",
     severity: Severity.Low,
     likertScale: 5,
     responses: [
-      {
+          // LOW SEVERITY
+          {
             conditions: {
-              willingness: [1, 2],
+              willingness: [1],
               severity: [Severity.Low],
             },
-            message: "I understand this might be difficult to discuss but talking about it could help."
+            message:
+              "It is acceptable if you are not prepared to explore social settings at this time. We can proceed at your preferred pace.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering the question. Reflection on social preferences can be beneficial.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to reflect on social energizing factors is noted. Such insights can be valuable.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may require vulnerability. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response4.mp3",
           },
           {
             conditions: {
               willingness: [2, 3],
               severity: [Severity.Medium],
             },
-            message: "Thank you for sharing something personal"
+            message:
+              "Thank you for considering your social environment preferences. This reflection is meaningful.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response5.mp3",
           },
           {
             conditions: {
-              willingness: [3, 4, 5],
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your willingness to reflect on social comfort is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
               severity: [Severity.High],
             },
-            message: "I appreciate your openness despite such a sensitive question"
-          }
-        ]
+            message:
+              "This is a personal topic. There is no obligation to share information at this time.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Your consideration of this question is acknowledged. Reflection on social safety can be significant.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for engaging with this personal reflection. Understanding social safety factors can be beneficial.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response9.mp3",
+          },
+        ],
+
   },
   {
     type: ResponseType.Statement,
     text: "Have you ever felt overwhelmed or disagreed with someone in a social setting?",
-    textAudio: "",
-    options: ["Yes, there have been times when I felt overwhelmed in social situations."]
+    textAudio: "audioFilesManu/Scenario1/Scenario1-Step4.mp3",
+    option: "Yes, there have been times when I felt overwhelmed in social situations."
 
   },
   {
     type: ResponseType.Question,
     question: "Have you ever felt emotionally triggered by people that you strongly disagreed with socially?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario1/Scenario1-Step5.mp3",
     severity: Severity.High,
     likertScale: 5,
-    responses: []
+    responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "If this topic causes discomfort, that is understandable. We can proceed at your preferred pace.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Social disagreements can have various impacts.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness is acknowledged. Social tensions can have emotional implications.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may be challenging. There is no requirement to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Emotional responses to disagreement are common.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on emotionally triggering social conflict demonstrates self-awareness.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This question may evoke significant emotions. There is no obligation to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Your consideration of this question is acknowledged. Reflection on emotional triggers is meaningful.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for engaging with this topic. Reflection on emotional triggers can be significant.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response9.mp3",
+          },
+        ],
   },
   {
     type: ResponseType.Statement,
     text: "What about during your alone time? Do you have any hobbies or activities that you enjoy doing alone?",
-    textAudio: "",
-    options: ["I enjoy reading, watching movies, and spending time with friends."]
+    textAudio: "audioFilesManu/Scenario1/Scenario1-Step6.mp3",
+    option: "I enjoy reading, watching movies, and spending time with friends."
   },
   {
     type: ResponseType.Question,
     question: "Are there certain types of music, shows, or stories that you avoid because they affect your mood negatively?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario1/Scenario1-Step7.mp3",
     severity: Severity.Medium,
     likertScale: 5,
-    responses: []
+    responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to reflect on this topic at this time.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Media content can have various emotional impacts.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to consider medias emotional impact is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may evoke various emotions. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering how content affects your emotional state. This reflection is meaningful.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your engagement with this question is noted. Awareness of emotional triggers in media is significant.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This topic may evoke personal memories. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Content avoidance can be a form of emotional protection.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your reflection on medias emotional impact demonstrates insight. Thank you for your engagement.",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response9.mp3",
+          },
+        ],
   },
 ],
-  completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being."
+  completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
+  completionAudio: "audioFilesManu/ScenarioCompletion.mp3"
   },
   {
     title: "Interpersonal Relations and Self-Concept",
     steps: [
       {
     type: ResponseType.Statement,
-    text: "Let’s now take a moment to reflect on your relationships with others and yourself.",
-    textAudio: "",
-    options: ["Yes, I'm okay with that."]
+    text: "Lets now take a moment to reflect on your relationships with others and yourself.",
+    textAudio: "audioFilesManu/Scenario2/Scenario2-Step1.mp3",
+    option: "Yes, Im okay with that."
   },
   {
     type: ResponseType.Statement,
     text: "Have you ever fallen out of touch or lost someone in the past?",
-    textAudio: "",
-    options: ["Yes, I have lost people in the past"]
+    textAudio: "audioFilesManu/Scenario2/Scenario2-Step2.mp3",
+    option: "Yes, I have lost people in the past"
   },
   {
     type: ResponseType.Question,
     question: "Do you ever feel a sense of loss or longing when you think about them?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario2/Scenario2-Step3.mp3",
     severity: Severity.Low,
     likertScale: 5,
-    responses: []
+    responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to explore feelings of loss at this time.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering these emotions. Such reflections can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to reflect on feelings of longing is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Reflection on loss can be challenging. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this complex topic. Your engagement is meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on feelings of loss demonstrates emotional awareness. This is significant.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This is a personal topic. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on loss requires emotional awareness.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this personal topic is acknowledged. Such reflection can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response9.mp3",
+          },
+        ],
   },
   {
     type: ResponseType.Question,
     question: "Have past experiences in relationships ever left you feeling emotionally hurt or let down?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario2/Scenario2-Step4.mp3",
     severity: Severity.High,
     likertScale: 5,
-    responses: []
+    responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to reflect on relationship experiences at this time.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Reflection on past relationships can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to explore past experiences is noted. This awareness can support growth.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may be sensitive. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Reflection on emotional experiences is meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on difficult experiences demonstrates resilience. This is significant.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This question may evoke strong emotions. There is no obligation to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on emotional hurt requires courage.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this topic is acknowledged. Reflection on past emotional experiences can be significant.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response9.mp3",
+          },
+        ],
   },
   {
     type: ResponseType.Statement,
     text: "Those feelings can run deep. Sometimes looking back reminds us of who we are. Let’s look at the present now.",
-    textAudio: "",
-    options: ["Yes, I would like to talk about something more positive"]
+    textAudio: "audioFilesManu/Scenario2/Scenario2-Step5.mp3",
+    option: "Yes, I would like to talk about something more positive."
   },
   {
     type: ResponseType.Question,
     question: "What is something you’ve done recently that made you feel genuinely proud or emotionally fulfilled?",
-    questionAudio: "",
+    questionAudio: "audioFilesManu/Scenario2/Scenario2-Step6.mp3",
     severity: Severity.Medium,
     likertScale: 5,
-    responses: []
+    responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to reflect on this topic at this time.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Even small achievements can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to reflect on achievements is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Reflection on achievements can be challenging. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Moments of fulfillment deserve attention.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on meaningful experiences is noted. This awareness is significant.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This question may be challenging. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on fulfillment can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this topic is acknowledged. Understanding sources of fulfillment is significant.",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response9.mp3",
+          },
+        ],
   },
 
     ],
-    completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being."
+    completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
+    completionAudio: "audioFilesManu/ScenarioCompletion.mp3"
   },
 
   {
@@ -185,56 +638,314 @@ export const manuScenarios: Scenario[] = [
       {
         type: ResponseType.Statement,
         text: "Let’s now take a small pivot and talk about another part of your life - Work and Studies",
-        textAudio: "",
-        options: ["Okay, I’m ready."]
+        textAudio: "audioFilesManu/Scenario3/Scenario3-Step1.mp3",
+        option: "Okay, I’m ready."
       },
       {
         type: ResponseType.Statement,
         text: "What do you think is the most valuable piece of advice to someone studying or working?",
-        textAudio: "",
-        options: ["Staying mentally balanced and have a healthy work life balance."]
+        textAudio: "audioFilesManu/Scenario3/Scenario3-Step2.mp3",
+        option: "Staying mentally balanced and have a healthy work life balance."
       },
       {
         type: ResponseType.Question,
         question: "What personal strengths do you draw on to stay mentally balanced in your career or studies?",
-        questionAudio: "",
+        questionAudio: "audioFilesManu/Scenario3/Scenario3-Step3.mp3",
         severity: Severity.Low,
         likertScale: 5,
-        responses: []
+        responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to reflect on your strengths at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Reflection on personal resources can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to recognize personal strengths is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This reflection may require vulnerability. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Identifying personal resources is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on inner resources is noted. This awareness can support development.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This topic may be personal. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on mental stability is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this topic is acknowledged. Understanding personal strengths is significant.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response9.mp3",
+          },
+        ],
       },
       {
         type: ResponseType.Statement,
         text: "Knowing your strengths can buffer stress. But even strong people feel pressure from time to time.",
-        textAudio: "",
-        options: ["Thats true. Even I have moments where I feel the pressure"]
+        textAudio: "audioFilesManu/Scenario3/Scenario3-Step4.mp3",
+        option: "Thats true. Even I have moments where I feel the pressure."
       },
       {
         type: ResponseType.Question,
         question: "Have you been feeling any stress or mental fatigue related to your work or academic life lately?",
-        questionAudio: "",
+        questionAudio: "audioFilesManu/Scenario3/Scenario3-Step5.mp3",
         severity: Severity.Medium,
         likertScale: 5,
-        responses: []
+        responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to discuss current stress levels at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Reflection on work or academic impact is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to recognize work or academic effects is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may be sensitive. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Reflection on work or academic impact is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your recognition of work or academic stress is noted. This awareness is significant.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This topic may be personal. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on work or academic stress is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this topic is acknowledged. Understanding work or academic stress is significant.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response9.mp3",
+          },
+        ],
       },
       {
         type: ResponseType.Statement,
         text: "Have you always had clear goals in regards to your studies and work?",
-        textAudio: "",
-        options: ["No, I havent always known what I wanted to achieve in the future."]
+        textAudio: "audioFilesManu/Scenario3/Scenario3-Step6.mp3",
+        option: "No, I havent always known what I wanted to achieve in the future."
       },
       {
         type: ResponseType.Question,
         question: "Have you ever felt completely overwhelmed or lost when it comes to your professional or academic path?",
-        questionAudio: "",
+        questionAudio: "audioFilesManu/Scenario3/Scenario3-Step7.mp3",
         severity: Severity.High,
         likertScale: 5,
-        responses: []
+         responses: [
+          // LOW SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Low],
+            },
+            message:
+              "There is no requirement to reflect on this topic at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response1.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Low],
+            },
+            message:
+              "Thank you for considering this question. Reflection on your path can be meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response2.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Low],
+            },
+            message:
+              "Your openness to consider your professional direction is noted. This awareness is valuable.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response3.mp3",
+          },
+
+          // MEDIUM SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.Medium],
+            },
+            message:
+              "This topic may be challenging. There is no requirement to engage with it now.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response4.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Thank you for considering this question. Reflection on uncertainty is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response5.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.Medium],
+            },
+            message:
+              "Your reflection on these challenges is noted. This awareness can support clarity.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response6.mp3",
+          },
+
+          // HIGH SEVERITY
+          {
+            conditions: {
+              willingness: [1],
+              severity: [Severity.High],
+            },
+            message:
+              "This topic may be personal. There is no obligation to engage with it at this time.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response7.mp3",
+          },
+          {
+            conditions: {
+              willingness: [2, 3],
+              severity: [Severity.High],
+            },
+            message:
+              "Thank you for considering this question. Reflection on professional challenges is meaningful.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response8.mp3",
+          },
+          {
+            conditions: {
+              willingness: [4, 5],
+              severity: [Severity.High],
+            },
+            message:
+              "Your engagement with this topic is acknowledged. Understanding these challenges is significant.",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response9.mp3",
+          },
+        ],
       }
     ],
-    completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being."
-
+    completionMessage: "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
+    completionAudio: "audioFilesManu/ScenarioCompletion.mp3"
   }
-
-
-
 ];
