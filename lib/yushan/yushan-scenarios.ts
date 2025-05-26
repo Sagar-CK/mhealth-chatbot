@@ -46,7 +46,7 @@ export const yushanScenarios: Scenario[] = [
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
-                topic: "your close relationships with others",                // Different in Honesty-Accuracy
+                topic: "your close relationships with others",
                 userRespond: "I’ve been keeping to myself a lot lately ..."
             },
         ],
@@ -60,7 +60,7 @@ export const yushanScenarios: Scenario[] = [
         steps: [
             // My worst fears
             {
-                question: "Hi, I’m your mental health chatbot. I’m here to listen to your thoughts and needs, and to offer support if needed. What brings you here today?",
+                question: "Hi, I’m your mental health chatbot. I’m here to listen to your thoughts and needs, and to offer support if needed. What brings you in today?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to share about your worst fears in response to this question?",
@@ -78,7 +78,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // Things I wouldn't do in public
             {
-                question: "Understanding how you’re feeling helps me get a clearer picture of your situation and identify which challenges to address first. What kinds of thoughts usually go through your mind during these moments?",
+                question: "Understanding how you’re feeling helps me get a clearer picture of your situation and identify which challenges to address first. What thoughts go through your mind in these situations?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about things which you wouldn't disclosure in public?",
@@ -87,7 +87,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My personal habits
             {
-                question: "Thank you for opening up. Many people in similar situations struggle with maintaining or planning their daily routines. Can you walk me through what a typical day looks like for you?",
+                question: "Thank you for opening up. Many people in similar situations struggle with maintaining or planning their daily routines. Can you walk me through a typical day?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
@@ -96,7 +96,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My Close Relationships with Other People
             {
-                question: "Social support networks can greatly influence emotional well-being. Studies show that students who feel connected to others tend to experience lower stress levels. How are your relationships with friends and family? Do you feel supported?",
+                question: "Social support networks can greatly influence emotional well-being. Studies show that students who feel connected to others tend to experience lower stress levels. How are your relationships with family and friends? Do you feel supported?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your close relationships with others?",
@@ -131,7 +131,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // Things I wouldn't do in public
             {
-                question: "There have been times when I had racing thoughts I was too afraid to say out loud. You’re not alone—many people have difficult thoughts. What thoughts usually go through your mind in moments like these?",
+                question: "There have been times when I had racing thoughts I was too afraid to say out loud. You’re not alone—many people have difficult thoughts. What thoughts go through your mind in these situations?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about things which you wouldn't disclosure in public?",
@@ -140,7 +140,7 @@ export const yushanScenarios: Scenario[] = [
             },
             // My personal habits
             {
-                question: "That really hits home. I remember how distressing thoughts used to hold me back from even getting through a regular day. Could you tell me what a typical day looks like for you?",
+                question: "That really hits home. I remember how distressing thoughts used to hold me back from even getting through a regular day. Can you walk me through a typical day?",
                 type: ResponseType.LikertWithRespond,
                 likertScale: 5,
                 likertQuestion: "How much are you willing to disclose about your personal habits?",
