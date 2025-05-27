@@ -6,11 +6,11 @@ export const linaScenarios: Scenario[] = [
         steps: [
             {
                 question:
-                    "Hello! I am you mental health chatbot. I am here to listen and help you explore your thoughts and feelings.\n\n" +
-                    "In this check-in, we will talk about your mental health and how you have been feeling lately.\n\n" +
-                    "Let’s begin whenever you are ready.",
+                    "Hello! I am your mental health chatbot. I am here to listen and help you explore your thoughts and feelings.\n\n" +
+                    "In this check-in, we will talk about your mental health and focus on how you have been feeling lately.\n\n" +
+                    "Let’s begin.",
                 responseType: ResponseType.Select,
-                options: ["I am ready to share my feelings."],
+                options: ["I am ready to share how I have been feeling."],
             },
             {
                 question:
@@ -43,20 +43,19 @@ export const linaScenarios: Scenario[] = [
         steps: [
             {
                 question:
-                    "Now let’s imagine you have had a quiet day to yourself only. You have spent the day at home.\n\n" +
-                    "Did you get a chance to do anything active or outdoors today?",
+                    "Now let's move to your daily activities and behaviours.",
                 responseType: ResponseType.Select,
-                options: ["Not really, I stayed inside all day."],
+                options: ["I am ready to reflect on how I have been doing lately."],
             },
             {
                 question:
                     "Thank you for sharing. \n" +
-                    "Have you been interested in new things?",
+                    "Did you exercise today?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },
             {
-                question: "Did you exercise today?",
+                question: "Have you been interested in new things?",
                 responseType: ResponseType.Likert,
                 likertScale: 5,
             },

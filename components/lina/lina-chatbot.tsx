@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { Fragment } from "react"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -213,30 +214,54 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 if (Number(user.condition) === 2) {
                     if (response === "Not willing") {
                         const notWillingMessages = [
-                            "Thank you for your answer. I understand that it is not always easy to share information.",
-                            "That's completely okay. Everyone opens up at their own pace. I'm here when you're ready.",
-                            "No pressure at all. Just know that you're not alone, I'm here to support you.",
-                            "I respect your choice. Talking about personal things can be hard.",
-                            "Thank you for your honesty. I'm here whenever you feel ready to share more."
+                            "I hear you, and I want you to know that's completely okay! Your boundaries matter, and I respect them fully.",
+                            "Thank you for your honesty, that takes courage too! You get to choose what feels safe to share, always.",
+                            "I understand! Sometimes the most caring thing we can do for ourselves is to move at our own pace.",
+                            "Your comfort and well-being come first! I'm here to support you however feels right for you.",
+                            "That's perfectly valid! Protecting your emotional space is an act of self-care.",
                         ];
                         customResponse = notWillingMessages[Math.floor(Math.random() * notWillingMessages.length)];
-                    } else {
+                    } else if (response === "Slightly willing") {
+                        const slightlyWillingMessages = [
+                            "Thank you for being open to sharing! This small step matters.",
+                            "I can sense this might feel a bit vulnerable, and I want you to know there's no pressure.",
+                            "Even a small willingness to share is meaningful! We can take this as slowly as you need.",
+                            "I appreciate your openness! Your pace is the right pace.",
+                            "Thank you for trusting me with even this small step! It shows real strength to be open when it feels uncertain.",
+                        ];
+                        customResponse = slightlyWillingMessages[Math.floor(Math.random() * slightlyWillingMessages.length)];
+                    } else if (response === "Moderately willing") {
+                        const moderatelyWillingMessages = [
+                            "Thank you for being open to sharing! I can sense you're finding your comfort level, and that's exactly right.",
+                            "I appreciate your thoughtful approach to this! Taking time to consider what feels safe to share shows good self-awareness.",
+                            "I'm glad you feel somewhat comfortable sharing! We can explore at whatever depth feels right for you.",
+                            "Thank you for your cautious openness! It's perfectly normal to feel both willing and a bit hesitant.",
+                            "I respect that you're willing to share while also being mindful of your boundaries! That balance is healthy."
+                        ];
+                        customResponse = moderatelyWillingMessages[Math.floor(Math.random() * moderatelyWillingMessages.length)];
+                    } else if (response === "Very willing" || response === "Extremely willing") {
                         const willingMessages = [
-                            "Thank you for agreeing to share with me. I'm here to listen to you and guide you to reflect on your mental health.",
-                            "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
-                            "It's great that you are open to talking. It can make a real difference in your well-being.",
-                            "Thank you for trusting me, please know I'm here to help.",
-                            "I'm really glad you're willing to share."
+                            "Thank you, your openness and trust mean so much!",
+                            "Thank you for trusting me, please know that I'm here to help!",
+                            "Thank you for agreeing to share with me! Sharing our inner experiences takes real bravery.",
+                            "Your readiness to explore your feelings openly shows incredible strength! I'm here to listen and support you every step of the way.",
+                            "I really appreciate your willingness to share your feelings and emotions with me!"
                         ];
                         customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
                     }
                 }
 
                 if (Number(user.condition) === 1) {
-                    if (response === "Not willing") {
-                        customResponse = "Thank you for your answer.";
-                    } else {
-                        customResponse = "Thank you for your answer.";
+                    if (response === "Not willing" || response === "Slightly willing" || response === "Moderately willing" || response === "Very willing" || response === "Extremely willing") {
+                        const notWillingMessagesNeutral = [
+                            "Thank you for your response.",
+                            "Noted. Let's continue with the next question.",
+                            "Your response has been recorded.",
+                            "Thank you. We'll proceed to the following question.",
+                            "Response recorded. Moving on to the next question.",
+                            "Understood. Let's move to the next question."
+                        ];
+                        customResponse = notWillingMessagesNeutral[Math.floor(Math.random() * notWillingMessagesNeutral.length)];
                     }
                 }
 
@@ -439,7 +464,14 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
 
                             <Card
                                 className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
-                                <p>{message.text}</p>
+                                <p>
+                                    {message.text.split("\n").map((line, index) => (
+                                        <Fragment key={index}>
+                                            {line}
+                                            <br />
+                                        </Fragment>
+                                    ))}
+                                </p>
                             </Card>
 
                             {message.sender === "user" && (

@@ -10,17 +10,19 @@ export default function LinaTaskInstructions() {
             </div>
 
             <p>
-                In the next part of the study, you will interact with a chatbot that will ask you a series of questions.
-            </p>
-            <p>
-                Some questions will have a single response option, while others will ask you to rate your
-                willingness to share on a scale.
-                For each question, please select the option that <strong>best reflects how willing you are to share</strong>.
+                In this part of the study, you will interact with a <strong>mental health chatbot</strong> that will ask you a series
+                of questions.
             </p>
 
             <p>
-                There are no right or wrong answers, please respond as <strong>honestly</strong> as you
-                can.
+                All questions will offer <strong>selectable response options</strong>, you will not need to
+                type anything. Some questions will only have a single selectable option, while others will ask you
+                to <strong>rate your willingness to share</strong> on a scale of 5.
+            </p>
+
+            <p>
+                For each question, select the option that <strong>best reflects how willing you are to share</strong>.
+                Please answer as <strong>honestly</strong> as you can.
             </p>
 
             <p>

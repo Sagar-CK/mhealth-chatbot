@@ -15,7 +15,7 @@ export function LinaChat({ user }: LinaChatProps) {
     const scenariosToUse = Number(user.condition) === 2 ? linaScenarioEmpathetic : linaScenarios;
     const titleText =
         Number(user.condition) === 2
-            ? 'Time for a quick mental check-in with Echo?'
+            ? 'Time for a quick mental check-in with Echo? 💬'
             : 'Time for a quick mental check-in?';
 
     return (
