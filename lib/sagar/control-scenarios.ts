@@ -294,7 +294,7 @@ export const controlScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let's now take a moment to reflect on your relationships with others and yourself.",
+        text: "Let's take a moment to reflect on your relationships with others and yourself.",
         option: "Yes, I'm okay with that.",
       },
       {
@@ -567,14 +567,14 @@ export const controlScenarios: Scenario[] = [
       },
     ],
     completionMessage:
-      "Thank you for sharing your thoughts and experiences. We will now move onto the final scenario.",
+    "Thank you for sharing your thoughts and experiences. Your responses help us better understand how to support mental well-being.",
   },
   {
     title: "Work or Studies",
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let's now take a small pivot and talk about another part of your life - Work and Studies",
+        text: "Let's now talk about an important part of your life - Work and Studies",
         option: "Okay, I'm ready.",
       },
       {
