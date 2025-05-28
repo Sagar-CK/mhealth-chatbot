@@ -58,6 +58,19 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         return likertMap[response] || 0;
     }
 
+    // Helper function to get question type based on content
+    const getQuestionType = (question: string): string => {
+        if (question.includes("Could you describe your most pleasant situation today?")) return "pleasant_situation";
+        if (question.includes("How stressed do you feel right now?")) return "stress";
+        if (question.includes("How lonely do you feel at the moment?")) return "loneliness";
+        if (question.includes("Could you describe your most unpleasant situation today?")) return "unpleasant_situation";
+        if (question.includes("Did you exercise today?")) return "exercise";
+        if (question.includes("Have you been interested in new things?")) return "new_things";
+        if (question.includes("you been dealing with your problems well?")) return "problem_management";
+        if (question.includes("What substances did you use last night and how much?")) return "substances";
+        return "unknown";
+    };
+
     useEffect(() => {
         const clickTaskInstructions = (attempts = 0) => {
             const button = Array.from(document.querySelectorAll('button'))
@@ -82,7 +95,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     useEffect(() => {
         const responseCount = Object.keys(userResponsesData).length;
         if (responseCount === 8) {
-            saveUserResponses();
+            saveUserResponsesWithData(userResponsesData);
         }
     }, [userResponsesData]);
 
@@ -125,6 +138,11 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     // Function to save user responses to the database with provided data
     const saveUserResponsesWithData = async (responseData: {[key: string]: number}) => {
         try {
+            // Skip saving if it's the introduction scenario
+            if (currentScenario.title === "introduction") {
+                return;
+            }
+
             const dbResponseData = {
                 user_id: user.user_id,
                 user_condition: user.condition.toString(),
@@ -141,12 +159,29 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 timestamp: new Date(),
             };
 
+            // Map question types to database fields
+            const questionTypeToField: {[key: string]: string} = {
+                "pleasant_situation": "question_1_likert_response",
+                "stress": "question_2_likert_response",
+                "loneliness": "question_3_likert_response",
+                "unpleasant_situation": "question_4_likert_response",
+                "exercise": "question_5_likert_response",
+                "new_things": "question_6_likert_response",
+                "problem_management": "question_7_likert_response",
+                "substances": "question_8_likert_response"
+            };
+
             // Update Likert responses if they exist
             Object.entries(responseData).forEach(([key, value]) => {
                 if (key.startsWith('question_')) {
                     const questionNumber = key.split('_')[1];
-                    const responseKey = `question_${questionNumber}_likert_response`;
-                    (dbResponseData as any)[responseKey] = value;
+                    const currentQuestion = currentScenario.steps[Number(questionNumber) - 1].question;
+                    const questionType = getQuestionType(currentQuestion);
+                    const dbField = questionTypeToField[questionType];
+
+                    if (dbField) {
+                        (dbResponseData as any)[dbField] = value;
+                    }
                 }
             });
 
@@ -158,11 +193,6 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         } catch (error) {
             console.error('Error in saveUserResponsesWithData:', error);
         }
-    }
-
-// Keep the original function but modify it to use the new one
-    const saveUserResponses = async () => {
-        await saveUserResponsesWithData(userResponsesData);
     }
 
     const handleResponse = async (response: string) => {
@@ -187,17 +217,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             let updatedUserResponsesData = { ...userResponsesData };
 
             if (currentStepscenario.responseType === ResponseType.Likert) {
-                const globalLikertNumber = (currentScenarioIndex * 4) + (currentStep - 1) + 1;
+                const questionType = getQuestionType(currentStepscenario.question);
                 const numericResponse = convertLikertToNumber(response);
 
                 updatedUserResponsesData = {
                     ...updatedUserResponsesData,
-                    [`question_${globalLikertNumber}`]: numericResponse
+                    [`question_${currentStep + 1}`]: numericResponse
                 };
 
                 // Update state
                 setUserResponsesData(updatedUserResponsesData);
-
                 setLikertQuestionCounter(prev => prev + 1);
             } else if (currentStepscenario.responseType === ResponseType.Select) {
                 updatedUserResponsesData = {
@@ -315,7 +344,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                     const finalMessage = {
                                         id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
                                         sender: "bot" as const,
-                                        text: currentScenario.completionMessage || "Thank you for your responses!",
+                                        text:
+                                            currentScenarioIndex === scenarios.length - 1
+                                                ? currentScenario.completionMessage
+                                                : (Number(user.condition) === 1
+                                                    ? (currentScenario.title === "introduction"
+                                                        ? "Thank you, let's move on to the first question."
+                                                        : "Thank you for your responses!")
+                                                    : (currentScenario.title === "introduction"
+                                                        ? "Thank you for trusting me with your feelings and being open to exploring them with me."
+                                                        : "Thank you for sharing what you felt comfortable with. Let's move on when you're ready.")),
                                         timestamp: new Date(),
                                         user_id: user.user_id,
                                         scenario: currentScenario.title
@@ -327,7 +365,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                     setIsTyping(false);
                                     scrollToBottom();
 
-                                    saveUserResponsesWithData(updatedUserResponsesData);
+                                    // Only save responses if it's not the introduction scenario
+                                    if (currentScenario.title !== "introduction") {
+                                        saveUserResponsesWithData(updatedUserResponsesData);
+                                    }
                                 }, 1000);
                             }, 500);
                         }
@@ -365,7 +406,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         const finalMessage = {
                             id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
                             sender: "bot" as const,
-                            text: currentScenario.completionMessage || "Thank you for your responses!",
+                            text:
+                                currentScenarioIndex === scenarios.length - 1
+                                    ? currentScenario.completionMessage
+                                    : (Number(user.condition) === 1
+                                        ? (currentScenario.title === "introduction"
+                                            ? "Thank you, let's move on to the first question."
+                                            : "Thank you for your responses!")
+                                        : (currentScenario.title === "introduction"
+                                            ? "Thank you for trusting me with your feelings and being open to exploring them with me."
+                                            : "Thank you for sharing what you felt comfortable with. Let's move on when you're ready.")),
                             timestamp: new Date(),
                             user_id: user.user_id,
                             scenario: currentScenario.title
@@ -377,7 +427,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         setIsTyping(false);
                         scrollToBottom();
 
-                        saveUserResponsesWithData(updatedUserResponsesData);
+                        // Only save responses if it's not the introduction scenario
+                        if (currentScenario.title !== "introduction") {
+                            saveUserResponsesWithData(updatedUserResponsesData);
+                        }
                     }, 1000);
                 }
             }
@@ -504,7 +557,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             <div className="p-4 border-t bg-card mt-auto">
                 {isComplete ? (
                     <Button onClick={nextOrCompleteScenario} className="w-full">
-                        {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
+                        {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next"}
                     </Button>
                 ) : (
                     <div className="overflow-x-auto pb-2">
