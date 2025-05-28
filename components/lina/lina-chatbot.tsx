@@ -346,7 +346,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                         sender: "bot" as const,
                                         text:
                                             currentScenarioIndex === scenarios.length - 1
-                                                ? currentScenario.completionMessage
+                                                ? currentScenario.completionMessage ?? "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being."
                                                 : (Number(user.condition) === 1
                                                     ? (currentScenario.title === "introduction"
                                                         ? "Thank you, let's move on to the first question."
@@ -408,7 +408,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                             sender: "bot" as const,
                             text:
                                 currentScenarioIndex === scenarios.length - 1
-                                    ? currentScenario.completionMessage
+                                    ? currentScenario.completionMessage ?? "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being."
                                     : (Number(user.condition) === 1
                                         ? (currentScenario.title === "introduction"
                                             ? "Thank you, let's move on to the first question."

@@ -12,15 +12,16 @@ interface LinaChatProps {
 }
 
 export function LinaChat({ user }: LinaChatProps) {
-    // Use appropriate randomization function based on user condition
-    const scenariosToUse = user.condition === '2'
-        ? getRandomizedEmpathethicScenarios(user.user_id)
-        : getRandomizedScenarios(user.user_id);
+    // Use randomization function based on user condition
+    const scenariosToUse =
+        Number(user.condition) === 2
+            ? getRandomizedEmpathethicScenarios(user.user_id)
+            : getRandomizedScenarios(user.user_id);
 
     const titleText =
         Number(user.condition) === 2
-            ? 'Time for a quick mental check-in with Echo? 💬'
-            : 'Time for a quick mental check-in?';
+            ? "Time for a quick mental check-in with Echo? 💬"
+            : "Time for a quick mental check-in?";
 
     return (
         <div className="flex w-full items-center justify-center">
