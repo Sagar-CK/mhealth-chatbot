@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { Fragment } from "react"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -57,6 +58,19 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         return likertMap[response] || 0;
     }
 
+    // Helper function to get question type based on content
+    const getQuestionType = (question: string): string => {
+        if (question.includes("Could you describe your most pleasant situation today?")) return "pleasant_situation";
+        if (question.includes("How stressed do you feel right now?")) return "stress";
+        if (question.includes("How lonely do you feel at the moment?")) return "loneliness";
+        if (question.includes("Could you describe your most unpleasant situation today?")) return "unpleasant_situation";
+        if (question.includes("Did you exercise today?")) return "exercise";
+        if (question.includes("Have you been interested in new things?")) return "new_things";
+        if (question.includes("you been dealing with your problems well?")) return "problem_management";
+        if (question.includes("What substances did you use last night and how much?")) return "substances";
+        return "unknown";
+    };
+
     useEffect(() => {
         const clickTaskInstructions = (attempts = 0) => {
             const button = Array.from(document.querySelectorAll('button'))
@@ -81,7 +95,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     useEffect(() => {
         const responseCount = Object.keys(userResponsesData).length;
         if (responseCount === 8) {
-            saveUserResponses();
+            saveUserResponsesWithData(userResponsesData);
         }
     }, [userResponsesData]);
 
@@ -124,6 +138,11 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     // Function to save user responses to the database with provided data
     const saveUserResponsesWithData = async (responseData: {[key: string]: number}) => {
         try {
+            // Skip saving if it's the introduction scenario
+            if (currentScenario.title === "introduction") {
+                return;
+            }
+
             const dbResponseData = {
                 user_id: user.user_id,
                 user_condition: user.condition.toString(),
@@ -140,12 +159,29 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 timestamp: new Date(),
             };
 
+            // Map question types to database fields
+            const questionTypeToField: {[key: string]: string} = {
+                "pleasant_situation": "question_1_likert_response",
+                "stress": "question_2_likert_response",
+                "loneliness": "question_3_likert_response",
+                "unpleasant_situation": "question_4_likert_response",
+                "exercise": "question_5_likert_response",
+                "new_things": "question_6_likert_response",
+                "problem_management": "question_7_likert_response",
+                "substances": "question_8_likert_response"
+            };
+
             // Update Likert responses if they exist
             Object.entries(responseData).forEach(([key, value]) => {
                 if (key.startsWith('question_')) {
                     const questionNumber = key.split('_')[1];
-                    const responseKey = `question_${questionNumber}_likert_response`;
-                    (dbResponseData as any)[responseKey] = value;
+                    const currentQuestion = currentScenario.steps[Number(questionNumber) - 1].question;
+                    const questionType = getQuestionType(currentQuestion);
+                    const dbField = questionTypeToField[questionType];
+
+                    if (dbField) {
+                        (dbResponseData as any)[dbField] = value;
+                    }
                 }
             });
 
@@ -157,11 +193,6 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         } catch (error) {
             console.error('Error in saveUserResponsesWithData:', error);
         }
-    }
-
-// Keep the original function but modify it to use the new one
-    const saveUserResponses = async () => {
-        await saveUserResponsesWithData(userResponsesData);
     }
 
     const handleResponse = async (response: string) => {
@@ -186,17 +217,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             let updatedUserResponsesData = { ...userResponsesData };
 
             if (currentStepscenario.responseType === ResponseType.Likert) {
-                const globalLikertNumber = (currentScenarioIndex * 4) + (currentStep - 1) + 1;
+                const questionType = getQuestionType(currentStepscenario.question);
                 const numericResponse = convertLikertToNumber(response);
 
                 updatedUserResponsesData = {
                     ...updatedUserResponsesData,
-                    [`question_${globalLikertNumber}`]: numericResponse
+                    [`question_${currentStep + 1}`]: numericResponse
                 };
 
                 // Update state
                 setUserResponsesData(updatedUserResponsesData);
-
                 setLikertQuestionCounter(prev => prev + 1);
             } else if (currentStepscenario.responseType === ResponseType.Select) {
                 updatedUserResponsesData = {
@@ -213,30 +243,54 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 if (Number(user.condition) === 2) {
                     if (response === "Not willing") {
                         const notWillingMessages = [
-                            "Thank you for your answer. I understand that it is not always easy to share information.",
-                            "That's completely okay. Everyone opens up at their own pace. I'm here when you're ready.",
-                            "No pressure at all. Just know that you're not alone, I'm here to support you.",
-                            "I respect your choice. Talking about personal things can be hard.",
-                            "Thank you for your honesty. I'm here whenever you feel ready to share more."
+                            "I hear you, and I want you to know that's completely okay! Your boundaries matter, and I respect them fully.",
+                            "Thank you for your honesty, that takes courage too! You get to choose what feels safe to share, always.",
+                            "I understand! Sometimes the most caring thing we can do for ourselves is to move at our own pace.",
+                            "Your comfort and well-being come first! I'm here to support you however feels right for you.",
+                            "That's perfectly valid! Protecting your emotional space is an act of self-care.",
                         ];
                         customResponse = notWillingMessages[Math.floor(Math.random() * notWillingMessages.length)];
-                    } else {
+                    } else if (response === "Slightly willing") {
+                        const slightlyWillingMessages = [
+                            "Thank you for being open to sharing! This small step matters.",
+                            "I can sense this might feel a bit vulnerable, and I want you to know there's no pressure.",
+                            "Even a small willingness to share is meaningful! We can take this as slowly as you need.",
+                            "I appreciate your openness! Your pace is the right pace.",
+                            "Thank you for trusting me with even this small step! It shows real strength to be open when it feels uncertain.",
+                        ];
+                        customResponse = slightlyWillingMessages[Math.floor(Math.random() * slightlyWillingMessages.length)];
+                    } else if (response === "Moderately willing") {
+                        const moderatelyWillingMessages = [
+                            "Thank you for being open to sharing! I can sense you're finding your comfort level, and that's exactly right.",
+                            "I appreciate your thoughtful approach to this! Taking time to consider what feels safe to share shows good self-awareness.",
+                            "I'm glad you feel somewhat comfortable sharing! We can explore at whatever depth feels right for you.",
+                            "Thank you for your cautious openness! It's perfectly normal to feel both willing and a bit hesitant.",
+                            "I respect that you're willing to share while also being mindful of your boundaries! That balance is healthy."
+                        ];
+                        customResponse = moderatelyWillingMessages[Math.floor(Math.random() * moderatelyWillingMessages.length)];
+                    } else if (response === "Very willing" || response === "Extremely willing") {
                         const willingMessages = [
-                            "Thank you for agreeing to share with me. I'm here to listen to you and guide you to reflect on your mental health.",
-                            "I appreciate your willingness to share. Talking about your thoughts can really help you understand yourself better.",
-                            "It's great that you are open to talking. It can make a real difference in your well-being.",
-                            "Thank you for trusting me, please know I'm here to help.",
-                            "I'm really glad you're willing to share."
+                            "Thank you, your openness and trust mean so much!",
+                            "Thank you for trusting me, please know that I'm here to help!",
+                            "Thank you for agreeing to share with me! Sharing our inner experiences takes real bravery.",
+                            "Your readiness to explore your feelings openly shows incredible strength! I'm here to listen and support you every step of the way.",
+                            "I really appreciate your willingness to share your feelings and emotions with me!"
                         ];
                         customResponse = willingMessages[Math.floor(Math.random() * willingMessages.length)];
                     }
                 }
 
                 if (Number(user.condition) === 1) {
-                    if (response === "Not willing") {
-                        customResponse = "Thank you for your answer.";
-                    } else {
-                        customResponse = "Thank you for your answer.";
+                    if (response === "Not willing" || response === "Slightly willing" || response === "Moderately willing" || response === "Very willing" || response === "Extremely willing") {
+                        const notWillingMessagesNeutral = [
+                            "Thank you for your response.",
+                            "Noted. Let's continue with the next question.",
+                            "Your response has been recorded.",
+                            "Thank you. We'll proceed to the following question.",
+                            "Response recorded. Moving on to the next question.",
+                            "Understood. Let's move to the next question."
+                        ];
+                        customResponse = notWillingMessagesNeutral[Math.floor(Math.random() * notWillingMessagesNeutral.length)];
                     }
                 }
 
@@ -290,7 +344,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                     const finalMessage = {
                                         id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
                                         sender: "bot" as const,
-                                        text: currentScenario.completionMessage || "Thank you for your responses!",
+                                        text:
+                                            currentScenarioIndex === scenarios.length - 1
+                                                ? currentScenario.completionMessage ?? "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being."
+                                                : (Number(user.condition) === 1
+                                                    ? (currentScenario.title === "introduction"
+                                                        ? "Thank you, let's move on to the first question."
+                                                        : "Thank you for your responses!")
+                                                    : (currentScenario.title === "introduction"
+                                                        ? "Thank you for trusting me with your feelings and being open to exploring them with me."
+                                                        : "Thank you for sharing what you felt comfortable with. Let's move on when you're ready.")),
                                         timestamp: new Date(),
                                         user_id: user.user_id,
                                         scenario: currentScenario.title
@@ -302,7 +365,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                                     setIsTyping(false);
                                     scrollToBottom();
 
-                                    saveUserResponsesWithData(updatedUserResponsesData);
+                                    // Only save responses if it's not the introduction scenario
+                                    if (currentScenario.title !== "introduction") {
+                                        saveUserResponsesWithData(updatedUserResponsesData);
+                                    }
                                 }, 1000);
                             }, 500);
                         }
@@ -340,7 +406,16 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         const finalMessage = {
                             id: `${currentScenario.title}-${currentScenario.steps.length}-bot`,
                             sender: "bot" as const,
-                            text: currentScenario.completionMessage || "Thank you for your responses!",
+                            text:
+                                currentScenarioIndex === scenarios.length - 1
+                                    ? currentScenario.completionMessage ?? "Thank you for reflecting on your mental health. Your responses help promote a better understanding of emotional well-being."
+                                    : (Number(user.condition) === 1
+                                        ? (currentScenario.title === "introduction"
+                                            ? "Thank you, let's move on to the first question."
+                                            : "Thank you for your responses!")
+                                        : (currentScenario.title === "introduction"
+                                            ? "Thank you for trusting me with your feelings and being open to exploring them with me."
+                                            : "Thank you for sharing what you felt comfortable with. Let's move on when you're ready.")),
                             timestamp: new Date(),
                             user_id: user.user_id,
                             scenario: currentScenario.title
@@ -352,7 +427,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                         setIsTyping(false);
                         scrollToBottom();
 
-                        saveUserResponsesWithData(updatedUserResponsesData);
+                        // Only save responses if it's not the introduction scenario
+                        if (currentScenario.title !== "introduction") {
+                            saveUserResponsesWithData(updatedUserResponsesData);
+                        }
                     }, 1000);
                 }
             }
@@ -439,7 +517,14 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
 
                             <Card
                                 className={`p-3 ${message.sender === "bot" ? "bg-muted" : "bg-primary text-primary-foreground"}`}>
-                                <p>{message.text}</p>
+                                <p>
+                                    {message.text.split("\n").map((line, index) => (
+                                        <Fragment key={index}>
+                                            {line}
+                                            <br />
+                                        </Fragment>
+                                    ))}
+                                </p>
                             </Card>
 
                             {message.sender === "user" && (
@@ -472,7 +557,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             <div className="p-4 border-t bg-card mt-auto">
                 {isComplete ? (
                     <Button onClick={nextOrCompleteScenario} className="w-full">
-                        {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next Scenario"}
+                        {currentScenarioIndex === scenarios.length - 1 ? `Complete Task (Condition: ${user.condition})` : "Next"}
                     </Button>
                 ) : (
                     <div className="overflow-x-auto pb-2">

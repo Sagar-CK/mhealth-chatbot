@@ -2,21 +2,26 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { linaScenarios } from "@/lib/lina/lina-scenarios";
+import { getRandomizedScenarios } from "@/lib/lina/lina-scenarios";
 import { User } from "@/server/api/models/user";
 import { LinaChatInterface } from "@/components/lina/lina-chatbot";
-import {linaScenarioEmpathetic} from "@/lib/lina/lina-scenario-empathetic";
+import { getRandomizedEmpathethicScenarios } from "@/lib/lina/lina-scenario-empathetic";
 
 interface LinaChatProps {
     user: User;
 }
 
 export function LinaChat({ user }: LinaChatProps) {
-    const scenariosToUse = Number(user.condition) === 2 ? linaScenarioEmpathetic : linaScenarios;
+    // Use randomization function based on user condition
+    const scenariosToUse =
+        Number(user.condition) === 2
+            ? getRandomizedEmpathethicScenarios(user.user_id)
+            : getRandomizedScenarios(user.user_id);
+
     const titleText =
         Number(user.condition) === 2
-            ? 'Time for a quick mental check-in with Echo?'
-            : 'Time for a quick mental check-in?';
+            ? "Time for a quick mental check-in with Echo? 💬"
+            : "Time for a quick mental check-in?";
 
     return (
         <div className="flex w-full items-center justify-center">
