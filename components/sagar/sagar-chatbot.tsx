@@ -7,12 +7,12 @@ import { Card } from "@/components/ui/card"
 import { BotMessageSquareIcon, User } from 'lucide-react'
 import { SelectResponse } from "@/components/chat/select-response"
 import { LikertResponse } from "@/components/chat/likert-response"
-import { type Scenario, type Message, ResponseType, type QuestionStep, type StatementStep, Severity } from "@/lib/sagar/types"
+import { type Scenario, type Message, ResponseType, type QuestionStep, type StatementStep, Sensitivity } from "@/lib/sagar/types"
 import { useRouter } from "next/navigation"
 import { api } from "@/trpc/react"
 import { sagarStudy } from "@/lib/constants"
 import { User as UserType } from "@/server/api/models/user"
-import { mapWillingnessToNumber, stringifyWillingnessSeverity } from "@/lib/utils"
+import { mapWillingnessToNumber, stringifyWillingnessSensitivity } from "@/lib/utils"
 
 interface SagarChatInterfaceProps {
   scenarios: Scenario[];
@@ -39,7 +39,7 @@ const TypingIndicator = () => {
 
 interface QuestionState {
   willingness?: number
-  severity?: Severity
+  sensitivity?: Sensitivity
 }
 
 // Add these helper functions after the TypingIndicator component
@@ -209,7 +209,6 @@ const handleNextStep = (
       
       // Only 70% chance of having a pause
       const shouldPause = Math.random() < 0.7
-      console.log("shouldPause", shouldPause)
       const numPauses = shouldPause ? 1 : 0
       let currentPause = 0
       
@@ -304,7 +303,7 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
       const questionStep = currentStepData as QuestionStep
       const matchingResponse = questionStep.responses.find(
         r => r.conditions.willingness.includes(questionState.willingness!) &&
-          r.conditions.severity.includes(questionState.severity!)
+          r.conditions.sensitivity.includes(questionState.sensitivity!)
       )
 
       if (matchingResponse) {
@@ -386,16 +385,16 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
         )
       }
 
-      // If we have willingness but not severity
-      if (questionState.severity === undefined && questionState.willingness !== undefined) {
+      // If we have willingness but not sensitivity
+      if (questionState.sensitivity === undefined && questionState.willingness !== undefined) {
         return (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground mb-2">How severe do you perceive this question to be?</p>
+            <p className="text-sm font-medium">How sensitive do you perceive this question to be?</p>
             <SelectResponse
-              options={[Severity.Low, Severity.Medium, Severity.High]}
-              onSelect={(severity) => {
-                const severityValue = severity as Severity
-                setQuestionState(prev => ({ ...prev, severity: severityValue }))
+              options={[Sensitivity.Low, Sensitivity.Medium, Sensitivity.High]}
+              onSelect={(sensitivity) => {
+                const sensitivityValue = sensitivity as Sensitivity
+                setQuestionState(prev => ({ ...prev, sensitivity: sensitivityValue }))
               }}
               disabled={isResponseDisabled}
             />
@@ -408,12 +407,12 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
 
   // Add effect to handle response after severity is set
   useEffect(() => {
-    if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+    if (questionState.willingness !== undefined && questionState.sensitivity !== undefined) {
       const currentStepData = currentScenario.steps[currentStep]
       if (currentStepData.type === ResponseType.Question) {
         const questionStep = currentStepData as QuestionStep
         const willingness = questionState.willingness
-        const severity = questionState.severity
+        const sensitivity = questionState.sensitivity
         const capturedStep = currentStep
         
         setIsProducingResponse(true)
@@ -421,9 +420,9 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
           user_id: user.user_id,
           scenario: currentScenario.title,
           question: questionStep.question,
-          question_severity: questionStep.severity,
+          question_sensitivity: questionStep.sensitivity,
           user_willingness: willingness,
-          user_severity: severity,
+          user_sensitivity: sensitivity,
           timestamp: new Date()
         }, {
           onSuccess: () => {
@@ -432,13 +431,13 @@ export function SagarChatInterface({ scenarios, user }: SagarChatInterfaceProps)
               const qStep = stepData as QuestionStep
               setIsResponseDisabled(true)
               setIsProducingResponse(false)
-              handleResponse(stringifyWillingnessSeverity(willingness, severity, qStep.likertScale))
+              handleResponse(stringifyWillingnessSensitivity(willingness, sensitivity, qStep.likertScale))
             }
           }
         })
       }
     }
-  }, [questionState.severity, questionState.willingness, currentStep, currentScenario.steps])
+  }, [questionState.sensitivity, questionState.willingness, currentStep, currentScenario.steps])
 
   // Add effect to re-enable responses when moving to next step
   useEffect(() => {

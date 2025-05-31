@@ -13,7 +13,7 @@ export default function SagarTaskInstructions() {
 
       <div className="mt-4">
         <strong>Important:</strong> You are <u>not</u> expected to actually share personal information. 
-        Instead, indicate how willing you would be to answer each question and how severe or sensitive 
+        Instead, indicate how willing you would be to answer each question and how sensitive 
         you perceive it to be.
       </div>
 
