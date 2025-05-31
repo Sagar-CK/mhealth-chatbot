@@ -15,8 +15,8 @@ export default function LinaTaskInstructions() {
             </p>
 
             <p>
-                All questions will offer <strong>selectable response options</strong>, you will not need to
-                type anything. Some questions will only have a single selectable option, while others will ask you
+                All questions will offer <strong>selectable response options, you will not need to
+                type anything</strong>. Some questions will only have a single selectable option, while others will ask you
                 to <strong>rate your willingness to share</strong> on a scale of 5.
             </p>
 
@@ -26,7 +26,7 @@ export default function LinaTaskInstructions() {
             </p>
 
             <p>
-                The interaction should take about <strong>5–10 minutes</strong>.
+                The interaction should take about <strong>5–8 minutes</strong>.
             </p>
 
             <p>
