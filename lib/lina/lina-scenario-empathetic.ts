@@ -34,7 +34,8 @@ const emotionalScenario: Scenario = {
     steps: [
         {
             question:
-                "Many people find it healing to reflect on both the bright and challenging moments of their day. Let's start with something positive!\n\n" +
+                "Many people find it healing to reflect on both the bright and challenging moments of their day. \n" +
+                "Even small moments of pleasantness matter and deserve recognition. Let's start with something positive!\n\n" +
                 "Could you describe your most pleasant situation today?",
             responseType: ResponseType.Likert,
             likertScale: 5
@@ -48,7 +49,8 @@ const emotionalScenario: Scenario = {
         },
         {
             question:
-                "Loneliness is one of the most universal human experiences — it can touch us even when we're surrounded by people, and it's nothing to be ashamed of.\n\n" +
+                "Loneliness is one of the most universal human experiences — it can touch us even when we're surrounded by people, and it's nothing to be ashamed of.\n" +
+                "By being willing to reflect on this feeling, you're already showing courage in facing something many people struggle with silently.\n\n"+
                 "How lonely do you feel at the moment?",
             responseType: ResponseType.Likert,
             likertScale: 5
@@ -85,7 +87,8 @@ const behavioralScenario: Scenario = {
         },
         {
             question:
-                "Everyone handles challenges differently, some days things go smoothly, other days feel tougher. There's no right way to manage it all.\n\n" +
+                "Everyone handles challenges differently, some days things go smoothly, other days feel tougher. \n" +
+                "There's no right way to manage it all, and struggling doesn't mean you're failing. \n\n" +
                 "Thinking about the difficulties you're currently facing, have you been dealing with your problems well?",
             responseType: ResponseType.Likert,
             likertScale: 5
