@@ -3,7 +3,7 @@ export enum ResponseType {
   Question = "question",
 }
 
-export enum Severity {
+export enum Sensitivity {
   Low = "Low",
   Medium = "Medium",
   High = "High",
@@ -20,12 +20,12 @@ export interface QuestionStep {
   type: ResponseType.Question
   question: string
   questionAudio: string
-  severity: Severity
+  sensitivity: Sensitivity
   likertScale: 5 | 7
   responses: {
     conditions: {
       willingness: number[]
-      severity: Severity[]
+      sensitivity: Sensitivity[]
     }
     message: string
     audioUrl: string

@@ -5,9 +5,9 @@ export const SelfDisclosureSchema = z.object({
   user_id: z.string(),
   scenario: z.string(),
   question: z.string(),
-  question_severity: z.enum(["Low", "Medium", "High"]),
+  question_sensitivity: z.enum(["Low", "Medium", "High"]),
   user_willingness: z.number(),
-  user_severity: z.enum(["Low", "Medium", "High"]),
+  user_sensitivity: z.enum(["Low", "Medium", "High"]),
   timestamp: z.date(),
 });
 

@@ -15,12 +15,12 @@ export const selfDisclosureRouter = createTRPCRouter({
       // Try to insert, if exists then update
       const [record] = await sql`
         INSERT INTO self_disclosure 
-        (id, user_id, scenario, question, question_severity, user_willingness, user_severity, timestamp) 
+        (id, user_id, scenario, question, question_sensitivity, user_willingness, user_sensitivity, timestamp) 
         VALUES 
-        (${id}, ${input.user_id}, ${input.scenario}, ${input.question}, ${input.question_severity}, ${input.user_willingness}, ${input.user_severity}, ${input.timestamp})
+        (${id}, ${input.user_id}, ${input.scenario}, ${input.question}, ${input.question_sensitivity}, ${input.user_willingness}, ${input.user_sensitivity}, ${input.timestamp})
         ON CONFLICT (id) DO UPDATE SET
           user_willingness = EXCLUDED.user_willingness,
-          user_severity = EXCLUDED.user_severity,
+          user_sensitivity = EXCLUDED.user_sensitivity,
           timestamp = EXCLUDED.timestamp
         RETURNING *
       `;

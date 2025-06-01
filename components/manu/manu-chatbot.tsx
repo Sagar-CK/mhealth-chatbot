@@ -12,10 +12,10 @@ import {
   ResponseType,
   type QuestionStep,
   type StatementStep,
-  Severity,
+  Sensitivity,
 } from "@/lib/manu/types"
 import { Card } from "@/components/ui/card"
-import { mapWillingnessToNumber, stringifyWillingnessSeverity } from "@/lib/utils"
+import { mapWillingnessToNumber, stringifyWillingnessSensitivity } from "@/lib/utils"
 import { LikertResponse } from "../chat/likert-response"
 import { SelectResponse } from "../chat/select-response"
 import { manuStudy } from "@/lib/constants"
@@ -58,7 +58,7 @@ const TypingIndicator = () => {
 
 interface QuestionState {
   willingness?: number
-  severity?: Severity
+  sensitivity?: Sensitivity
 }
 
 export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioChatInterfaceProps) {
@@ -140,15 +140,15 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
       }
 
       // If we have willingness but not severity
-      if (questionState.severity === undefined && questionState.willingness !== undefined) {
+      if (questionState.sensitivity === undefined && questionState.willingness !== undefined) {
         return (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground mb-2">How severe do you perceive this question to be?</p>
             <SelectResponse
-              options={[Severity.Low, Severity.Medium, Severity.High]}
+              options={[Sensitivity.Low, Sensitivity.Medium, Sensitivity.High]}
               onSelect={(severity) => {
-                const severityValue = severity as Severity
-                setQuestionState((prev) => ({ ...prev, severity: severityValue }))
+                const severityValue = severity as Sensitivity
+                setQuestionState((prev) => ({ ...prev, sensitivity: severityValue }))
               }}
             />
           </div>
@@ -160,16 +160,16 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
 
   // Add effect to handle response after severity is set
   useEffect(() => {
-    if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+    if (questionState.willingness !== undefined && questionState.sensitivity !== undefined) {
       const currentStepData = currentScenario.steps[currentStepNo]
       if (currentStepData.type === ResponseType.Question) {
         const questionStep = currentStepData as QuestionStep
         handleResponse(
-          stringifyWillingnessSeverity(questionState.willingness, questionState.severity, questionStep.likertScale),
+          stringifyWillingnessSensitivity(questionState.willingness, questionState.sensitivity, questionStep.likertScale),
         )
       }
     }
-  }, [questionState.severity, questionState.willingness, currentStepNo, currentScenario.steps])
+  }, [questionState.sensitivity, questionState.willingness, currentStepNo, currentScenario.steps])
 
   const handleResponse = async (response: string) => {
     const currentStepData = currentScenario.steps[currentStepNo]
@@ -179,14 +179,14 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
       const questionStep = currentStepData as QuestionStep
 
       // Store self-disclosure data when we have both willingness and severity
-      if (questionState.willingness !== undefined && questionState.severity !== undefined) {
+      if (questionState.willingness !== undefined && questionState.sensitivity !== undefined) {
         createSelfDisclosure.mutate({
           user_id: user.user_id,
           scenario: currentScenario.title,
           question: questionStep.question,
-          question_severity: questionStep.severity,
+          question_sensitivity: questionStep.sensitivity,
           user_willingness: questionState.willingness,
-          user_severity: questionState.severity,
+          user_sensitivity: questionState.sensitivity,
           timestamp: new Date(),
         })
       }
@@ -207,7 +207,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
       const matchingResponse = questionStep.responses.find(
         (r) =>
           r.conditions.willingness.includes(questionState.willingness!) &&
-          r.conditions.severity.includes(questionState.severity!),
+          r.conditions.sensitivity.includes(questionState.sensitivity!),
       )
 
       if (matchingResponse) {
