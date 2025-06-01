@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Scenario, Severity, ResponseType } from "@/lib/sagar/types";
+import { Scenario, Sensitivity, ResponseType } from "@/lib/sagar/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,38 +33,49 @@ export function mapWillingnessToNumber(willingness: string) {
   }
 }
 
-export function stringifyWillingnessSeverity(
+export function stringifyWillingnessSensitivity(
   willingness: number,
-  severity: Severity,
+  sensitivity: Sensitivity,
   likertScale: 5 | 7
 ) {
   const likertValue =
     likertScale === 5
       ? likertValues5[willingness - 1]
       : likertValues7[willingness - 1];
-  const severityValue =
-    severity === Severity.Low
+  const sensitivityValue =
+    sensitivity === Sensitivity.Low
       ? "low"
-      : severity === Severity.Medium
+      : sensitivity === Sensitivity.Medium
       ? "medium"
       : "high";
-  const res = `I would be ${likertValue.toLowerCase()} to answer this question. I believe the severity of this question is ${severityValue}.`;
-  console.log(res);
+  const res = `I would be ${likertValue.toLowerCase()} to answer this question. I believe the sensitivity of this question is ${sensitivityValue}.`;
   return res;
 }
 
 export function stringifyWillingness(
-    willingness: number,
-    userRespond: string,
-    topic: string
+  willingness: number,
+  userRespond: string,
+  topic: string
 ): string {
-    if (willingness < 0 || willingness >= 5) {
-        throw new Error("Willingness must be between 0 and 5");
-    }
-  const amounts = ["very little", "a bit", "some information", "quite a bit", "a lot"];
-  const res = userRespond + " (and you shared " + amounts[willingness] + " about " + topic + ")";
-    console.log(res);
-    return res;
+  if (willingness < 0 || willingness >= 5) {
+    throw new Error("Willingness must be between 0 and 5");
+  }
+  const amounts = [
+    "very little",
+    "a bit",
+    "some information",
+    "quite a bit",
+    "a lot",
+  ];
+  const res =
+    userRespond +
+    " (and you shared " +
+    amounts[willingness] +
+    " about " +
+    topic +
+    ")";
+  console.log(res);
+  return res;
 }
 
 export function validateResponseCoverage(scenarios: Scenario[]) {
@@ -72,7 +83,11 @@ export function validateResponseCoverage(scenarios: Scenario[]) {
     for (const step of scenario.steps) {
       if (step.type === ResponseType.Question) {
         const allWillingness = [1, 2, 3, 4, 5];
-        const allSeverity = [Severity.Low, Severity.Medium, Severity.High];
+        const allSeverity = [
+          Sensitivity.Low,
+          Sensitivity.Medium,
+          Sensitivity.High,
+        ];
 
         // For each severity level, check if all willingness levels are covered
         for (const severity of allSeverity) {
@@ -80,7 +95,7 @@ export function validateResponseCoverage(scenarios: Scenario[]) {
 
           // Check each response's conditions
           step.responses.forEach((response) => {
-            if (response.conditions.severity.includes(severity)) {
+            if (response.conditions.sensitivity.includes(severity)) {
               response.conditions.willingness.forEach((w) =>
                 coveredWillingness.add(w)
               );

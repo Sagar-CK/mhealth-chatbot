@@ -33,6 +33,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
     const messagesEndRef = useRef<HTMLDivElement>(null)
     const messagesContainerRef = useRef<HTMLDivElement>(null)
     const taskInstructionsRef = useRef<HTMLButtonElement>(null)
+    const [isNearBottom, setIsNearBottom] = useState(true) // Track if user is near bottom
 
     const currentScenario = scenarios[currentScenarioIndex]
 
@@ -119,17 +120,25 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
         }
     }, [currentScenario, messages.length, user.user_id]);
 
-    // Auto-scroll to bottom of messages with smooth animation
+    // Add scroll event listener to detect if user is near bottom
     useEffect(() => {
-        if (messagesEndRef.current) {
-            const scrollOptions = { behavior: "smooth" as const }
-            messagesEndRef.current.scrollIntoView(scrollOptions)
-        }
-    }, [messages, isTyping])
+        const container = messagesContainerRef.current;
+        if (!container) return;
 
-    // Add a function to handle scrolling
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = container;
+            // Consider "near bottom" if within 100px of bottom
+            const isBottom = scrollHeight - scrollTop - clientHeight < 100;
+            setIsNearBottom(isBottom);
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Modify scrollToBottom to only scroll if user is near bottom
     const scrollToBottom = () => {
-        if (messagesEndRef.current) {
+        if (messagesEndRef.current && isNearBottom) {
             const scrollOptions = { behavior: "smooth" as const }
             messagesEndRef.current.scrollIntoView(scrollOptions)
         }
@@ -208,7 +217,10 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
 
             setMessages((prev) => [...prev, userMessage]);
             createMessage.mutate(userMessage);
-            scrollToBottom();
+            // Only scroll if user is near bottom
+            if (isNearBottom) {
+                scrollToBottom();
+            }
 
             // Handle response data collection
             const currentStepscenario = currentScenario.steps[currentStep];
@@ -458,7 +470,7 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
                 return (
                     <LikertResponse
                         key={`likert-${currentScenarioIndex}-${currentStep}`}
-                        question={currentStepscenario.likertQuestion || "Rate your willingness to share regarding this question:"}
+                        question={currentStepscenario.likertQuestion || "Rate your willingness to share information regarding this question:"}
                         onSelect={(response) => handleResponse(response)}
                         scale={(currentStepscenario.likertScale === 5 ? 5 : 7)}
                     />
@@ -488,8 +500,8 @@ export function LinaChatInterface({ scenarios, user, height = "600px" }: ChatInt
             setLikertQuestionCounter(0)
             setUserResponsesData({})
         } else {
-            // All scenarios complete, navigate to completion page
-            router.push(`/completion?study_id=${linaStudy}&uid=${user.user_id}`)
+            // All scenarios complete, navigate to Lina's custom completion page
+            router.push(`/bb24e39e-ddd5-4fd1-87ba-07e0520ec91a/completion?study_id=${linaStudy}&uid=${user.user_id}&condition=${user.condition}`)
         }
     }
 
