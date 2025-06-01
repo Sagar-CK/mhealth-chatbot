@@ -355,7 +355,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
         <PrivacyPolicyPopup
           isOpen={showPrivacyPopup}
           onConfirm={handlePrivacyPolicyConfirm}
-          audioUrl="audioFilesManu/welcome.mp3" // Replace with actual privacy policy audio URL
+          audioUrl="audioFilesManu/privacyPolicy.mp3" // Replace with actual privacy policy audio URL
         />
       )}
 
@@ -370,7 +370,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
           <Volume2 className="h-5 w-5 text-blue-500" />
           <p className="text-sm font-medium text-blue-700">If you have any doubts about the privacy policy, you can listen to it again here.</p>
           <div className="ml-auto">
-            <AudioMessage audioUrl="/path-to-privacy-policy-audio.mp3" />
+            <AudioMessage audioUrl="audioFilesManu/privacyPolicy.mp3" />
           </div>
         </div>
       )}
