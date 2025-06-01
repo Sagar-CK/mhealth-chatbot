@@ -33,7 +33,7 @@ export const controlScenarios: Scenario[] = [
               ],
             },
             message:
-              "Thank you for considering the question. Reflection on social preferences can be beneficial.",
+              "Thank you for considering your social environment preferences. This reflection is meaningful.",
           },
         ],
       },
