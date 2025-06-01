@@ -24,94 +24,16 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.Low,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "It is acceptable if you are not prepared to explore social settings at this time. We can proceed at your preferred pace.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering the question. Reflection on social preferences can be beneficial.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response2.mp3",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response.mp3",
           },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to reflect on social energizing factors is noted. Such insights can be valuable.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may require vulnerability. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering your social environment preferences. This reflection is meaningful.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your willingness to reflect on social comfort is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This is a personal topic. There is no obligation to share information at this time.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your consideration of this question is acknowledged. Reflection on social safety can be significant.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for engaging with this personal reflection. Understanding social safety factors can be beneficial.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step3-Response9.mp3",
-          },
-        ],
-
+    ]
   },
   {
     type: ResponseType.Statement,
@@ -127,91 +49,14 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.High,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "If this topic causes discomfort, that is understandable. We can proceed at your preferred pace.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Thank you for considering this question. Social disagreements can have various impacts.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness is acknowledged. Social tensions can have emotional implications.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may be challenging. There is no requirement to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering this question. Emotional responses to disagreement are common.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on emotionally triggering social conflict demonstrates self-awareness.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This question may evoke significant emotions. There is no obligation to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your consideration of this question is acknowledged. Reflection on emotional triggers is meaningful.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for engaging with this topic. Reflection on emotional triggers can be significant.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step5-Response.mp3",
           },
         ],
   },
@@ -228,91 +73,14 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.Medium,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to reflect on this topic at this time.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Thank you for considering this question. Media content can have various emotional impacts.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to consider medias emotional impact is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may evoke various emotions. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering how content affects your emotional state. This reflection is meaningful.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your engagement with this question is noted. Awareness of emotional triggers in media is significant.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This topic may evoke personal memories. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Content avoidance can be a form of emotional protection.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your reflection on medias emotional impact demonstrates insight. Thank you for your engagement.",
-            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario1/Scenario1-Step7-Response.mp3",
           },
         ],
   },
@@ -342,91 +110,14 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.Low,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to explore feelings of loss at this time.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
+              willingness: [1,2, 3,4,5],
               sensitivity: [Sensitivity.Low],
             },
             message:
               "Thank you for considering these emotions. Such reflections can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to reflect on feelings of longing is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Reflection on loss can be challenging. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this complex topic. Your engagement is meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on feelings of loss demonstrates emotional awareness. This is significant.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This is a personal topic. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Reflection on loss requires emotional awareness.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your engagement with this personal topic is acknowledged. Such reflection can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step3-Response.mp3",
           },
         ],
   },
@@ -437,91 +128,14 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.High,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to reflect on relationship experiences at this time.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Thank you for considering this question. Reflection on past relationships can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to explore past experiences is noted. This awareness can support growth.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may be sensitive. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this question. Reflection on emotional experiences is meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on difficult experiences demonstrates resilience. This is significant.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This question may evoke strong emotions. There is no obligation to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering this question. Reflection on emotional hurt requires courage.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your engagement with this topic is acknowledged. Reflection on past emotional experiences can be significant.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step4-Response.mp3",
           },
         ],
   },
@@ -538,91 +152,14 @@ export const manuScenarios: Scenario[] = [
     sensitivity: Sensitivity.Medium,
     likertScale: 5,
     responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to reflect on this topic at this time.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Thank you for considering this question. Even small achievements can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to reflect on achievements is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Reflection on achievements can be challenging. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this question. Moments of fulfillment deserve attention.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on meaningful experiences is noted. This awareness is significant.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This question may be challenging. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Reflection on fulfillment can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Your engagement with this topic is acknowledged. Understanding sources of fulfillment is significant.",
-            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario2/Scenario2-Step6-Response.mp3",
           },
         ],
   },
@@ -657,88 +194,12 @@ export const manuScenarios: Scenario[] = [
           // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to reflect on your strengths at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering this question. Reflection on personal resources can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to recognize personal strengths is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This reflection may require vulnerability. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this question. Identifying personal resources is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on inner resources is noted. This awareness can support development.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This topic may be personal. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Reflection on mental stability is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your engagement with this topic is acknowledged. Understanding personal strengths is significant.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step3-Response.mp3",
           },
         ],
       },
@@ -755,91 +216,14 @@ export const manuScenarios: Scenario[] = [
         sensitivity: Sensitivity.Medium,
         likertScale: 5,
         responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to discuss current stress levels at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Thank you for considering this question. Reflection on work or academic impact is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to recognize work or academic effects is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may be sensitive. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this question. Reflection on work or academic impact is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your recognition of work or academic stress is noted. This awareness is significant.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This topic may be personal. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Reflection on work or academic stress is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
+              willingness: [1,2,3,4, 5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Your engagement with this topic is acknowledged. Understanding work or academic stress is significant.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step5-Response.mp3",
           },
         ],
       },
@@ -856,91 +240,14 @@ export const manuScenarios: Scenario[] = [
         sensitivity: Sensitivity.High,
         likertScale: 5,
          responses: [
-          // LOW SEVERITY
           {
             conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "There is no requirement to reflect on this topic at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response1.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Low],
+              willingness: [1,2,3,4,5],
+              sensitivity: [Sensitivity.Low, Sensitivity.Medium, Sensitivity.High],
             },
             message:
               "Thank you for considering this question. Reflection on your path can be meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response2.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Low],
-            },
-            message:
-              "Your openness to consider your professional direction is noted. This awareness is valuable.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response3.mp3",
-          },
-
-          // MEDIUM SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "This topic may be challenging. There is no requirement to engage with it now.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response4.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Thank you for considering this question. Reflection on uncertainty is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response5.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.Medium],
-            },
-            message:
-              "Your reflection on these challenges is noted. This awareness can support clarity.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response6.mp3",
-          },
-
-          // HIGH SEVERITY
-          {
-            conditions: {
-              willingness: [1],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "This topic may be personal. There is no obligation to engage with it at this time.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response7.mp3",
-          },
-          {
-            conditions: {
-              willingness: [2, 3],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Thank you for considering this question. Reflection on professional challenges is meaningful.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response8.mp3",
-          },
-          {
-            conditions: {
-              willingness: [4, 5],
-              sensitivity: [Sensitivity.High],
-            },
-            message:
-              "Your engagement with this topic is acknowledged. Understanding these challenges is significant.",
-            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response9.mp3",
+            audioUrl: "audioFilesManu/Scenario3/Scenario3-Step7-Response.mp3",
           },
         ],
       }

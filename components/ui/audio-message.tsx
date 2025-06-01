@@ -205,7 +205,7 @@ export function AudioMessage({ audioUrl, onAudioComplete }: AudioMessageProps) {
         />
       </div>
 
-      <div className="text-sm font-medium text-gray-500 ml-2">{formatTime(currentTime)}</div>
+      <div className="text-sm font-medium text-gray-500 ml-2">{currentTime === 0 ? formatTime(duration) : formatTime(currentTime)}</div>
 
       <audio ref={audioRef} src={audioUrl} preload="metadata" />
     </div>
