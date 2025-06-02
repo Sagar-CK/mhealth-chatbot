@@ -45,10 +45,10 @@ def text_to_mp3():
 if __name__ == "__main__":
     # Example usage
     # text_to_mp3()
-    message = "We respect your privacy—your chats are private, never sold, and only shared when needed to support or improve your experience or if required by law. You are in control and can access, update, or delete your data anytime. We use strong security and follow privacy laws to keep your information safe."
+    message = "In this scenario, lets talk about personal interests and how they impact our well-being."
 
     #Convert to audio
     audio = gTTS(text=message, lang='en', slow=False)
     # Save the audio file
-    audio.save("../../public/audioFilesManu/privacyPolicy.mp3")
+    audio.save("../../public/audioFilesManu/Scenario1/Scenario1-Step1.mp3")
     print("Audio files created successfully.")
