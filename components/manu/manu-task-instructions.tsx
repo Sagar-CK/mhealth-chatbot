@@ -11,9 +11,9 @@ export default function ManuTaskInstructions() {
         <br /><br />
         You will go through <strong>three short scenarios</strong>:
         <ul className="list-disc ml-6 mt-1">
-          <li><strong>Scenario 1:</strong> Tastes and Interests</li>
-          <li><strong>Scenario 2:</strong> Interpersonal Relationships and Self-Concept</li>
-          <li><strong>Scenario 3:</strong> Work or Studies</li>
+          <li> Tastes and Interests</li>
+          <li> Interpersonal Relationships and Self-Concept</li>
+          <li> Work or Studies</li>
         </ul>
         <br />
         Each scenario will include:

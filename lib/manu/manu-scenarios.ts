@@ -7,7 +7,7 @@ export const manuScenarios: Scenario[] = [
   steps: [
   {
     type: ResponseType.Statement,
-    text: "Lets talk about personal interests and how they impact our well-being.",
+    text: "In this scenario, lets talk about personal interests and how they impact our well-being.",
     textAudio: "audioFilesManu/Scenario1/Scenario1-Step1.mp3",
     option: "Sure, I am comfortable discussing my interests"
   },
@@ -93,7 +93,7 @@ export const manuScenarios: Scenario[] = [
     steps: [
       {
     type: ResponseType.Statement,
-    text: "Lets now take a moment to reflect on your relationships with others and yourself.",
+    text: "In this scenario, lets take a moment to reflect on your relationships with others and yourself.",
     textAudio: "audioFilesManu/Scenario2/Scenario2-Step1.mp3",
     option: "Yes, Im okay with that."
   },
@@ -174,7 +174,7 @@ export const manuScenarios: Scenario[] = [
     steps: [
       {
         type: ResponseType.Statement,
-        text: "Let’s now take a small pivot and talk about another part of your life - Work and Studies",
+        text: "In this scenario, lets talk about an important part of your life - Work and Studies",
         textAudio: "audioFilesManu/Scenario3/Scenario3-Step1.mp3",
         option: "Okay, I’m ready."
       },
