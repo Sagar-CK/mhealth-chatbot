@@ -1,7 +1,6 @@
 from gtts import gTTS
 import json
 import os
-from pydub import AudioSegment
 
 # This function takes a list of strings (text) and converts each of them to audio and saves them as mp3 files.
 def text_to_mp3():
@@ -56,15 +55,11 @@ Users have the right to access, correct, and delete their data. They may also re
 Users can withdraw consent at any time, which will result in the deletion and invalidation of all previously collected data.
 Users are encouraged to regularly review this privacy policy to stay informed about how their data is handled.
 For questions or concerns regarding personal data, users can contact e.c.s.degroot@tudelft.nl.
+Please note that this policy is in regards to the chatbot interface and interactions with it specifically
     """
 
     #Convert to audio
     audio = gTTS(text=message, lang='en', slow=False)
     # Save the audio file
     audio.save("../../public/audioFilesManu/privacyPolicy.mp3")
-    privacy = AudioSegment.from_file("../../public/audioFilesManu/privacyPolicy.mp3")
-    faster_privacy = privacy.speedup(playback_speed=1.5)
-
-# Export the faster audio
-    faster_privacy.export("../../public/audioFilesManu/privacyPolicy_Fast.mp3", format="mp3")
     print("Audio files created successfully.")
