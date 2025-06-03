@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Avatar } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { Volume2, BotMessageSquareIcon, User } from "lucide-react"
+import { Volume2, BotMessageSquareIcon, User, Mic } from "lucide-react"
 import { api } from "@/trpc/react"
 import type { User as UserType } from "@/server/api/models/user"
 import {
@@ -29,28 +29,14 @@ interface AudioChatInterfaceProps {
   height?: string
 }
 
-// Add TypingIndicator
-const TypingIndicator = () => {
+const AudioIndicator = () => {
   return (
     <div className="flex items-center gap-2">
       <Avatar className="h-8 w-8 bg-primary flex items-center justify-center shrink-0">
         <BotMessageSquareIcon className="h-4 w-4 text-primary-foreground" />
       </Avatar>
       <Card className="p-3 bg-muted w-[60px] flex items-center justify-center">
-        <div className="flex space-x-1">
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce"
-            style={{ animationDelay: "0ms" }}
-          ></span>
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce"
-            style={{ animationDelay: "150ms" }}
-          ></span>
-          <span
-            className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce"
-            style={{ animationDelay: "300ms" }}
-          ></span>
-        </div>
+        <Mic className="h-4 w-4 text-gray-500 animate-pulse" />
       </Card>
     </div>
   )
@@ -409,7 +395,7 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
                 </div>
               </div>
             ))}
-            {isTyping && <TypingIndicator />}
+            {isTyping && <AudioIndicator />}
             <div ref={messagesEndRef} />
           </div>
 
