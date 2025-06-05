@@ -147,7 +147,7 @@ export const manuScenarios: Scenario[] = [
   },
   {
     type: ResponseType.Question,
-    question: "What is something you’ve done recently that made you feel genuinely proud or emotionally fulfilled?",
+    question: "What is something you have done recently that made you feel genuinely proud or emotionally fulfilled?",
     questionAudio: "audioFilesManu/Scenario2/Scenario2-Step6.mp3",
     sensitivity: Sensitivity.Medium,
     likertScale: 5,

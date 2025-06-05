@@ -45,6 +45,7 @@ def text_to_mp3():
 if __name__ == "__main__":
     # Example usage
     # text_to_mp3()
+    message_fix = "What is something you have done recently that made you feel genuinely proud or emotionally fulfilled?"
     message = """
 We are committed to safeguarding personal data in compliance with international privacy standards such as the General Data Protection Regulation (GDPR). We ensure transparency in our data practices, guarantee that personal data is never sold to advertisers, and commit to storing data anonymously whenever possible.
 We collect personal data such as users’ willingness to self-disclose and their perceived sensitivity of questions. This data is gathered with specific intent—to support academic research in developing mobile health (mHealth) chatbots and to personalize and improve the user experience with the Services.
@@ -59,7 +60,8 @@ Please note that this policy is in regards to the chatbot interface specifically
     """
 
     #Convert to audio
-    audio = gTTS(text=message, lang='en', slow=False)
+    audio = gTTS(text=message_fix, lang='en', slow=False)
     # Save the audio file
-    audio.save("../../public/audioFilesManu/privacyPolicy.mp3")
+    audio.save("../../public/audioFilesManu/Scenario2/Scenario2-Step6.mp3")
+    # audio.save("../../public/audioFilesManu/privacyPolicy.mp3")
     print("Audio files created successfully.")
