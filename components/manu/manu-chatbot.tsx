@@ -318,11 +318,6 @@ export function AudioChatInterface({ scenarios, user, height = "600px" }: AudioC
 
   const nextOrCompleteScenario = () => {
     if (currentScenarioNo < scenarios.length - 1) {
-      // Show privacy policy popup for next scenario
-      if (Number(user.condition) === 2) {
-        setShowPrivacyPopup(true)
-      }
-
       // Move to next scenario
       setCurrentScenarioNo((prev) => prev + 1)
       setMessages([]) // Clear messages for new scenario
