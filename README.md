@@ -1,5 +1,5 @@
 # mHealth - Chatbot
-This is the repository for the *Talking About Mental Health: Information Disclosure in User Interactions With Chatbots or mHealth Applications* `CSE3000` Research Project course at TU Delft. It contains the code for a research study investigating information disclosure towards chatbots and was created for partial fulfilment of the requirements of the bachelor.
+This is the repository for the *Talking About Mental Health: Information Disclosure in User Interactions With Chatbots or mHealth Applications* [`CSE3000` Research Project](https://github.com/TU-Delft-CSE/Research-Project) course at TU Delft, for the 2025 Q4 edition. It contains the code for a research study investigating information disclosure towards chatbots and was created for partial fulfilment of the requirements of the bachelor.
 
 ## Project Overview
 This project is a web-based chatbot application designed to study information disclosure patterns in mental health conversations.
